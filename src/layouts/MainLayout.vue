@@ -1,106 +1,113 @@
+<script setup lang="ts">
+defineOptions({
+  name: 'MainLayout'
+})
+
+const navigation = [
+  {
+    title: 'Искать',
+    icon: 'eva-search-outline',
+    to: '/search'
+  },
+  {
+    title: 'Опубликовать',
+    icon: 'eva-plus-circle-outline'
+  },
+  {
+    title: 'Ваши поездки',
+    icon: 'eva-map-outline',
+  },
+  {
+    title: 'Входящие',
+    icon: 'eva-message-circle-outline',
+  },
+  {
+    title: 'Профиль',
+    icon: 'eva-person-outline',
+    to: '/profile'
+  },
+]
+</script>
+
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
+  <q-layout>
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer
+      bordered
+      class="bg-white"
+    >
+      <nav
+        :class="$style.nav"
+      >
+        <ul :class="$style.list">
+          <li
+            v-for="item in navigation"
+            :key="item.title"
+            :class="$style.item"
+          >
+            <RouterLink
+              :to="item.to || '/'"
+              :class="$style.link"
+              :active-class="$style.active"
+            >
+              <q-icon
+                size="1.5rem"
+                :name="item.icon"
+              />
+              <span :class="$style.label">{{ item.title }}</span>
+            </RouterLink>
+          </li>
+        </ul>
+      </nav>
+    </q-footer>
   </q-layout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
-
-defineOptions({
-  name: 'MainLayout'
-});
-
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+<style lang="scss" module>
+.nav {
+  padding: 0.3rem 0 1rem;
 }
-</script>
+
+.list {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style: none;
+
+  display: flex;
+}
+
+.item {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0.25rem;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+
+  text-decoration: none;
+  color: $dark;
+
+  &.active {
+    color: $primary;
+  }
+}
+
+.label {
+  font-size: 0.56rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  line-height: 1;
+  text-align: center;
+}
+</style>
