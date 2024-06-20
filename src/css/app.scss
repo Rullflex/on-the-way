@@ -1,1 +1,21 @@
-// app global css in SCSS form
+.gap {
+  &-xs {
+    gap: ($space-base * 0.25);
+  }
+  &-sm {
+    gap: ($space-base * 0.5);
+  }
+  &-md {
+    gap: $space-base;
+  }
+  &-lg {
+    gap: ($space-base * 1.5);
+  }
+  &-xl {
+    gap: ($space-base * 3);
+  }
+}
+
+.display-grid {
+  display: grid;
+}
