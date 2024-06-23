@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+
+const router = useRouter();
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
@@ -38,7 +41,7 @@ const onSearchClicked = () => {
   } else if (!passengers.value) {
     showDialog('passengers');
   } else {
-    console.log('Search clicked');
+    router.push({ name: 'all-drives-list' });
   }
 };
 </script>

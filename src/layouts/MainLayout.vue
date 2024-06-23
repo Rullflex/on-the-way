@@ -1,17 +1,17 @@
 <script setup lang="ts">
 defineOptions({
-  name: 'MainLayout'
-})
+  name: 'MainLayout',
+});
 
 const navigation = [
   {
     title: 'Искать',
     icon: 'eva-search-outline',
-    to: '/search'
+    to: { name: 'search' },
   },
   {
     title: 'Опубликовать',
-    icon: 'eva-plus-circle-outline'
+    icon: 'eva-plus-circle-outline',
   },
   {
     title: 'Ваши поездки',
@@ -24,9 +24,9 @@ const navigation = [
   {
     title: 'Профиль',
     icon: 'eva-person-outline',
-    to: '/profile'
+    to: { name: 'profile' },
   },
-]
+];
 </script>
 
 <template>
@@ -36,12 +36,11 @@ const navigation = [
     </q-page-container>
 
     <q-footer
+      reveal
       bordered
       class="bg-white"
     >
-      <nav
-        :class="$style.nav"
-      >
+      <nav :class="$style.nav">
         <ul :class="$style.list">
           <li
             v-for="item in navigation"
@@ -68,7 +67,7 @@ const navigation = [
 
 <style lang="scss" module>
 .nav {
-  padding: 0.3rem 0 1rem;
+  padding: 0.35rem 0 1rem;
 }
 
 .list {

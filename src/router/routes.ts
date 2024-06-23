@@ -8,12 +8,29 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/search',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SearchPage.vue') }],
+    children: [
+      {
+        path: '',
+        name: 'search',
+        component: () => import('pages/SearchPage.vue'),
+      },
+    ],
+  },
+  {
+    name: 'all-drives-list',
+    path: '/all-drives-list',
+    component: () => import('pages/AllDrivesList.vue'),
   },
   {
     path: '/profile',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ProfilePage.vue') }],
+    children: [
+      {
+        path: '',
+        name: 'profile',
+        component: () => import('pages/ProfilePage.vue'),
+      },
+    ],
   },
 
   // Always leave this as last one,
