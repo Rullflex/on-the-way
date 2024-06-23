@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useDriveSettingsStore } from 'src/stores/drive-settings';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
+const store = useDriveSettingsStore();
+const { origin, destination, date, passengers } = storeToRefs(store);
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
-
-const origin = ref('');
-const destination = ref('');
-const date = ref('');
-const passengers = ref(1);
 
 const isDialogVisible = ref<boolean>(false);
 const dialogType = ref<DialogType>();

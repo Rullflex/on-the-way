@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useDriveSettingsStore } from 'src/stores/drive-settings';
+import { storeToRefs } from 'pinia';
+
+const store = useDriveSettingsStore();
+const { origin, destination, date, passengers } = storeToRefs(store);
+
 const list = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9', 'item 10'];
 </script>
 
@@ -19,12 +25,12 @@ const list = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 
 
       <div style="font-size: 0.75rem">
         <div class="row flex-center gap-xs">
-          <span>Пермь</span>
+          <span>{{ origin }}</span>
           <q-icon name="eva-arrow-forward-outline" />
-          <span>Добрянка</span>
+          <span>{{ destination }}</span>
         </div>
 
-        <div class="text-grey-8 text-center">Ср 26 июня, 1 пассажир</div>
+        <div class="text-grey-8 text-center">{{ date }}, {{ passengers }} пассажир</div>
       </div>
 
       <q-btn
