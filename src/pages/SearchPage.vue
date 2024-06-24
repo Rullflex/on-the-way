@@ -1,14 +1,44 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { storeToRefs } from 'pinia';
+
+type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
 const router = useRouter();
 const store = useDriveSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
-type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
+const datePickerModel = ref<string>('');
+
+watch(datePickerModel, (newValue) => {
+  const [dayOfWeek, dayOfMonth, month] = newValue.split(' ');
+
+  if (Number(dayOfMonth) === new Date().getDate()) {
+    date.value = 'Сегодня';
+  } else if (Number(dayOfMonth) === new Date().getDate() + 1) {
+    date.value = 'Завтра';
+  } else {
+    const monthIndex = Number(month) - 1;
+    const monthNames = [
+      'января',
+      'февраля',
+      'марта',
+      'апреля',
+      'мая',
+      'июня',
+      'июля',
+      'августа',
+      'сентября',
+      'октября',
+      'ноября',
+      'декабря',
+    ];
+
+    date.value = `${dayOfWeek} ${dayOfMonth} ${monthNames[monthIndex]}`;
+  }
+});
 
 const isDialogVisible = ref<boolean>(false);
 const dialogType = ref<DialogType>();
@@ -200,10 +230,10 @@ const onSearchClicked = () => {
         <p class="text-h4 text-bold">Когда вы едете?</p>
 
         <q-date
-          v-model="date"
+          v-model="datePickerModel"
           flat
           minimal
-          mask="ddd D.MM"
+          mask="ddd D M"
           class="full-width"
           :options="
             (date) => {
