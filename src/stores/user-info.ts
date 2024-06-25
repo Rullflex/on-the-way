@@ -1,0 +1,15 @@
+import { defineStore, acceptHMRUpdate } from 'pinia';
+
+export const useUserInfoStore = defineStore('user-info', {
+  state: () => ({
+    name: 'Дмитрий',
+    surname: 'Горшков',
+    dateOfBirth: '26 марта 1999',
+    email: 'libafer99@gmail.com',
+    phone: '+7 (999) 999-99-99',
+  }),
+});
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useUserInfoStore, import.meta.hot));
+}

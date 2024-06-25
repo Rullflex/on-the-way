@@ -48,6 +48,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
       <q-item
         clickable
         class="rounded-borders text-primary"
+        :to="{ name: 'profile-edit' }"
       >
         <q-item-section side>
           <q-icon
