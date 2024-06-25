@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { useUserInfoStore } from 'src/stores/user-info';
 import { computed } from 'vue';
+import MyItem from 'src/ui/MyItem.vue';
 
 const userInfoStore = useUserInfoStore();
 const { name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
@@ -31,45 +32,31 @@ const listItems = computed(() => [
 
         <q-list>
           <!-- ANCHOR - Add Profile Photo -->
-          <q-item
-            clickable
-            class="rounded-borders text-primary"
+          <my-item
+            color="primary"
+            icon="eva-plus-circle-outline"
+            label="Добавить фото профиля"
           >
-            <q-item-section side>
-              <q-icon
-                color="primary"
-                name="eva-plus-circle-outline"
-              ></q-icon>
-            </q-item-section>
-
-            <q-item-section>Добавить фото профиля</q-item-section>
-
-            <q-item-section avatar>
-              <q-avatar
-                color="grey-4"
-                text-color="white"
-                icon="eva-person"
-                size="5rem"
-              />
-            </q-item-section>
-          </q-item>
+            <template #append>
+              <q-item-section avatar>
+                <q-avatar
+                  color="grey-4"
+                  text-color="white"
+                  icon="eva-person"
+                  size="5rem"
+                />
+              </q-item-section>
+            </template>
+          </my-item>
 
           <!-- ANCHOR - List Items -->
-          <q-item
+          <my-item
             v-for="item in listItems"
+            chevron
             :key="item.label"
-            clickable
-            class="rounded-borders"
-          >
-            <q-item-section>
-              <q-item-label>{{ item.label }}</q-item-label>
-              <q-item-label caption>{{ item.value }}</q-item-label>
-            </q-item-section>
-
-            <q-item-section side>
-              <q-icon name="eva-chevron-right-outline"></q-icon>
-            </q-item-section>
-          </q-item>
+            :label="item.label"
+            :caption="item.value"
+          />
         </q-list>
       </q-page>
     </q-page-container>

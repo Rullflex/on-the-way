@@ -125,9 +125,9 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
       <!-- ANCHOR - Log Out -->
       <q-item
         clickable
-        class="rounded-borders"
+        class="rounded-borders text-negative"
       >
-        <q-item-section class="text-negative">Выйти</q-item-section>
+        <q-item-section>Выйти</q-item-section>
       </q-item>
     </q-list>
   </q-page>

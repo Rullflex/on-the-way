@@ -108,7 +108,7 @@ const isBtnNextVisible = computed<boolean>(() => {
       </q-card-section>
       <!-- !SECTION -->
 
-      <!-- SECTION - Step Car Make -->
+      <!-- SECTION - Step Car Name -->
       <q-card-section
         v-else-if="currentStep === Steps.Name"
         tag="form"
