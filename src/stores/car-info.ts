@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore, acceptHMRUpdate } from 'pinia';
 
 interface CarInfo {
   licensePlate: string;
@@ -18,3 +18,7 @@ export const useCarInfoStore = defineStore('car-info', {
     },
   },
 });
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useCarInfoStore, import.meta.hot));
+}
