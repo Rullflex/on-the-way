@@ -32,6 +32,11 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    name: 'car-info',
+    path: '/profile/car-info/:id',
+    component: () => import('pages/CarInfo.vue'),
+  },
 
   // Always leave this as last one,
   // but you can also remove it

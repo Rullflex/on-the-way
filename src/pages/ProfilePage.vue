@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from 'vue';
-import { useCarInfoStore } from 'src/stores/car-info';
-const AddVehcile = defineAsyncComponent(() => import('../features/AddVehicle/AddVehicle.vue'));
+import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
+const UpdateCar = defineAsyncComponent(() => import('../features/UpdateCar/UpdateCar.vue'));
 
 const carInfoStore = useCarInfoStore();
 const cars = computed(() => carInfoStore.cars);
 
-const extraLinks = ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение'];
 const isDialogVisible = ref(false);
+
+const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
+  carInfoStore.addCar({
+    id: Date.now(),
+    ...payload,
+  });
+  isDialogVisible.value = false;
+};
 </script>
 
 <template>
@@ -53,14 +60,16 @@ const isDialogVisible = ref(false);
 
       <q-separator class="q-my-md" />
 
-      <!-- ANCHOR - Cars -->
+      <!-- SECTION - Cars -->
       <q-item-label header>Машины</q-item-label>
 
+      <!-- ANCHOR - Cars -->
       <template v-if="cars.length">
         <q-item
           v-for="car in cars"
           :key="car.licensePlate"
           clickable
+          :to="{ name: 'car-info', params: { id: car.id } }"
           class="rounded-borders"
         >
           <q-item-section>
@@ -79,6 +88,7 @@ const isDialogVisible = ref(false);
         </q-item>
       </template>
 
+      <!-- ANCHOR - Add Car -->
       <q-item
         clickable
         class="rounded-borders text-primary"
@@ -92,13 +102,14 @@ const isDialogVisible = ref(false);
         </q-item-section>
         <q-item-section>Добавить авто</q-item-section>
       </q-item>
+      <!-- !SECTION -->
 
       <q-separator class="q-my-md" />
 
       <!-- ANCHOR - Extra Links -->
       <q-item
         clickable
-        v-for="link in extraLinks"
+        v-for="link in ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение']"
         :key="link"
         class="rounded-borders"
       >
@@ -120,10 +131,11 @@ const isDialogVisible = ref(false);
     </q-list>
   </q-page>
 
+  <!-- ANCHOR - Add Car Dialog -->
   <q-dialog
     v-model="isDialogVisible"
     maximized
   >
-    <AddVehcile @updated="isDialogVisible = false" />
+    <UpdateCar @updated="handleAddedCar" />
   </q-dialog>
 </template>

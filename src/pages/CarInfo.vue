@@ -1,0 +1,111 @@
+<script setup lang="ts">
+import { computed, defineAsyncComponent, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
+import { useQuasar } from 'quasar';
+
+const UpdateCar = defineAsyncComponent(() => import('../features/UpdateCar/UpdateCar.vue'));
+
+const $q = useQuasar();
+const route = useRoute();
+const router = useRouter();
+const store = useCarInfoStore();
+
+const isDialogVisible = ref(false);
+
+const id = computed(() => Number(route.params.id));
+
+const listItems = computed(() => {
+  const { licensePlate, name, year, bodyType, color } = store.carById(id.value) ?? {};
+
+  return [
+    { label: 'Регистрационный номер', value: licensePlate || '-' },
+    { label: 'Марка', value: name || '-' },
+    { label: 'Год выпуска', value: year || '-' },
+    { label: 'Тип кузова', value: bodyType || '-' },
+    { label: 'Цвет', value: color || '-' },
+  ];
+});
+
+const handleDeleteCard = () => {
+  $q.dialog({
+    title: 'Подтвердите действие',
+    message: 'Вы уверены, что хотите удалить данные о машине?',
+    persistent: true,
+    cancel: true,
+  }).onOk(() => {
+    store.deleteCar(id.value);
+    router.back();
+  });
+};
+
+const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
+  store.updateCar(id.value, payload);
+  isDialogVisible.value = false;
+};
+</script>
+
+<template>
+  <q-layout>
+    <q-page-container>
+      <q-page class="q-pa-lg">
+        <q-btn
+          @click="$router.back()"
+          icon="eva-arrow-back-outline"
+          flat
+          dense
+        />
+
+        <div class="text-h5 text-bold q-mb-lg q-mt-md">Информация о машине</div>
+
+        <q-list>
+          <!-- ANCHOR - Car Info -->
+          <q-item
+            v-for="item in listItems"
+            :key="item.label"
+          >
+            <q-item-section>
+              <q-item-label>{{ item.label }}</q-item-label>
+              <q-item-label caption>{{ item.value }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-my-md" />
+
+          <!-- ANCHOR - Edit Car -->
+          <q-item
+            clickable
+            class="rounded-borders text-primary"
+            @click="isDialogVisible = true"
+          >
+            <q-item-section>
+              <q-item-label>Изменить данные</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <!-- ANCHOR - Delete Car -->
+          <q-item
+            clickable
+            class="rounded-borders text-primary"
+            @click="handleDeleteCard"
+          >
+            <q-item-section>
+              <q-item-label>Удалить авто</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-page>
+    </q-page-container>
+  </q-layout>
+
+  <!-- ANCHOR - Update Car Dialog -->
+  <q-dialog
+    v-model="isDialogVisible"
+    maximized
+  >
+    <UpdateCar
+      :id="id"
+      @updated="handleUpdateCar"
+    />
+  </q-dialog>
+</template>

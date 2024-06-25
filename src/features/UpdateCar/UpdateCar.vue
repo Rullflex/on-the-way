@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useCarInfoStore } from 'src/stores/car-info';
+import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 
 enum Steps {
   LicensePlate,
@@ -10,6 +10,17 @@ enum Steps {
   Year,
 }
 
+interface IProps {
+  id?: number;
+}
+
+interface IEmits {
+  (e: 'updated', payload: Omit<CarInfo, 'id'>): void;
+}
+
+const props = defineProps<IProps>();
+const emit = defineEmits<IEmits>();
+
 const currentStep = ref(Steps.LicensePlate);
 
 const licensePlate = ref<string | null>();
@@ -17,6 +28,17 @@ const name = ref<string | null>();
 const bodyType = ref<string | null>();
 const color = ref<string | null>();
 const year = ref<string | null>();
+
+const carInfoStore = useCarInfoStore();
+
+if (props.id && carInfoStore.carById(props.id)) {
+  const car = carInfoStore.carById(props.id);
+  licensePlate.value = car?.licensePlate;
+  name.value = car?.name;
+  bodyType.value = car?.bodyType;
+  color.value = car?.color;
+  year.value = car?.year;
+}
 
 const isBtnNextVisible = computed<boolean>(() => {
   if (currentStep.value === Steps.LicensePlate) {
@@ -27,20 +49,6 @@ const isBtnNextVisible = computed<boolean>(() => {
 
   return false;
 });
-
-const emit = defineEmits(['updated']);
-const carInfoStore = useCarInfoStore();
-
-const submitCarInfo = () => {
-  carInfoStore.addCar({
-    licensePlate: licensePlate.value ?? '',
-    name: name.value ?? '',
-    bodyType: bodyType.value ?? '',
-    color: color.value ?? '',
-    year: year.value ?? '',
-  });
-  emit('updated');
-};
 </script>
 
 <template>
@@ -233,7 +241,15 @@ const submitCarInfo = () => {
           label="Сохранить"
           color="primary"
           class="fixed-bottom q-ma-lg"
-          @click="submitCarInfo"
+          @click="
+            emit('updated', {
+              licensePlate: licensePlate ?? '',
+              name: name ?? '',
+              bodyType: bodyType ?? '',
+              color: color ?? '',
+              year: year ?? '',
+            })
+          "
         />
       </q-card-section>
       <!-- !SECTION -->
