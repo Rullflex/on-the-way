@@ -95,7 +95,7 @@ const navigation = [
   gap: 0.1rem;
 
   text-decoration: none;
-  color: $dark;
+  color: $blue-grey-8;
 
   &.active {
     color: $primary;

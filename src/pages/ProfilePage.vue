@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { computed, defineAsyncComponent, ref } from 'vue';
+import { useCarInfoStore } from 'src/stores/car-info';
+const AddVehcile = defineAsyncComponent(() => import('../features/AddVehicle/AddVehicle.vue'));
+
+const carInfoStore = useCarInfoStore();
+const cars = computed(() => carInfoStore.cars);
+
 const extraLinks = ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение'];
+const isDialogVisible = ref(false);
 </script>
 
 <template>
@@ -11,7 +19,7 @@ const extraLinks = ['Ваши отзывы', 'О проекте', 'Помощь'
         class="rounded-borders"
       >
         <q-item-section>
-          <q-item-label class="text-h5 text-bold">Дмитрий</q-item-label>
+          <q-item-label class="text-h5 text-bold text-blue-grey-9">Дмитрий</q-item-label>
           <q-item-label caption>Личные данные</q-item-label>
         </q-item-section>
 
@@ -48,9 +56,33 @@ const extraLinks = ['Ваши отзывы', 'О проекте', 'Помощь'
       <!-- ANCHOR - Cars -->
       <q-item-label header>Машины</q-item-label>
 
+      <template v-if="cars.length">
+        <q-item
+          v-for="car in cars"
+          :key="car.licensePlate"
+          clickable
+          class="rounded-borders"
+        >
+          <q-item-section>
+            <q-item-label class="text-bold">
+              {{ car.name }}
+            </q-item-label>
+
+            <q-item-label caption>
+              {{ car.color }}
+            </q-item-label>
+          </q-item-section>
+
+          <q-item-section side>
+            <q-icon name="eva-chevron-right-outline" />
+          </q-item-section>
+        </q-item>
+      </template>
+
       <q-item
         clickable
         class="rounded-borders text-primary"
+        @click="isDialogVisible = true"
       >
         <q-item-section side>
           <q-icon
@@ -87,4 +119,11 @@ const extraLinks = ['Ваши отзывы', 'О проекте', 'Помощь'
       </q-item>
     </q-list>
   </q-page>
+
+  <q-dialog
+    v-model="isDialogVisible"
+    maximized
+  >
+    <AddVehcile @updated="isDialogVisible = false" />
+  </q-dialog>
 </template>

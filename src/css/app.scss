@@ -1,3 +1,7 @@
+html {
+  color: $blue-grey-8;
+}
+
 .gap {
   &-xs {
     gap: ($space-base * 0.25);
@@ -16,6 +20,30 @@
   }
 }
 
+.text-biege,
+.bg-biege {
+  color: #e8c5a1 !important;
+}
+
 .display-grid {
   display: grid;
+}
+
+// transition animations
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-left-enter-from,
+.slide-left-leave-to {
+  transform: translateX(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
