@@ -4,7 +4,7 @@ export const useUserInfoStore = defineStore('user-info', {
   state: () => ({
     name: 'Дмитрий',
     surname: 'Горшков',
-    dateOfBirth: '26 марта 1999',
+    dateOfBirth: '1999/03/26',
     email: 'libafer99@gmail.com',
     phone: '+7 (999) 999-99-99',
   }),

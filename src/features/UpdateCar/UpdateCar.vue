@@ -238,6 +238,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         <!-- ANCHOR - Submit Button -->
         <q-btn
           v-if="year?.length === 4 && Number(year) <= new Date().getFullYear()"
+          unelevated
           label="Сохранить"
           color="primary"
           class="fixed-bottom q-ma-lg"
