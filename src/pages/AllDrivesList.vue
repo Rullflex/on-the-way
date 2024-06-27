@@ -56,7 +56,7 @@ const drivesList = [
       place: 'Ленинск',
       time: '15:00',
     },
-    reserved: 6,
+    reserved: 7,
     passengers: 7,
     driver: {
       name: 'Мария',
@@ -111,6 +111,7 @@ const drivesList = [
             v-for="drive in drivesList"
             :key="drive.id"
             clickable
+            :disable="drive.reserved === drive.passengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
           >
             <div
@@ -146,7 +147,9 @@ const drivesList = [
                 </q-avatar>
 
                 <div class="col-auto column items-end">
-                  <span class="text-bold">{{ drive.price }} ₽</span>
+                  <span class="text-bold">{{
+                    drive.reserved === drive.passengers ? 'Мест нет' : drive.price + ' ₽'
+                  }}</span>
                   <div class="row items-center gap-xs text-caption">
                     <span>{{ drive.reserved }}/{{ drive.passengers }}</span>
                     <q-icon name="eva-people-outline" />
