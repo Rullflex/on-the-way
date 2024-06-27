@@ -103,76 +103,76 @@ const drivesList = [
     <!-- !SECTION -->
 
     <q-page-container>
-      <q-page>
-        <div class="column gap-sm q-pa-lg full-height">
-          <div class="text-h5 text-bold">Сегодня</div>
+      <q-page class="q-pa-lg">
+        <div class="text-h5 text-bold q-mb-sm">Сегодня</div>
 
-          <q-card
+        <q-list class="column gap-sm">
+          <q-item
             v-for="drive in drivesList"
             :key="drive.id"
+            clickable
+            class="row rounded-borders bg-white shadow-2 q-pa-md"
           >
-            <q-card-section class="row">
-              <div
-                class="column overflow-hidden"
-                style="width: 72px"
-              >
-                <span class="text-subtitle2">{{ drive.origin.place }}</span>
-                <span class="text-caption">{{ drive.origin.time }}</span>
+            <div
+              class="column overflow-hidden"
+              style="width: 72px"
+            >
+              <span class="text-subtitle2">{{ drive.origin.place }}</span>
+              <span class="text-caption">{{ drive.origin.time }}</span>
 
-                <q-icon
-                  name="eva-more-vertical-outline"
-                  class="q-my-sm"
-                />
-
-                <span class="text-subtitle2">{{ drive.destination.place }}</span>
-                <span class="text-caption">{{ drive.destination.time }}</span>
-              </div>
-
-              <q-separator
-                vertical
-                spaced
-                inset
+              <q-icon
+                name="eva-more-vertical-outline"
+                class="q-my-sm"
               />
 
-              <div class="col column gap-sm">
-                <div class="row justify-between">
-                  <q-avatar
-                    color="grey-4"
-                    text-color="white"
-                    size="2.5rem"
-                  >
-                    <img :src="drive.driver.avatar" />
-                  </q-avatar>
+              <span class="text-subtitle2">{{ drive.destination.place }}</span>
+              <span class="text-caption">{{ drive.destination.time }}</span>
+            </div>
 
-                  <div class="col-auto column items-end">
-                    <span class="text-bold">{{ drive.price }} ₽</span>
-                    <div class="row items-center gap-xs text-caption">
-                      <span>{{ drive.reserved }}/{{ drive.passengers }}</span>
-                      <q-icon name="eva-people-outline" />
-                    </div>
+            <q-separator
+              vertical
+              spaced
+              inset
+            />
+
+            <div class="col column gap-sm">
+              <div class="row justify-between">
+                <q-avatar
+                  color="grey-4"
+                  text-color="white"
+                  size="2.5rem"
+                >
+                  <img :src="drive.driver.avatar" />
+                </q-avatar>
+
+                <div class="col-auto column items-end">
+                  <span class="text-bold">{{ drive.price }} ₽</span>
+                  <div class="row items-center gap-xs text-caption">
+                    <span>{{ drive.reserved }}/{{ drive.passengers }}</span>
+                    <q-icon name="eva-people-outline" />
                   </div>
-                </div>
-
-                <div class="row">
-                  <div class="column">
-                    <span class="text-subtitle2">{{ drive.driver.name }}</span>
-                    <span class="text-caption">{{ drive.driver.car }}</span>
-                  </div>
-                </div>
-
-                <div class="row q-mt-auto gap-sm justify-end">
-                  <q-icon
-                    v-for="name in ['cube', 'briefcase', 'pin']"
-                    :key="name"
-                    :name="`eva-${name}-outline`"
-                    size="1.2rem"
-                    v-tooltip="'asd'"
-                  />
                 </div>
               </div>
-            </q-card-section>
-          </q-card>
-        </div>
+
+              <div class="row">
+                <div class="column">
+                  <span class="text-subtitle2">{{ drive.driver.name }}</span>
+                  <span class="text-caption">{{ drive.driver.car }}</span>
+                </div>
+              </div>
+
+              <div class="row q-mt-auto gap-sm justify-end">
+                <q-icon
+                  v-for="name in ['cube', 'briefcase', 'pin']"
+                  :key="name"
+                  :name="`eva-${name}-outline`"
+                  size="1.2rem"
+                  v-tooltip="'asd'"
+                />
+              </div>
+            </div>
+          </q-item>
+        </q-list>
       </q-page>
     </q-page-container>
   </q-layout>
