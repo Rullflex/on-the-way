@@ -15,11 +15,6 @@ const props = defineProps<IProps>();
     class="rounded-borders"
     :class="props.color && `text-${props.color}`"
   >
-    <slot
-      v-if="$slots.prepend"
-      name="prepend"
-    />
-
     <q-item-section
       v-if="props.icon"
       side
@@ -29,6 +24,8 @@ const props = defineProps<IProps>();
         :color="color"
       />
     </q-item-section>
+
+    <slot v-if="$slots.default" />
 
     <q-item-section>
       <q-item-label>

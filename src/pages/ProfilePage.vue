@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from 'vue';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
+import { MyAvatar } from 'src/shared/ui';
 const UpdateCar = defineAsyncComponent(() => import('../features/UpdateCar/UpdateCar.vue'));
 
 const carInfoStore = useCarInfoStore();
@@ -31,12 +32,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         </q-item-section>
 
         <q-item-section avatar>
-          <q-avatar
-            color="grey-4"
-            text-color="white"
-            icon="eva-person"
-            size="5rem"
-          />
+          <my-avatar />
         </q-item-section>
 
         <q-item-section side>

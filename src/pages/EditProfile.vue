@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { useUserInfoStore } from 'src/stores/user-info';
 import { computed, ref } from 'vue';
-import { MyItem, MyPhoneInput } from 'src/shared/ui';
+import { MyAvatar, MyItem, MyPhoneInput } from 'src/shared/ui';
 
 const monthNames = [
   'января',
@@ -23,7 +23,7 @@ type ItemType = 'name' | 'surname' | 'dateOfBirth' | 'email' | 'phone';
 type IListItem = { label: string; value: string; type: ItemType };
 
 const userInfoStore = useUserInfoStore();
-const { name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
+const { avatar, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
 
 const formattedDateOfBirth = computed(() => {
   if (dateOfBirth.value) {
@@ -67,6 +67,13 @@ const showDialogByType = (type: ItemType) => {
   dialogModel.value = userInfoStore[type];
 };
 
+const handleAvatarChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    avatar.value = URL.createObjectURL(target.files[0]);
+  }
+};
+
 const handleSave = () => {
   switch (dialogType.value) {
     case 'name':
@@ -107,20 +114,23 @@ const handleSave = () => {
         <q-list>
           <!-- ANCHOR - Add Profile Photo -->
           <my-item
+            tag="label"
             color="primary"
-            icon="eva-plus-circle-outline"
-            label="Добавить фото профиля"
+            :icon="avatar ? 'eva-edit-outline' : 'eva-plus-circle-outline'"
+            :label="`${avatar ? 'Изменить' : 'Добавить'} фото профиля`"
           >
             <template #append>
               <q-item-section avatar>
-                <q-avatar
-                  color="grey-4"
-                  text-color="white"
-                  icon="eva-person"
-                  size="5rem"
-                />
+                <my-avatar />
               </q-item-section>
             </template>
+
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              @input="handleAvatarChange"
+            />
           </my-item>
 
           <!-- ANCHOR - List Items -->

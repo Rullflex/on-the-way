@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 
 export const useUserInfoStore = defineStore('user-info', {
   state: () => ({
+    avatar: '',
     name: 'Дмитрий',
     surname: 'Горшков',
     dateOfBirth: '1999/03/26',
