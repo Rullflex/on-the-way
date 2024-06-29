@@ -114,7 +114,6 @@ const drivesStore = useDrivesStore();
                   :key="name"
                   :name="`eva-${name}-outline`"
                   size="1.2rem"
-                  v-tooltip="'asd'"
                 />
               </div>
             </div>

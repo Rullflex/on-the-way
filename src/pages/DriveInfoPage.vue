@@ -4,6 +4,7 @@ import { getPluralNoun } from 'src/shared/utils';
 import { useDrivesStore } from 'src/stores/drives';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { MyBackBtn } from 'src/shared/ui';
 
 const route = useRoute();
 const driveId = computed(() => Number(route.params.id));
@@ -16,13 +17,10 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
     <q-page-container>
       <q-page
         v-if="drive"
-        class="q-pb-lg"
+        class="q-pb-lg q-pt-sm"
       >
-        <q-btn
-          @click="$router.back()"
-          icon="eva-arrow-back-outline"
-          flat
-          dense
+        <my-back-btn
+          :fallback-route="{ name: 'all-drives-list' }"
           class="q-ml-md q-mb-md"
         />
 
