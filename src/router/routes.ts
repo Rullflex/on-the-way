@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
+import MainLayout from 'layouts/MainLayout.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -7,7 +8,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/search',
-    component: () => import('layouts/MainLayout.vue'),
+    component: MainLayout,
     children: [
       {
         path: '',
@@ -27,8 +28,19 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/DriveInfoPage.vue'),
   },
   {
+    path: '/incoming',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'incoming',
+        component: () => import('pages/IncomingPage.vue'),
+      },
+    ],
+  },
+  {
     path: '/profile',
-    component: () => import('layouts/MainLayout.vue'),
+    component: MainLayout,
     children: [
       {
         path: '',

@@ -20,6 +20,7 @@ const navigation = [
   {
     title: 'Входящие',
     icon: 'eva-message-circle-outline',
+    to: { name: 'incoming' },
   },
   {
     title: 'Профиль',

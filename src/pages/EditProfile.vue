@@ -121,7 +121,10 @@ const handleSave = () => {
           >
             <template #append>
               <q-item-section avatar>
-                <my-avatar />
+                <my-avatar
+                  self
+                  size="5rem"
+                />
               </q-item-section>
             </template>
 

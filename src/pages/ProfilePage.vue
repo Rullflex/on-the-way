@@ -32,7 +32,10 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         </q-item-section>
 
         <q-item-section avatar>
-          <my-avatar />
+          <my-avatar
+            self
+            size="5rem"
+          />
         </q-item-section>
 
         <q-item-section side>
