@@ -22,6 +22,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/AllDrivesList.vue'),
   },
   {
+    name: 'drive-info',
+    path: '/drive-info/:id',
+    component: () => import('pages/DriveInfoPage.vue'),
+  },
+  {
     path: '/profile',
     component: () => import('layouts/MainLayout.vue'),
     children: [

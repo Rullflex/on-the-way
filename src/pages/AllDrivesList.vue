@@ -1,70 +1,13 @@
 <script setup lang="ts">
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
+import { useDrivesStore } from 'src/stores/drives';
 import { storeToRefs } from 'pinia';
 import { getPluralNoun } from 'src/shared/utils';
 
 const store = useDriveSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
-const drivesList = [
-  {
-    id: 1,
-    price: '900',
-    origin: {
-      place: 'Пермь',
-      time: '10:00',
-    },
-    destination: {
-      place: 'Кудымкар',
-      time: '13:00',
-    },
-    reserved: 1,
-    passengers: 4,
-    driver: {
-      name: 'Алексей',
-      car: 'TOYOTA COROLA XXL 22',
-      avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
-    },
-  },
-  {
-    id: 2,
-    price: '800',
-    origin: {
-      place: 'Юсьва',
-      time: '11:00',
-    },
-    destination: {
-      place: 'Карагай',
-      time: '13:30',
-    },
-    reserved: 2,
-    passengers: 3,
-    driver: {
-      name: 'Алина',
-      car: 'ВАЗ 1122',
-      avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
-    },
-  },
-  {
-    id: 3,
-    price: '1000',
-    origin: {
-      place: 'Юрла',
-      time: '14:00',
-    },
-    destination: {
-      place: 'Ленинск',
-      time: '15:00',
-    },
-    reserved: 7,
-    passengers: 7,
-    driver: {
-      name: 'Мария',
-      car: 'Jerry Tiger 2020',
-      avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-    },
-  },
-];
+const drivesStore = useDrivesStore();
 </script>
 
 <template>
@@ -108,11 +51,12 @@ const drivesList = [
 
         <q-list class="column gap-sm">
           <q-item
-            v-for="drive in drivesList"
+            v-for="drive in drivesStore.drives"
             :key="drive.id"
             clickable
             :disable="drive.reserved === drive.passengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
+            :to="{ name: 'drive-info', params: { id: drive.id } }"
           >
             <div
               class="column overflow-hidden"
