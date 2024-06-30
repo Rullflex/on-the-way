@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 
 enum Steps {
@@ -53,20 +54,17 @@ const isBtnNextVisible = computed<boolean>(() => {
 <template>
   <q-card>
     <!-- ANCHOR - Close/Back Button -->
-    <q-card-section class="q-pb-none">
+    <q-card-section class="sticky-top bg-white z-top">
       <q-btn
         v-if="currentStep === Steps.LicensePlate"
         v-close-popup
-        icon="eva-close"
         flat
         dense
+        icon="eva-close"
       />
 
-      <q-btn
+      <my-back-btn
         v-else
-        icon="eva-arrow-back-outline"
-        flat
-        dense
         @click="currentStep--"
       />
     </q-card-section>
@@ -76,11 +74,10 @@ const isBtnNextVisible = computed<boolean>(() => {
       <q-card-section
         v-if="currentStep === Steps.LicensePlate"
         tag="form"
-        class="absolute-top"
-        :style="{ top: '53px' }"
+        class="absolute q-px-sm q-pt-none"
         @submit.prevent="licensePlate && currentStep++"
       >
-        <h4 class="q-mb-lg">Какой у машины регистрационный номер?</h4>
+        <h4 class="q-mx-md q-mb-lg">Какой у машины регистрационный номер?</h4>
 
         <q-input
           v-model="licensePlate"
@@ -88,22 +85,17 @@ const isBtnNextVisible = computed<boolean>(() => {
           clearable
           maxlength="20"
           placeholder="А 123 БВ 45"
+          class="q-mx-md"
         />
 
-        <q-item
+        <my-item
           v-show="!licensePlate?.length"
+          chevron
           clickable
-          class="q-mt-md rounded-borders"
+          class="q-mt-md"
+          label="Я не знаю номер"
           @click="currentStep++"
-        >
-          <q-item-section>
-            <q-item-label>Я не знаю номер</q-item-label>
-          </q-item-section>
-
-          <q-item-section side>
-            <q-icon name="eva-chevron-right-outline" />
-          </q-item-section>
-        </q-item>
+        />
       </q-card-section>
       <!-- !SECTION -->
 
@@ -111,8 +103,7 @@ const isBtnNextVisible = computed<boolean>(() => {
       <q-card-section
         v-else-if="currentStep === Steps.Name"
         tag="form"
-        class="absolute-top"
-        :style="{ top: '53px' }"
+        class="absolute q-px-lg q-pt-none"
         @submit.prevent="name && currentStep++"
       >
         <h4 class="q-mb-lg">Какая у вас марка и модель машины?</h4>
@@ -122,7 +113,7 @@ const isBtnNextVisible = computed<boolean>(() => {
           outlined
           clearable
           maxlength="20"
-          placeholder="HYUNDAI SOLARIS"
+          placeholder="HYNDAI SOLARIS"
         />
       </q-card-section>
       <!-- !SECTION -->
@@ -130,31 +121,23 @@ const isBtnNextVisible = computed<boolean>(() => {
       <!-- SECTION - Step Body Type -->
       <q-card-section
         v-else-if="currentStep === Steps.BodyType"
-        class="absolute-top"
-        :style="{ top: '53px' }"
+        class="absolute q-px-sm q-pt-none"
       >
-        <h4 class="q-mb-lg">Какой тип кузова у вашего авто?</h4>
+        <h4 class="q-mx-md q-mb-lg">Какой тип кузова у вашего авто?</h4>
 
         <q-list>
           <!-- TODO: Icons of body types for items -->
-          <q-item
+          <my-item
             v-for="type in ['Седан', 'Хэтчбэк', 'Легковой фургон', 'Универсал', 'Кроссовер', 'Минивэн']"
             :key="type"
             clickable
-            class="rounded-borders"
+            chevron
+            :label="type"
             @click="
               bodyType = type;
               currentStep++;
             "
-          >
-            <q-item-section>
-              <q-item-label>{{ type }}</q-item-label>
-            </q-item-section>
-
-            <q-item-section side>
-              <q-icon name="eva-chevron-right-outline"></q-icon>
-            </q-item-section>
-          </q-item>
+          />
         </q-list>
       </q-card-section>
       <!-- !SECTION -->
@@ -162,10 +145,9 @@ const isBtnNextVisible = computed<boolean>(() => {
       <!-- SECTION - Step Car Color -->
       <q-card-section
         v-else-if="currentStep === Steps.Color"
-        class="absolute-top"
-        :style="{ top: '53px' }"
+        class="absolute q-px-sm q-pt-none"
       >
-        <h4 class="q-mb-lg">Какого цвета ваша машина?</h4>
+        <h4 class="q-mx-md q-mb-lg">Какого цвета ваша машина?</h4>
 
         <q-list>
           <q-item
@@ -217,8 +199,7 @@ const isBtnNextVisible = computed<boolean>(() => {
       <!-- SECTION - Step Car Year -->
       <q-card-section
         v-else-if="currentStep === Steps.Year"
-        class="absolute-top"
-        :style="{ top: '53px' }"
+        class="absolute q-px-lg q-pt-none"
       >
         <h4 class="q-mb-lg">Какого года выпуска ваша машина?</h4>
 
@@ -238,8 +219,8 @@ const isBtnNextVisible = computed<boolean>(() => {
         <q-btn
           v-if="year?.length === 4 && Number(year) <= new Date().getFullYear()"
           unelevated
-          label="Сохранить"
           color="primary"
+          label="Сохранить"
           class="fixed-bottom q-ma-lg"
           @click="
             emit('updated', {

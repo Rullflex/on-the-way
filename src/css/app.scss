@@ -12,6 +12,15 @@ p {
   margin: 0;
 }
 
+.sticky {
+  position: sticky;
+
+  &-top {
+    position: sticky;
+    top: 0;
+  }
+}
+
 .gap {
   &-xs {
     gap: ($space-base * 0.25);
