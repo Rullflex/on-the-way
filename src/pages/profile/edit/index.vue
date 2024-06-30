@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserInfoStore } from 'src/stores/user-info';
-import { MyAvatar, MyItem, MyPhoneInput } from 'src/shared/ui';
+import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
 
 const monthNames = [
   'января',
@@ -96,65 +96,57 @@ const handleSave = () => {
 </script>
 
 <template>
-  <q-layout>
-    <q-page-container>
-      <q-page class="q-pa-lg">
-        <q-btn
-          @click="$router.back()"
-          icon="eva-arrow-back-outline"
-          flat
-          dense
-          class="q-ml-xs"
-        />
+  <q-page>
+    <div class="sticky-top bg-white q-pa-md">
+      <my-back-btn fallback-route="/profile" />
+    </div>
 
-        <h5 class="q-mb-lg q-mt-md q-ml-md">Редактирование профиля</h5>
+    <h5 class="q-mb-lg q-mx-lg">Редактирование профиля</h5>
 
-        <q-list>
-          <!-- ANCHOR - Add Profile Photo -->
-          <my-item
-            tag="label"
-            color="primary"
-            :icon="avatar ? 'eva-edit-outline' : 'eva-plus-circle-outline'"
-            :label="`${avatar ? 'Изменить' : 'Добавить'} фото профиля`"
-          >
-            <template #append>
-              <q-item-section avatar>
-                <my-avatar
-                  self
-                  size="5rem"
-                />
-              </q-item-section>
-            </template>
-
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              @input="handleAvatarChange"
+    <q-list class="q-pa-sm">
+      <!-- ANCHOR - Add Profile Photo -->
+      <my-item
+        tag="label"
+        color="primary"
+        :icon="avatar ? 'eva-edit-outline' : 'eva-plus-circle-outline'"
+        :label="`${avatar ? 'Изменить' : 'Добавить'} фото профиля`"
+      >
+        <template #append>
+          <q-item-section avatar>
+            <my-avatar
+              self
+              size="5rem"
             />
-          </my-item>
+          </q-item-section>
+        </template>
 
-          <!-- ANCHOR - List Items -->
-          <my-item
-            v-for="item in listItems"
-            chevron
-            clickable
-            :key="item.label"
-            :label="item.label"
-            :caption="item.value || 'Не указано'"
-            @click="showDialogByType(item.type)"
-          />
-        </q-list>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          @input="handleAvatarChange"
+        />
+      </my-item>
+
+      <!-- ANCHOR - List Items -->
+      <my-item
+        v-for="item in listItems"
+        chevron
+        clickable
+        :key="item.label"
+        :label="item.label"
+        :caption="item.value || 'Не указано'"
+        @click="showDialogByType(item.type)"
+      />
+    </q-list>
+  </q-page>
 
   <q-dialog
     maximized
     v-model="isDialogVisible"
   >
     <q-card>
-      <q-card-section class="q-pb-none">
+      <q-card-section>
         <q-btn
           v-close-popup
           icon="eva-close"
@@ -163,50 +155,52 @@ const handleSave = () => {
         />
       </q-card-section>
 
-      <q-card-section class="q-pa-lg">
-        <h4 class="q-mb-lg">{{ dialogTitle }}</h4>
+      <h4 class="q-mx-lg q-mb-lg">{{ dialogTitle }}</h4>
 
-        <q-input
-          v-if="dialogType === 'name'"
-          v-model="dialogModel"
-          outlined
-          clearable
-          maxlength="20"
-          placeholder="Имя"
-        />
+      <q-input
+        v-if="dialogType === 'name'"
+        v-model="dialogModel"
+        outlined
+        clearable
+        maxlength="20"
+        placeholder="Имя"
+        class="q-mx-lg"
+      />
 
-        <q-input
-          v-else-if="dialogType === 'surname'"
-          v-model="dialogModel"
-          outlined
-          clearable
-          maxlength="20"
-          placeholder="Фамилия"
-        />
+      <q-input
+        v-else-if="dialogType === 'surname'"
+        v-model="dialogModel"
+        outlined
+        clearable
+        maxlength="20"
+        placeholder="Фамилия"
+        class="q-mx-lg"
+      />
 
-        <q-date
-          v-else-if="dialogType === 'dateOfBirth'"
-          v-model="dialogModel"
-          flat
-          minimal
-          class="full-width"
-        ></q-date>
+      <q-date
+        v-else-if="dialogType === 'dateOfBirth'"
+        v-model="dialogModel"
+        flat
+        minimal
+        class="full-width"
+      ></q-date>
 
-        <q-input
-          v-else-if="dialogType === 'email'"
-          v-model="dialogModel"
-          outlined
-          clearable
-          maxlength="40"
-          placeholder="Эл. почта"
-          :rules="['email']"
-        />
+      <q-input
+        v-else-if="dialogType === 'email'"
+        v-model="dialogModel"
+        outlined
+        clearable
+        maxlength="40"
+        placeholder="Эл. почта"
+        :rules="['email']"
+        class="q-mx-lg"
+      />
 
-        <my-phone-input
-          v-else-if="dialogType === 'phone'"
-          v-model="dialogModel"
-        />
-      </q-card-section>
+      <my-phone-input
+        v-else-if="dialogType === 'phone'"
+        v-model="dialogModel"
+        class="q-mx-lg"
+      />
 
       <!-- ANCHOR - Save Button -->
       <q-btn
