@@ -53,7 +53,7 @@ const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
           dense
         />
 
-        <div class="text-h5 text-bold q-mb-lg q-mt-md">Информация о машине</div>
+        <h5 class="q-mb-lg q-mt-md">Информация о машине</h5>
 
         <q-list>
           <!-- ANCHOR - Car Info -->

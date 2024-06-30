@@ -18,7 +18,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
 </script>
 
 <template>
-  <q-page class="q-pa-lg">
+  <q-page class="q-pa-md">
     <q-list>
       <!-- ANCHOR - Personal Data -->
       <q-item
@@ -26,7 +26,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         class="rounded-borders"
       >
         <q-item-section>
-          <q-item-label class="text-h5 text-bold text-blue-grey-9">Дмитрий</q-item-label>
+          <q-item-label class="text-h5 text-blue-grey-9">Дмитрий</q-item-label>
           <q-item-label caption>Личные данные</q-item-label>
         </q-item-section>
 

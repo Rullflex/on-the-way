@@ -44,11 +44,11 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       <!-- SECTION - Step Departure City -->
       <div
         v-if="currentStep === StepNames.departureCity"
-        class="q-pa-md absolute full-width"
+        class="absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-md">Откуда вы выезжаете?</div>
+        <h4 class="q-ma-lg">Откуда вы выезжаете?</h4>
 
-        <q-list>
+        <q-list class="q-px-sm">
           <my-item
             v-for="name in CITY_NAMES"
             :key="name"
@@ -69,7 +69,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.departureLocation"
         class="q-pa-lg absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-lg">Укажите точный адрес отправления</div>
+        <h4 class="q-mb-lg">Укажите точный адрес отправления</h4>
 
         <q-input
           v-model="departureLocation"
@@ -100,7 +100,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.destinationCity"
         class="q-pa-md absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-md">Куда вы едете?</div>
+        <h4 class="q-mb-md">Куда вы едете?</h4>
 
         <q-list>
           <my-item
@@ -123,7 +123,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.destinationLocation"
         class="q-pa-lg absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-lg">Укажите точный адрес прибытия</div>
+        <h4 class="q-mb-lg">Укажите точный адрес прибытия</h4>
 
         <q-input
           v-model="destinationLocation"
@@ -154,7 +154,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.intermediateCities"
         class="q-pa-md absolute full-width"
       >
-        <div class="text-h5 text-bold q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</div>
+        <h5 class="q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
 
         <q-list>
           <my-item
@@ -175,7 +175,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.date"
         class="q-pa-md absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-md">Когда поездка?</div>
+        <h4 class="q-mb-md">Когда поездка?</h4>
 
         <q-date
           v-model="date"
@@ -198,7 +198,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.time"
         class="q-pa-md absolute full-width"
       >
-        <div class="text-h4 text-bold q-mb-md">Во сколько заберете пассажиров?</div>
+        <h4 class="q-mb-md">Во сколько заберете пассажиров?</h4>
 
         <q-time
           flat

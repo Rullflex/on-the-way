@@ -80,7 +80,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         :style="{ top: '53px' }"
         @submit.prevent="licensePlate && currentStep++"
       >
-        <div class="text-h4 text-bold q-mb-lg">Какой у машины регистрационный номер?</div>
+        <h4 class="q-mb-lg">Какой у машины регистрационный номер?</h4>
 
         <q-input
           v-model="licensePlate"
@@ -115,7 +115,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         :style="{ top: '53px' }"
         @submit.prevent="name && currentStep++"
       >
-        <div class="text-h4 text-bold q-mb-lg">Какая у вас марка и модель машины?</div>
+        <h4 class="q-mb-lg">Какая у вас марка и модель машины?</h4>
 
         <q-input
           v-model="name"
@@ -133,7 +133,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         class="absolute-top"
         :style="{ top: '53px' }"
       >
-        <div class="text-h4 text-bold q-mb-lg">Какой тип кузова у вашего авто?</div>
+        <h4 class="q-mb-lg">Какой тип кузова у вашего авто?</h4>
 
         <q-list>
           <!-- TODO: Icons of body types for items -->
@@ -165,7 +165,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         class="absolute-top"
         :style="{ top: '53px' }"
       >
-        <div class="text-h4 text-bold q-mb-lg">Какого цвета ваша машина?</div>
+        <h4 class="q-mb-lg">Какого цвета ваша машина?</h4>
 
         <q-list>
           <q-item
@@ -220,7 +220,7 @@ const isBtnNextVisible = computed<boolean>(() => {
         class="absolute-top"
         :style="{ top: '53px' }"
       >
-        <div class="text-h4 text-bold q-mb-lg">Какого года выпуска ваша машина?</div>
+        <h4 class="q-mb-lg">Какого года выпуска ваша машина?</h4>
 
         <q-input
           v-model="year"

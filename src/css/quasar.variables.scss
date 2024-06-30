@@ -4,6 +4,27 @@
 $body-font-size: 16px;
 $body-line-height: 1.2;
 
+$h4: (
+  size: 1.8rem,
+  line-height: 1.25em,
+  letter-spacing: 0.00735em,
+  weight: 700,
+);
+
+$h5: (
+  size: 1.5rem,
+  line-height: 1.25em,
+  letter-spacing: normal,
+  weight: 700,
+);
+
+$h6: (
+  size: 1.25rem,
+  line-height: 1.25em,
+  letter-spacing: 0.0125em,
+  weight: 700,
+);
+
 $primary: #cb997e;
 $secondary: #b7b7a4;
 $accent: #777d63;
@@ -17,6 +38,8 @@ $negative: #ee6055;
 $info: #0bb6d9;
 $warning: #ffd152;
 
+$separator-color: rgba(0, 0, 0, 0.09);
+
 $generic-border-radius: 12px;
 
 $button-padding: 16px 32px;
@@ -25,3 +48,4 @@ $button-font-size: 16px;
 $button-font-weight: 600;
 
 $input-font-size: 16px;
+$input-label-color: rgba(0, 0, 0, 0.4);

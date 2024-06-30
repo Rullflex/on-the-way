@@ -46,7 +46,7 @@ const drivesStore = useDrivesStore();
 
     <q-page-container>
       <q-page class="q-pa-lg">
-        <div class="text-h5 text-bold q-mb-sm">Сегодня</div>
+        <h5 class="q-mb-sm">Сегодня</h5>
 
         <q-list class="column gap-sm">
           <q-item

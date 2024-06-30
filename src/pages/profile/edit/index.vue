@@ -107,7 +107,7 @@ const handleSave = () => {
           class="q-ml-xs"
         />
 
-        <div class="text-h5 text-bold q-mb-lg q-mt-md q-ml-md">Редактирование профиля</div>
+        <h5 class="q-mb-lg q-mt-md q-ml-md">Редактирование профиля</h5>
 
         <q-list>
           <!-- ANCHOR - Add Profile Photo -->
@@ -164,7 +164,7 @@ const handleSave = () => {
       </q-card-section>
 
       <q-card-section class="q-pa-lg">
-        <p class="text-h4 text-bold text-blue-grey-9 q-mb-lg">{{ dialogTitle }}</p>
+        <h4 class="q-mb-lg">{{ dialogTitle }}</h4>
 
         <q-input
           v-if="dialogType === 'name'"

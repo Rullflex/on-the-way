@@ -23,7 +23,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
         />
 
         <div class="q-px-lg">
-          <div class="text-h5 text-bold q-mb-lg">Чт 27 июня</div>
+          <h5 class="q-mb-lg">Чт 27 июня</h5>
 
           <div class="column">
             <span class="text-bold">Ленина 25 (автовокзал)</span>
@@ -47,7 +47,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
         />
 
         <div class="q-px-lg">
-          <span class="text-h6 text-bold">{{ drive.price }} ₽</span> за 1 пассажира, осталось
+          <span class="text-h6">{{ drive.price }} ₽</span> за 1 пассажира, осталось
           {{ drive.passengers - drive.reserved }}
           {{ getPluralNoun(drive.passengers - drive.reserved, 'место', 'места', 'мест') }}
         </div>

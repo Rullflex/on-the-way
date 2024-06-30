@@ -69,7 +69,7 @@ const navigation = [
 
 <style lang="scss" module>
 .nav {
-  padding: 0.35rem 0 1rem;
+  padding: 0.4rem 0 0.8rem;
 }
 
 .list {

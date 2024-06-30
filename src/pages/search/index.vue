@@ -198,9 +198,7 @@ const onSearchClicked = () => {
 
       <!-- ANCHOR - Location Picker -->
       <q-card-section v-if="dialogType === 'origin' || dialogType === 'destination'">
-        <p class="text-h4 text-bold text-blue-grey-9">
-          {{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}
-        </p>
+        <h4>{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
 
         <q-list
           separator
@@ -225,7 +223,7 @@ const onSearchClicked = () => {
 
       <!-- ANCHOR - Date Picker -->
       <q-card-section v-else-if="dialogType === 'date'">
-        <p class="text-h4 text-bold text-blue-grey-9">Когда вы едете?</p>
+        <h4>Когда вы едете?</h4>
 
         <q-date
           v-model="datePickerModel"
@@ -246,7 +244,7 @@ const onSearchClicked = () => {
 
       <!-- ANCHOR - Passengers Picker -->
       <q-card-section v-else-if="dialogType === 'passengers'">
-        <p class="text-h4 text-bold text-blue-grey-9">Количество бронируемых мест</p>
+        <h4>Количество бронируемых мест</h4>
 
         <div class="column items-center gap-lg q-pt-lg">
           <div class="row items-center">
