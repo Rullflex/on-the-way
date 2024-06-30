@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { QInput } from 'quasar';
-import { ref } from 'vue';
 import { formatByPhoneMask } from 'src/shared/utils';
 
 const model = defineModel<string | null>({ default: '' });

@@ -1,5 +1,3 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
-
 export const useUserInfoStore = defineStore('user-info', {
   state: () => ({
     avatar: '',

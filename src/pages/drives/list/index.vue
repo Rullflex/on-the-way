@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { useDrivesStore } from 'src/stores/drives';
-import { storeToRefs } from 'pinia';
 import { getPluralNoun } from 'src/shared/utils';
 
 const store = useDriveSettingsStore();

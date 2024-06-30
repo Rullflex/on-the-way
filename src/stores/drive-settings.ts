@@ -1,5 +1,3 @@
-import { acceptHMRUpdate, defineStore } from 'pinia';
-
 export const useDriveSettingsStore = defineStore('drive-settings', {
   state: () => ({
     origin: '',

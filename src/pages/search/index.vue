@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { ref, watch } from 'vue';
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
-import { storeToRefs } from 'pinia';
 import { CITY_NAMES } from 'src/shared/constants';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';

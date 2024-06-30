@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
-import { useQuasar } from 'quasar';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();

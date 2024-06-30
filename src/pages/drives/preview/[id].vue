@@ -2,7 +2,6 @@
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { getPluralNoun } from 'src/shared/utils';
 import { useDrivesStore } from 'src/stores/drives';
-import { computed } from 'vue';
 import { MyBackBtn } from 'src/shared/ui';
 
 const props = defineProps<{ id: string }>();

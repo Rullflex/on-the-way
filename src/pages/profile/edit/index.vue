@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { useUserInfoStore } from 'src/stores/user-info';
-import { computed, ref } from 'vue';
 import { MyAvatar, MyItem, MyPhoneInput } from 'src/shared/ui';
 
 const monthNames = [

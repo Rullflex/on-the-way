@@ -21,7 +21,7 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      
+
       'axios',
     ],
 
@@ -83,6 +83,10 @@ module.exports = configure(function (/* ctx */) {
           exclude: ['**/ui/*.vue'],
         }],
         ['vite-plugin-vue-layouts'],
+        ['unplugin-auto-import/vite', {
+          imports: ['vue', 'vue-router', 'pinia', 'quasar'],
+          vueTemplate: true,
+        }],
       ]
     },
 

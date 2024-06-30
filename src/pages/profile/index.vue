@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { MyAvatar } from 'src/shared/ui';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));

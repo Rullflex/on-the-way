@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useUserInfoStore } from 'src/stores/user-info';
 
 interface IProps {

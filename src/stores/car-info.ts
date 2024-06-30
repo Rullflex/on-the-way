@@ -1,5 +1,3 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
-
 export interface CarInfo {
   id: number;
   licensePlate: string;

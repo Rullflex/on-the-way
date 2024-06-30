@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 
 enum Steps {
