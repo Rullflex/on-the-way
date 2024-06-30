@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { useQuasar } from 'quasar';
+const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
-const UpdateCar = defineAsyncComponent(() => import('../features/UpdateCar/UpdateCar.vue'));
+const props = defineProps<{ id: string }>();
 
 const $q = useQuasar();
-const route = useRoute();
 const router = useRouter();
 const store = useCarInfoStore();
 
 const isDialogVisible = ref(false);
 
-const id = computed(() => Number(route.params.id));
+const currentCarId = computed(() => Number(props.id));
 
 const listItems = computed(() => {
-  const { licensePlate, name, year, bodyType, color } = store.carById(id.value) ?? {};
+  const { licensePlate, name, year, bodyType, color } = store.carById(currentCarId.value) ?? {};
 
   return [
     { label: 'Регистрационный номер', value: licensePlate || '-' },
@@ -34,13 +34,13 @@ const handleDeleteCard = () => {
     persistent: true,
     cancel: true,
   }).onOk(() => {
-    store.deleteCar(id.value);
+    store.deleteCar(currentCarId.value);
     router.back();
   });
 };
 
 const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
-  store.updateCar(id.value, payload);
+  store.updateCar(currentCarId.value, payload);
   isDialogVisible.value = false;
 };
 </script>
@@ -104,8 +104,13 @@ const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
     maximized
   >
     <UpdateCar
-      :id="id"
+      :id="currentCarId"
       @updated="handleUpdateCar"
     />
   </q-dialog>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: blank
+</route>

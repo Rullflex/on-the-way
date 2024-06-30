@@ -6,7 +6,8 @@ import {
   createWebHistory,
 } from 'vue-router';
 
-import routes from './routes';
+import { setupLayouts } from 'virtual:generated-layouts'
+import generatedRoutes from '~pages'
 
 /*
  * If not building with SSR mode, you can
@@ -24,7 +25,13 @@ export default route(function (/* { store, ssrContext } */) {
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
+    routes: [
+      {
+        path: '/',
+        redirect: '/search',
+      },
+      ...setupLayouts(generatedRoutes),
+    ],
 
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode

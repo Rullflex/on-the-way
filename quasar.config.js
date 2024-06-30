@@ -78,7 +78,11 @@ module.exports = configure(function (/* ctx */) {
           eslint: {
             lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"'
           }
-        }, { server: false }]
+        }, { server: false }],
+        ['vite-plugin-pages', {
+          exclude: ['**/ui/*.vue'],
+        }],
+        ['vite-plugin-vue-layouts'],
       ]
     },
 

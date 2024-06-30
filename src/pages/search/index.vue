@@ -69,7 +69,7 @@ const onSearchClicked = () => {
   } else if (!passengers.value) {
     showDialog('passengers');
   } else {
-    router.push({ name: 'all-drives-list' });
+    router.push('/drives/list');
   }
 };
 </script>

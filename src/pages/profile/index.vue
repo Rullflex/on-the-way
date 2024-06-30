@@ -2,7 +2,7 @@
 import { computed, defineAsyncComponent, ref } from 'vue';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { MyAvatar } from 'src/shared/ui';
-const UpdateCar = defineAsyncComponent(() => import('../features/UpdateCar/UpdateCar.vue'));
+const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const carInfoStore = useCarInfoStore();
 const cars = computed(() => carInfoStore.cars);
@@ -47,7 +47,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
       <q-item
         clickable
         class="rounded-borders text-primary"
-        :to="{ name: 'profile-edit' }"
+        to="/profile/edit"
       >
         <q-item-section side>
           <q-icon
@@ -69,7 +69,7 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
           v-for="car in cars"
           :key="car.licensePlate"
           clickable
-          :to="{ name: 'car-info', params: { id: car.id } }"
+          :to="`/cars/preview/${car.id}`"
           class="rounded-borders"
         >
           <q-item-section>

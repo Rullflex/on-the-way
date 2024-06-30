@@ -7,12 +7,12 @@ const navigation = [
   {
     title: 'Искать',
     icon: 'eva-search-outline',
-    to: { name: 'search' },
+    to: '/search',
   },
   {
     title: 'Опубликовать',
     icon: 'eva-plus-circle-outline',
-    to: { name: 'publish' },
+    to: '/publish',
   },
   {
     title: 'Ваши поездки',
@@ -21,12 +21,12 @@ const navigation = [
   {
     title: 'Входящие',
     icon: 'eva-message-circle-outline',
-    to: { name: 'incoming' },
+    to: '/incoming',
   },
   {
     title: 'Профиль',
     icon: 'eva-person-outline',
-    to: { name: 'profile' },
+    to: '/profile',
   },
 ];
 </script>

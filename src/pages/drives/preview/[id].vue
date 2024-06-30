@@ -3,11 +3,10 @@ import MyItem from 'src/shared/ui/MyItem.vue';
 import { getPluralNoun } from 'src/shared/utils';
 import { useDrivesStore } from 'src/stores/drives';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { MyBackBtn } from 'src/shared/ui';
 
-const route = useRoute();
-const driveId = computed(() => Number(route.params.id));
+const props = defineProps<{ id: string }>();
+const driveId = computed(() => Number(props.id));
 const drivesStore = useDrivesStore();
 const drive = computed(() => drivesStore.driveById(driveId.value));
 </script>
@@ -20,7 +19,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
         class="q-pb-lg q-pt-sm"
       >
         <my-back-btn
-          :fallback-route="{ name: 'all-drives-list' }"
+          fallback-route="/drives/list"
           class="q-ml-md q-mb-md"
         />
 
@@ -134,3 +133,8 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
     </q-page-container>
   </q-layout>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: blank
+</route>

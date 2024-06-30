@@ -22,7 +22,7 @@ const drivesStore = useDrivesStore();
         icon="eva-chevron-left-outline"
         flat
         dense
-        :to="{ name: 'search' }"
+        to="/search"
       />
 
       <div style="font-size: 0.75rem">
@@ -56,7 +56,7 @@ const drivesStore = useDrivesStore();
             clickable
             :disable="drive.reserved === drive.passengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
-            :to="{ name: 'drive-info', params: { id: drive.id } }"
+            :to="`/drives/preview/${drive.id}`"
           >
             <div
               class="column overflow-hidden"
@@ -123,3 +123,8 @@ const drivesStore = useDrivesStore();
     </q-page-container>
   </q-layout>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: blank
+</route>
