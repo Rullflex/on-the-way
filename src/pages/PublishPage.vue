@@ -1,0 +1,226 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import { CITY_NAMES } from 'src/shared/constants';
+import { MyBackBtn, MyItem } from 'src/shared/ui';
+enum StepNames {
+  departureCity,
+  departureLocation,
+  destinationCity,
+  destinationLocation,
+  intermediateCities,
+  date,
+  time,
+}
+
+const currentStep = ref(StepNames.departureCity);
+const departureCity = ref('');
+const departureLocation = ref('');
+const destinationCity = ref('');
+const destinationLocation = ref('');
+const intermediateCities = ref<string[]>([]);
+const date = ref('');
+const time = ref('');
+
+const toggleIntermediateCity = (city: string) => {
+  if (intermediateCities.value.includes(city)) {
+    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
+  } else {
+    intermediateCities.value.push(city);
+  }
+};
+
+const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
+</script>
+
+<template>
+  <q-page>
+    <!-- ANCHOR - Back Button -->
+    <my-back-btn
+      v-if="currentStep !== StepNames.departureCity"
+      class="q-ml-md q-mt-md"
+      @click="currentStep--"
+    />
+
+    <transition name="slide-left">
+      <!-- SECTION - Step Departure City -->
+      <div
+        v-if="currentStep === StepNames.departureCity"
+        class="q-pa-md absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-md">Откуда вы выезжаете?</div>
+
+        <q-list>
+          <my-item
+            v-for="name in CITY_NAMES"
+            :key="name"
+            :label="name"
+            chevron
+            clickable
+            @click="
+              departureCity = name;
+              currentStep++;
+            "
+          />
+        </q-list>
+      </div>
+      <!-- !SECTION -->
+
+      <!-- SECTION - Step Departure Location -->
+      <div
+        v-else-if="currentStep === StepNames.departureLocation"
+        class="q-pa-lg absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-lg">Укажите точный адрес отправления</div>
+
+        <q-input
+          v-model="departureLocation"
+          outlined
+          maxlength="20"
+          :prefix="`${departureCity},`"
+          placeholder="Ленина 24"
+        />
+
+        <my-item
+          label="Я заберу пассажиров с места"
+          chevron
+          clickable
+          @click="currentStep++"
+        />
+
+        <my-item
+          label="Договорно"
+          chevron
+          clickable
+          @click="currentStep++"
+        />
+      </div>
+      <!-- !SECTION -->
+
+      <!-- SECTION - Step Destination City -->
+      <div
+        v-else-if="currentStep === StepNames.destinationCity"
+        class="q-pa-md absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-md">Куда вы едете?</div>
+
+        <q-list>
+          <my-item
+            v-for="name in CITY_NAMES"
+            :key="name"
+            :label="name"
+            chevron
+            clickable
+            @click="
+              destinationCity = name;
+              currentStep++;
+            "
+          />
+        </q-list>
+      </div>
+      <!-- !SECTION -->
+
+      <!-- SECTION - Step Destination Location -->
+      <div
+        v-else-if="currentStep === StepNames.destinationLocation"
+        class="q-pa-lg absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-lg">Укажите точный адрес прибытия</div>
+
+        <q-input
+          v-model="destinationLocation"
+          outlined
+          maxlength="20"
+          :prefix="`${destinationCity},`"
+          placeholder="Ленина 24"
+        />
+
+        <my-item
+          label="Я довезу пассажиров до места"
+          chevron
+          clickable
+          @click="currentStep++"
+        />
+
+        <my-item
+          label="Договорно"
+          chevron
+          clickable
+          @click="currentStep++"
+        />
+      </div>
+      <!-- !SECTION -->
+
+      <!-- SECTION - Step Intermediate Cities -->
+      <div
+        v-else-if="currentStep === StepNames.intermediateCities"
+        class="q-pa-md absolute full-width"
+      >
+        <div class="text-h5 text-bold q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</div>
+
+        <q-list>
+          <my-item
+            v-for="name in CITY_NAMES"
+            :icon="hasIntermediateCity(name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
+            :key="name"
+            :label="name"
+            chevron
+            clickable
+            @click="toggleIntermediateCity(name)"
+          />
+        </q-list>
+      </div>
+      <!-- !SECTION -->
+
+      <!-- SECTION - Step Date -->
+      <div
+        v-else-if="currentStep === StepNames.date"
+        class="q-pa-md absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-md">Когда поездка?</div>
+
+        <q-date
+          v-model="date"
+          flat
+          minimal
+          class="full-width"
+          :options="
+            (date) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return new Date(date) >= today;
+            }
+          "
+          @update:model-value="currentStep++"
+        ></q-date>
+      </div>
+      <!-- !SECTION -->
+
+      <div
+        v-else-if="currentStep === StepNames.time"
+        class="q-pa-md absolute full-width"
+      >
+        <div class="text-h4 text-bold q-mb-md">Во сколько заберете пассажиров?</div>
+
+        <q-time
+          flat
+          now-btn
+          class="full-width"
+          v-model="time"
+        />
+      </div>
+    </transition>
+
+    <!-- ANCHOR - Next Button -->
+    <q-page-sticky
+      position="bottom-right"
+      :offset="[18, 18]"
+    >
+      <q-btn
+        fab
+        icon="eva-arrow-forward-outline"
+        color="primary"
+        @click="currentStep++"
+      />
+    </q-page-sticky>
+  </q-page>
+</template>

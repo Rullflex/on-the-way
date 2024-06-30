@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { storeToRefs } from 'pinia';
+import { CITY_NAMES } from 'src/shared/constants';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
@@ -42,8 +43,6 @@ watch(datePickerModel, (newValue) => {
 
 const isDialogVisible = ref<boolean>(false);
 const dialogType = ref<DialogType>();
-
-const availableLocationNames = ['Пермь', 'Кудымкар', 'Карагай', 'Юрла', 'Юсьва', 'Ленинск'];
 
 const showDialog = (type: DialogType) => {
   isDialogVisible.value = true;
@@ -211,7 +210,7 @@ const onSearchClicked = () => {
           padding
         >
           <q-item
-            v-for="name in availableLocationNames"
+            v-for="name in CITY_NAMES"
             :key="name"
             clickable
             @click="dialogType === 'origin' ? onOriginPicked(name) : onDestinationPicked(name)"

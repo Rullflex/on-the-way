@@ -2,9 +2,11 @@
 import { computed } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 
-const props = defineProps<{
-  fallbackRoute: RouteLocationRaw;
-}>();
+interface IProps {
+  fallbackRoute?: RouteLocationRaw;
+}
+
+const props = defineProps<IProps>();
 const backRoute = computed(() => history.state.back ?? props.fallbackRoute);
 </script>
 
@@ -13,6 +15,6 @@ const backRoute = computed(() => history.state.back ?? props.fallbackRoute);
     flat
     dense
     icon="eva-arrow-back-outline"
-    :to="backRoute"
+    :to="fallbackRoute && backRoute"
   />
 </template>

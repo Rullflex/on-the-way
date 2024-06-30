@@ -28,6 +28,17 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/DriveInfoPage.vue'),
   },
   {
+    path: '/publish',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'publish',
+        component: () => import('pages/PublishPage.vue'),
+      },
+    ],
+  },
+  {
     path: '/incoming',
     component: MainLayout,
     children: [

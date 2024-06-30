@@ -12,6 +12,7 @@ const navigation = [
   {
     title: 'Опубликовать',
     icon: 'eva-plus-circle-outline',
+    to: { name: 'publish' },
   },
   {
     title: 'Ваши поездки',
