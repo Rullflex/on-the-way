@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
-import { MyAvatar } from 'src/shared/ui';
+import { MyAvatar, MyItem } from 'src/shared/ui';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const carInfoStore = useCarInfoStore();
@@ -18,8 +18,8 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
 </script>
 
 <template>
-  <q-page class="q-pa-md">
-    <q-list>
+  <q-page>
+    <q-list class="q-px-sm q-py-md">
       <!-- ANCHOR - Personal Data -->
       <q-item
         clickable
@@ -43,26 +43,22 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
       </q-item>
 
       <!-- ANCHOR - Edit Profile -->
-      <q-item
-        clickable
-        class="rounded-borders text-primary"
+      <my-item
+        color="primary"
         to="/profile/edit"
-      >
-        <q-item-section side>
-          <q-icon
-            color="primary"
-            name="eva-edit-outline"
-          ></q-icon>
-        </q-item-section>
-        <q-item-section>Редактировать профиль</q-item-section>
-      </q-item>
+        icon="eva-edit-outline"
+        label="Редактировать профиль"
+      />
 
-      <q-separator class="q-my-md" />
+      <q-separator
+        inset
+        spaced="1rem"
+      />
 
       <!-- SECTION - Cars -->
       <q-item-label header>Машины</q-item-label>
 
-      <!-- ANCHOR - Cars -->
+      <!-- ANCHOR - Список машин -->
       <template v-if="cars.length">
         <q-item
           v-for="car in cars"
@@ -88,45 +84,40 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
       </template>
 
       <!-- ANCHOR - Add Car -->
-      <q-item
+      <my-item
         clickable
-        class="rounded-borders text-primary"
+        color="primary"
+        label="Добавить авто"
+        icon="eva-plus-circle-outline"
         @click="isDialogVisible = true"
-      >
-        <q-item-section side>
-          <q-icon
-            color="primary"
-            name="eva-plus-circle-outline"
-          ></q-icon>
-        </q-item-section>
-        <q-item-section>Добавить авто</q-item-section>
-      </q-item>
+      />
       <!-- !SECTION -->
 
-      <q-separator class="q-my-md" />
+      <q-separator
+        inset
+        spaced="1rem"
+      />
 
       <!-- ANCHOR - Extra Links -->
-      <q-item
-        clickable
+      <my-item
         v-for="link in ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение']"
         :key="link"
-        class="rounded-borders"
-      >
-        <q-item-section>{{ link }}</q-item-section>
-        <q-item-section side>
-          <q-icon name="eva-chevron-right-outline"></q-icon>
-        </q-item-section>
-      </q-item>
+        :label="link"
+        clickable
+        chevron
+      />
 
-      <q-separator class="q-my-md" />
+      <q-separator
+        inset
+        spaced="1rem"
+      />
 
       <!-- ANCHOR - Log Out -->
-      <q-item
+      <my-item
         clickable
-        class="rounded-borders text-negative"
-      >
-        <q-item-section>Выйти</q-item-section>
-      </q-item>
+        color="negative"
+        label="Выйти"
+      />
     </q-list>
   </q-page>
 
