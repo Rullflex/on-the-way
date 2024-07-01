@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { CITY_NAMES } from 'src/shared/constants';
+import { MyItem } from 'src/shared/ui';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
@@ -184,46 +185,43 @@ const onSearchClicked = () => {
     maximized
     v-model="isDialogVisible"
   >
-    <q-card>
+    <q-card class="column">
       <!-- ANCHOR - Row with close button -->
-      <q-card-section class="q-pb-none">
+      <q-card-section class="sticky-top bg-white z-top">
         <q-btn
+          v-close-popup
           icon="eva-close"
           flat
           round
           dense
-          v-close-popup
         />
       </q-card-section>
 
       <!-- ANCHOR - Location Picker -->
-      <q-card-section v-if="dialogType === 'origin' || dialogType === 'destination'">
-        <h4>{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
+      <q-card-section
+        v-if="dialogType === 'origin' || dialogType === 'destination'"
+        class="q-px-sm q-pt-none"
+      >
+        <h4 class="q-mx-md q-mb-lg">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
 
-        <q-list
-          separator
-          padding
-        >
-          <q-item
+        <q-list>
+          <my-item
             v-for="name in CITY_NAMES"
             :key="name"
+            :label="name"
             clickable
+            chevron
             @click="dialogType === 'origin' ? onOriginPicked(name) : onDestinationPicked(name)"
-          >
-            <q-item-section>
-              <q-item-label>{{ name }}</q-item-label>
-            </q-item-section>
-
-            <q-item-section avatar>
-              <q-icon name="eva-chevron-right-outline"></q-icon>
-            </q-item-section>
-          </q-item>
+          />
         </q-list>
       </q-card-section>
 
       <!-- ANCHOR - Date Picker -->
-      <q-card-section v-else-if="dialogType === 'date'">
-        <h4>Когда вы едете?</h4>
+      <q-card-section
+        v-else-if="dialogType === 'date'"
+        class="q-px-none q-pt-none"
+      >
+        <h4 class="q-mx-lg q-mb-lg">Когда вы едете?</h4>
 
         <q-date
           v-model="datePickerModel"
@@ -243,36 +241,43 @@ const onSearchClicked = () => {
       </q-card-section>
 
       <!-- ANCHOR - Passengers Picker -->
-      <q-card-section v-else-if="dialogType === 'passengers'">
+      <q-card-section
+        v-else-if="dialogType === 'passengers'"
+        class="q-px-lg q-pt-none col column justify-between"
+      >
         <h4>Количество бронируемых мест</h4>
 
-        <div class="column items-center gap-lg q-pt-lg">
+        <div class="column items-center gap-lg">
           <div class="row items-center">
             <q-btn
-              icon="eva-minus-circle-outline"
               flat
-              round
               dense
+              icon="eva-minus-circle-outline"
               @click="passengers > 1 && passengers--"
             />
-            <div class="text-h1 text-bold q-px-md">{{ passengers }}</div>
+
+            <div
+              class="text-h1 text-bold q-px-md row flex-center"
+              style="width: 100px"
+            >
+              {{ passengers }}
+            </div>
+
             <q-btn
-              icon="eva-plus-circle-outline"
               flat
-              round
               dense
+              icon="eva-plus-circle-outline"
               @click="passengers++"
             />
           </div>
-
-          <q-space />
-
-          <q-btn
-            color="primary"
-            @click="isDialogVisible = false"
-            >Подтвердить</q-btn
-          >
         </div>
+
+        <q-btn
+          unelevated
+          color="primary"
+          label="Подтвердить"
+          @click="isDialogVisible = false"
+        />
       </q-card-section>
     </q-card>
   </q-dialog>

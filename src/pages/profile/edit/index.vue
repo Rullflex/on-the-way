@@ -97,7 +97,7 @@ const handleSave = () => {
 
 <template>
   <q-page>
-    <div class="sticky-top bg-white q-pa-md">
+    <div class="sticky-top bg-white q-pa-md z-top">
       <my-back-btn fallback-route="/profile" />
     </div>
 
