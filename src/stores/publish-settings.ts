@@ -1,4 +1,9 @@
-import { ICityInfo, ITravelOptions } from 'src/shared/types/travelTypes';
+import { ITravelOptions } from 'src/shared/types/travelTypes';
+
+export interface ICityInfo {
+  city: string,
+  location: string,
+}
 
 interface State {
   departureCity: ICityInfo,

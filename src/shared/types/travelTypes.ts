@@ -7,7 +7,4 @@ export interface ITravelOptions {
   hasAirCondition: boolean
 }
 
-export interface ICityInfo {
-  city: string,
-  location: string,
-}
+
