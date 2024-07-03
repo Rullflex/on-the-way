@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
+
 enum StepNames {
   departureCity,
   departureLocation,
@@ -12,7 +13,7 @@ enum StepNames {
 }
 
 const currentStep = ref(StepNames.departureCity);
-const stepAnimationDirection = ref('')
+const stepAnimationName = ref('');
 const departureCity = ref('');
 const departureLocation = ref('');
 const destinationCity = ref('');
@@ -30,9 +31,8 @@ const toggleIntermediateCity = (city: string) => {
 };
 
 watch(currentStep, (nextStep, prevStep) => {
-  if (nextStep > prevStep) stepAnimationDirection.value = 'step-right'
-  else stepAnimationDirection.value = 'step-left'
-})
+  stepAnimationName.value = nextStep > prevStep ? 'slide-right' : 'slide-left';
+});
 
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
@@ -46,7 +46,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       @click="currentStep--"
     />
 
-    <transition :name="stepAnimationDirection">
+    <transition :name="stepAnimationName">
       <!-- SECTION - Step Departure City -->
       <div
         v-if="currentStep === StepNames.departureCity"
