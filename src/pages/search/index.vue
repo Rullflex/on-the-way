@@ -70,7 +70,6 @@ const onSearchClicked = () => {
     router.push('/drives/list');
   }
 };
-
 </script>
 
 <template>
@@ -306,29 +305,23 @@ const onSearchClicked = () => {
       <!-- ANCHOR - Time Picker -->
       <q-card-section
         v-else-if="dialogType === 'time'"
-        class="q-px-none q-pt-none"
+        class="q-px-lg q-pt-none column col gap-lg"
       >
-        <h4 class="q-mx-lg q-mb-lg">Во сколько вы планируете выехать?</h4>
+        <h4>Во сколько вы планируете выехать?</h4>
 
-        <div class="q-mx-lg q-px-md q-py-sm row justify-center">
-          <q-input
-            v-model="time"
-            type="time"
-            outlined
-            dense
-            class="q-pa-sm"
-            style="width: 150px; text-align: center; font-size: 1.5rem;"
-          />
-        </div>
-        <div class="q-ma-lg">
-          <q-btn
-            unelevated
-            color="primary"
-            label="Подтвердить"
-            @click="isDialogVisible = false"
-            class="full-width"
-          />
-        </div>
+        <q-input
+          v-model="time"
+          type="time"
+          outlined
+        />
+
+        <q-btn
+          unelevated
+          color="primary"
+          label="Подтвердить"
+          class="q-mt-auto"
+          @click="isDialogVisible = false"
+        />
       </q-card-section>
     </q-card>
   </q-dialog>
