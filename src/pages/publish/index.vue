@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { CITY_NAMES } from 'src/shared/constants';
-import { MyBackBtn, MyItem } from 'src/shared/ui';
+import {CITY_NAMES} from 'src/shared/constants';
+import {MyBackBtn, MyItem} from 'src/shared/ui';
+
 enum StepNames {
   departureCity,
   departureLocation,
@@ -32,6 +33,10 @@ const toggleIntermediateCity = (city: string) => {
 watch(currentStep, (nextStep, prevStep) => {
   if (nextStep > prevStep) stepAnimationDirection.value = 'step-right'
   else stepAnimationDirection.value = 'step-left'
+})
+
+const cityListWithoutRepeats = computed(() => {
+  return CITY_NAMES.filter(city => city !== departureCity.value && city !== destinationCity.value)
 })
 
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
@@ -110,7 +115,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 
         <q-list>
           <my-item
-            v-for="name in CITY_NAMES"
+            v-for="name in cityListWithoutRepeats"
             :key="name"
             :label="name"
             chevron
@@ -164,11 +169,10 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 
         <q-list>
           <my-item
-            v-for="name in CITY_NAMES"
+            v-for="name in cityListWithoutRepeats"
             :icon="hasIntermediateCity(name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
             :key="name"
             :label="name"
-            chevron
             clickable
             @click="toggleIntermediateCity(name)"
           />
