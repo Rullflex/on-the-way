@@ -12,6 +12,7 @@ enum StepNames {
 }
 
 const currentStep = ref(StepNames.departureCity);
+const stepAnimationDirection = ref('')
 const departureCity = ref('');
 const departureLocation = ref('');
 const destinationCity = ref('');
@@ -28,6 +29,11 @@ const toggleIntermediateCity = (city: string) => {
   }
 };
 
+watch(currentStep, (nextStep, prevStep) => {
+  if (nextStep > prevStep) stepAnimationDirection.value = 'step-right'
+  else stepAnimationDirection.value = 'step-left'
+})
+
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -40,7 +46,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       @click="currentStep--"
     />
 
-    <transition name="slide-left">
+    <transition :name="stepAnimationDirection">
       <!-- SECTION - Step Departure City -->
       <div
         v-if="currentStep === StepNames.departureCity"
