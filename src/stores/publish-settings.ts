@@ -1,17 +1,4 @@
-import { useDriveSettingsStore } from 'stores/drive-settings';
-
-interface ITravelOptions {
-  isPackageAvailable: boolean,
-  isBaggageAvailable: boolean,
-  isChildSeatAvailable: boolean,
-  isAnimalsAvailable: boolean,
-  twoInTheBack: boolean
-}
-
-interface ICityInfo {
-  city: string,
-  location: string,
-}
+import { ICityInfo, ITravelOptions } from 'src/shared/types/travelTypes';
 
 interface State {
   departureCity: ICityInfo,
@@ -38,6 +25,7 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
       isBaggageAvailable: false,
       isPackageAvailable: false,
       isChildSeatAvailable: false,
+      hasAirCondition: false,
       twoInTheBack: false
     },
     date: '',
@@ -56,5 +44,5 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useDriveSettingsStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(usePublishSettingsStore, import.meta.hot));
 }
