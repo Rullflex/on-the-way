@@ -2,6 +2,7 @@
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
+import { date as qDateUtil } from 'quasar';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers' | 'time';
 
@@ -10,6 +11,7 @@ const store = useDriveSettingsStore();
 const { origin, destination, date, passengers, time } = storeToRefs(store);
 
 const datePickerModel = ref<string>('');
+const initialTimeSet = ref<boolean>(false);
 
 watch(datePickerModel, (newValue) => {
   const [dayOfWeek, dayOfMonth, month] = newValue.split(' ');
@@ -36,6 +38,13 @@ watch(datePickerModel, (newValue) => {
     ];
 
     date.value = `${dayOfWeek} ${dayOfMonth} ${monthNames[monthIndex]}`;
+  }
+});
+
+onMounted(() => {
+  if (!initialTimeSet.value && !time.value) {
+    time.value = qDateUtil.formatDate(new Date(), 'HH:mm');
+    initialTimeSet.value = true;
   }
 });
 
