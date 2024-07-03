@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
+import { useStep } from 'src/shared/hooks/useStep';
 
 enum Steps {
   LicensePlate,
@@ -21,7 +22,7 @@ interface IEmits {
 const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
 
-const currentStep = ref(Steps.LicensePlate);
+const {currentStep, stepAnimationName} = useStep(Steps.LicensePlate)
 
 const licensePlate = ref<string | null>();
 const name = ref<string | null>();
@@ -69,7 +70,7 @@ const isBtnNextVisible = computed<boolean>(() => {
       />
     </q-card-section>
 
-    <transition name="slide-left">
+    <transition :name="stepAnimationName">
       <!-- SECTION - Step License Plate -->
       <q-card-section
         v-if="currentStep === Steps.LicensePlate"
