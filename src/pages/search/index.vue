@@ -3,11 +3,11 @@ import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
 
-type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
+type DialogType = 'origin' | 'destination' | 'date' | 'passengers' | 'time';
 
 const router = useRouter();
 const store = useDriveSettingsStore();
-const { origin, destination, date, passengers } = storeToRefs(store);
+const { origin, destination, date, passengers, time } = storeToRefs(store);
 
 const datePickerModel = ref<string>('');
 
@@ -70,6 +70,7 @@ const onSearchClicked = () => {
     router.push('/drives/list');
   }
 };
+
 </script>
 
 <template>
@@ -166,6 +167,28 @@ const onSearchClicked = () => {
         </div>
       </div>
 
+      <!-- ANCHOR - Time Field -->
+      <div
+        class="q-px-lg"
+        @click="showDialog('time')"
+      >
+        <q-field
+          label="Время отбытия"
+          :stack-label="Boolean(time)"
+        >
+          <template v-slot:prepend>
+            <q-icon
+              name="eva-clock-outline"
+              size="1.3rem"
+            />
+          </template>
+
+          <template v-slot:control>
+            {{ time }}
+          </template>
+        </q-field>
+      </div>
+
       <div class="q-pa-lg">
         <!-- ANCHOR - Search Button -->
         <q-btn
@@ -202,7 +225,7 @@ const onSearchClicked = () => {
         v-if="dialogType === 'origin' || dialogType === 'destination'"
         class="q-px-sm q-pt-none"
       >
-        <h4 class="q-mx-md q-mb-lg">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
+        <h4 class="q-mx-md q-mb-md">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
 
         <q-list>
           <my-item
@@ -221,7 +244,7 @@ const onSearchClicked = () => {
         v-else-if="dialogType === 'date'"
         class="q-px-none q-pt-none"
       >
-        <h4 class="q-mx-lg q-mb-lg">Когда вы едете?</h4>
+        <h4 class="q-mx-lg q-mb-md">Когда вы едете?</h4>
 
         <q-date
           v-model="datePickerModel"
@@ -278,6 +301,34 @@ const onSearchClicked = () => {
           label="Подтвердить"
           @click="isDialogVisible = false"
         />
+      </q-card-section>
+
+      <!-- ANCHOR - Time Picker -->
+      <q-card-section
+        v-else-if="dialogType === 'time'"
+        class="q-px-none q-pt-none"
+      >
+        <h4 class="q-mx-lg q-mb-lg">Во сколько вы планируете выехать?</h4>
+
+        <div class="q-mx-lg q-px-md q-py-sm row justify-center">
+          <q-input
+            v-model="time"
+            type="time"
+            outlined
+            dense
+            class="q-pa-sm"
+            style="width: 150px; text-align: center; font-size: 1.5rem;"
+          />
+        </div>
+        <div class="q-ma-lg">
+          <q-btn
+            unelevated
+            color="primary"
+            label="Подтвердить"
+            @click="isDialogVisible = false"
+            class="full-width"
+          />
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>

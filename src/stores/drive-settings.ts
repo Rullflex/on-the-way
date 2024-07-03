@@ -4,6 +4,7 @@ export const useDriveSettingsStore = defineStore('drive-settings', {
     destination: '',
     date: '',
     passengers: 1,
+    time: '',
   }),
 });
 
