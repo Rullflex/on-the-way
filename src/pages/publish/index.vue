@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
+import { useStep } from 'src/shared/hooks/useStep';
 
 enum StepNames {
   departureCity,
@@ -12,8 +13,7 @@ enum StepNames {
   time,
 }
 
-const currentStep = ref(StepNames.departureCity);
-const stepAnimationName = ref('');
+const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 const departureCity = ref('');
 const departureLocation = ref('');
 const destinationCity = ref('');

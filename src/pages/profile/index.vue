@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { MyAvatar, MyItem } from 'src/shared/ui';
+
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const carInfoStore = useCarInfoStore();
@@ -11,7 +12,7 @@ const isDialogVisible = ref(false);
 const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
   carInfoStore.addCar({
     id: Date.now(),
-    ...payload,
+    ...payload
   });
   isDialogVisible.value = false;
 };
