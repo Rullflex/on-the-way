@@ -66,3 +66,20 @@ p {
 .fade-leave-to {
   opacity: 0;
 }
+
+.step-right-enter-active,
+.step-right-leave-active,
+.step-left-enter-active,
+.step-left-leave-active {
+  transition: all 0.3s ease;
+}
+
+.step-right-enter-from,
+.step-left-leave-to {
+  transform: translateX(100%);
+}
+
+.step-left-enter-from,
+.step-right-leave-to {
+  transform: translateX(-100%);
+}
