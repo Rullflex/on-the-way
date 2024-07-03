@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { NamedColor } from 'quasar';
+
 interface IProps {
   label: string;
   caption?: string;
-  color?: 'primary' | 'accent' | 'secondary' | 'info' | 'warning' | 'positive' | 'negative';
+  color?: NamedColor;
   icon?: string;
   chevron?: boolean;
 }

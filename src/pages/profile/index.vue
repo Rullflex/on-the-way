@@ -12,7 +12,7 @@ const isDialogVisible = ref(false);
 const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
   carInfoStore.addCar({
     id: Date.now(),
-    ...payload
+    ...payload,
   });
   isDialogVisible.value = false;
 };
@@ -23,8 +23,8 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
     <q-list class="q-px-sm q-py-md">
       <!-- ANCHOR - Personal Data -->
       <q-item
-        clickable
         class="rounded-borders"
+        to="/profile/preview/1"
       >
         <q-item-section>
           <q-item-label class="text-h5 text-blue-grey-9">Дмитрий</q-item-label>

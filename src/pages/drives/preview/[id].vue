@@ -57,10 +57,11 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
           size="0.5rem"
         />
 
-        <q-list>
+        <q-list class="q-px-sm">
           <my-item
             chevron
             :label="drive.driver.name"
+            to="/profile/preview/1"
           >
             <template #append>
               <q-avatar
