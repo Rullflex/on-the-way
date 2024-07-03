@@ -18,6 +18,7 @@ export const useDrivesStore = defineStore('drives', {
           name: 'Алексей',
           car: 'TOYOTA COROLA XXL 22',
           avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
+          phone: '+7 (999) 999-99-99',
         },
       },
       {
@@ -37,6 +38,7 @@ export const useDrivesStore = defineStore('drives', {
           name: 'Алина',
           car: 'ВАЗ 1122',
           avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
+          phone: '+7 (999) 999-99-99',
         },
       },
       {
@@ -56,6 +58,7 @@ export const useDrivesStore = defineStore('drives', {
           name: 'Мария',
           car: 'Jerry Tiger 2020',
           avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
+          phone: '+7 (999) 999-99-99',
         },
       },
     ],
