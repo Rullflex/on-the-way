@@ -22,7 +22,7 @@ interface IEmits {
 const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
 
-const {currentStep, stepAnimationName} = useStep(Steps.LicensePlate)
+const { currentStep, stepAnimationName } = useStep(Steps.LicensePlate);
 
 const licensePlate = ref<string | null>();
 const name = ref<string | null>();

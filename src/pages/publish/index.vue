@@ -13,7 +13,7 @@ enum StepNames {
   time,
 }
 
-const {currentStep, stepAnimationName} = useStep(StepNames.departureCity)
+const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 const departureCity = ref('');
 const departureLocation = ref('');
 const destinationCity = ref('');
