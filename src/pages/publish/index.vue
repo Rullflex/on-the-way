@@ -18,18 +18,6 @@ const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 
-const toggleIntermediateCity = (city: string) => {
-  if (intermediateCities.value.includes(city)) {
-    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
-  } else {
-    intermediateCities.value.push(city);
-  }
-};
-
-watch(currentStep, (nextStep, prevStep) => {
-  stepAnimationName.value = nextStep > prevStep ? 'slide-right' : 'slide-left';
-});
-
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -165,7 +153,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
             :key="name"
             :label="name"
             clickable
-            @click="toggleIntermediateCity(name)"
+            @click="store.toggleIntermediateCity(name)"
           />
         </q-list>
       </div>

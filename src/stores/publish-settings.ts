@@ -36,12 +36,21 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
     travelOptions: {
       isAnimalsAvailable: false,
       isBaggageAvailable: false,
+      isPackageAvailable: false,
       isChildSeatAvailable: false,
-      twoInTheBack: false,
-      isPackageAvailable: false
+      twoInTheBack: false
     },
     date: '',
     time: ''
+  }),
+  actions: ({
+    toggleIntermediateCity(city: string) {
+      if (this.intermediateCities.includes(city)) {
+        this.intermediateCities = this.intermediateCities.filter((item) => item !== city);
+      } else {
+        this.intermediateCities.push(city);
+      }
+    },
   })
 });
 
