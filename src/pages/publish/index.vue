@@ -2,6 +2,7 @@
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
+import { usePublishSettingsStore } from 'stores/publish-settings';
 
 enum StepNames {
   departureCity,
@@ -13,26 +14,9 @@ enum StepNames {
   time,
 }
 
+const store = usePublishSettingsStore();
+const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const departureCity = ref('');
-const departureLocation = ref('');
-const destinationCity = ref('');
-const destinationLocation = ref('');
-const intermediateCities = ref<string[]>([]);
-const date = ref('');
-const time = ref('');
-
-const toggleIntermediateCity = (city: string) => {
-  if (intermediateCities.value.includes(city)) {
-    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
-  } else {
-    intermediateCities.value.push(city);
-  }
-};
-
-watch(currentStep, (nextStep, prevStep) => {
-  stepAnimationName.value = nextStep > prevStep ? 'slide-right' : 'slide-left';
-});
 
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
@@ -62,7 +46,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
             chevron
             clickable
             @click="
-              departureCity = name;
+              departureCity.city = name;
               currentStep++;
             "
           />
@@ -78,10 +62,10 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         <h4 class="q-mb-lg">Укажите точный адрес отправления</h4>
 
         <q-input
-          v-model="departureLocation"
+          v-model="departureCity.location"
           outlined
           maxlength="20"
-          :prefix="`${departureCity},`"
+          :prefix="`${departureCity.city},`"
           placeholder="Ленина 24"
         />
 
@@ -116,7 +100,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
             chevron
             clickable
             @click="
-              destinationCity = name;
+              destinationCity.city = name;
               currentStep++;
             "
           />
@@ -132,10 +116,10 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         <h4 class="q-mb-lg">Укажите точный адрес прибытия</h4>
 
         <q-input
-          v-model="destinationLocation"
+          v-model="destinationCity.location"
           outlined
           maxlength="20"
-          :prefix="`${destinationCity},`"
+          :prefix="`${destinationCity.city},`"
           placeholder="Ленина 24"
         />
 
@@ -168,9 +152,8 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
             :icon="hasIntermediateCity(name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
             :key="name"
             :label="name"
-            chevron
             clickable
-            @click="toggleIntermediateCity(name)"
+            @click="store.toggleIntermediateCity(name)"
           />
         </q-list>
       </div>
