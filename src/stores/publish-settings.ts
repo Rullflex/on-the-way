@@ -43,6 +43,7 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
     date: '',
     time: ''
   }),
+
   actions: ({
     toggleIntermediateCity(city: string) {
       if (this.intermediateCities.includes(city)) {
@@ -50,7 +51,7 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
       } else {
         this.intermediateCities.push(city);
       }
-    },
+    }
   })
 });
 
