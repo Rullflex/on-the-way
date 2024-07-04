@@ -20,6 +20,7 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
+const isStepValid = ref(false)
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -138,6 +139,9 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       </div>
     </transition>
 
-    <NextButton @btn-click="currentStep++" />
+    <NextButton
+      v-if="isStepValid"
+      @btn-click="currentStep++"
+    />
   </q-page>
 </template>

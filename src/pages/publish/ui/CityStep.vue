@@ -18,6 +18,7 @@ defineProps<{
         v-for="name in cityList"
         :key="name"
         :label="name"
+        :active="name === cityName"
         chevron
         clickable
         @click="$emit('listItemClick', name)"
