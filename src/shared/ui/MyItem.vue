@@ -16,7 +16,7 @@ const props = defineProps<IProps>();
 <template>
   <q-item
     class="rounded-borders"
-    :class="[props.color && `text-${props.color}`, 'borders-primary']"
+    :class="props.color && `text-${props.color}`"
     :active="props.active"
   >
     <q-item-section
@@ -54,7 +54,6 @@ const props = defineProps<IProps>();
       side
     >
       <q-icon
-        :color="props.active ? 'primary' : ''"
         name="eva-chevron-right-outline"
       />
     </q-item-section>

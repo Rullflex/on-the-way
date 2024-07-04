@@ -3,9 +3,9 @@ import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import { usePublishSettingsStore } from 'stores/publish-settings';
-import CityStep from 'pages/publish/ui/CityStep.vue';
-import LocationStep from 'pages/publish/ui/LocationStep.vue';
-import NextButton from 'pages/publish/ui/NextButton.vue';
+import CityStep from './ui/CityStep.vue';
+import LocationStep from './ui/LocationStep.vue';
+import NextButton from './ui/NextButton.vue';
 
 enum StepNames {
   departureCity,
@@ -33,7 +33,6 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
     />
 
     <transition :name="stepAnimationName">
-      <!-- SECTION - Step Departure City -->
       <CityStep
         v-if="currentStep === StepNames.departureCity"
         title="Откуда вы выезжаете?"
@@ -44,9 +43,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         departureCity.city = name;
         }"
       />
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Departure Location -->
       <LocationStep
         v-else-if="currentStep === StepNames.departureLocation"
         title="Укажите точный адрес отправления"
@@ -60,9 +57,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           currentStep++
         }"
       />
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Destination City -->
       <CityStep
         v-else-if="currentStep === StepNames.destinationCity"
         title="Куда вы едете?"
@@ -73,9 +68,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           currentStep++;
         }"
       />
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Destination Location -->
       <LocationStep
         v-else-if="currentStep === StepNames.destinationLocation"
         title="Укажите точный адрес прибытия"
@@ -89,9 +82,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           currentStep++
         }"
       />
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Intermediate Cities -->
       <div
         v-else-if="currentStep === StepNames.intermediateCities"
         class="q-pa-md absolute full-width"
@@ -109,9 +100,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           />
         </q-list>
       </div>
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Date -->
       <div
         v-else-if="currentStep === StepNames.date"
         class="q-pa-md absolute full-width"
@@ -133,7 +122,6 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           @update:model-value="currentStep++"
         ></q-date>
       </div>
-      <!-- !SECTION -->
 
       <div
         v-else-if="currentStep === StepNames.time"
@@ -150,7 +138,6 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       </div>
     </transition>
 
-    <!-- ANCHOR - Next Button -->
     <NextButton @btn-click="currentStep++" />
   </q-page>
 </template>

@@ -25,7 +25,8 @@ const locationInputValue = ref(props.city.location);
     />
 
     <my-item
-      v-for="option in options" :key="option"
+      v-for="option in options"
+      :key="option"
       :label="option"
       chevron
       clickable
