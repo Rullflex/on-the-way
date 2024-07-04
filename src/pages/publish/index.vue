@@ -2,7 +2,6 @@
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
-import { usePublishSettingsStore } from 'stores/publish-settings';
 import CityStep from './ui/CityStep.vue';
 import LocationStep from './ui/LocationStep.vue';
 import NextButton from './ui/NextButton.vue';
@@ -17,9 +16,35 @@ enum StepNames {
   time,
 }
 
-const store = usePublishSettingsStore();
-const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
+export interface ICityInfo {
+  city: string,
+  location: string,
+  canDriveToPassengerLocation: boolean,
+}
+
+const initialCityState = {
+  city: '',
+  location: '',
+  canDriveToPassengerLocation: false
+};
+
+// Ожидает страницы отправки поездки
+// interface publishFormData {
+//   departureCity: ICityInfo,
+//   destinationCity: ICityInfo,
+//   intermediateCities: string[],
+//   travelOptions: ITravelOptions,
+//   date: '',
+//   time: ''
+// }
+
+const departureCity = ref<ICityInfo>({ ...initialCityState });
+const destinationCity = ref<ICityInfo>({ ...initialCityState });
+const intermediateCities = ref<string[]>([]);
+const date = ref('');
+const time = ref('');
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
+
 const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
     return Boolean(departureCity.value.city);
@@ -35,6 +60,14 @@ const isNextButtonVisible = computed<boolean>(() => {
 
   return false;
 });
+
+const toggleIntermediateCity = (city: string) => {
+  if (intermediateCities.value.includes(city)) {
+    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
+  } else {
+    intermediateCities.value.push(city);
+  }
+};
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -113,7 +146,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
             :key="name"
             :label="name"
             clickable
-            @click="store.toggleIntermediateCity(name)"
+            @click="toggleIntermediateCity(name)"
           />
         </q-list>
       </div>
