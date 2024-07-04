@@ -5,6 +5,7 @@ import { useStep } from 'src/shared/hooks/useStep';
 import { usePublishSettingsStore } from 'stores/publish-settings';
 import CityStep from 'pages/publish/ui/CityStep.vue';
 import LocationStep from 'pages/publish/ui/LocationStep.vue';
+import NextButton from 'pages/publish/ui/NextButton.vue';
 
 enum StepNames {
   departureCity,
@@ -19,7 +20,6 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -37,6 +37,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       <CityStep
         v-if="currentStep === StepNames.departureCity"
         title="Откуда вы выезжаете?"
+        :city-name="departureCity.city"
         :city-list="CITY_NAMES"
         @list-item-click="(name) => {
         currentStep++;
@@ -65,6 +66,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       <CityStep
         v-else-if="currentStep === StepNames.destinationCity"
         title="Куда вы едете?"
+        :city-name="destinationCity.city"
         :city-list="CITY_NAMES"
         @list-item-click="(name) => {
           destinationCity.city = name;
@@ -76,7 +78,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       <!-- SECTION - Step Destination Location -->
       <LocationStep
         v-else-if="currentStep === StepNames.destinationLocation"
-        title="Укажите точный вдрес прибытия"
+        title="Укажите точный адрес прибытия"
         :city="destinationCity"
         :options="['Я довезу пассажиров до места', 'Договорно']"
         @location-input="(value) => {
@@ -149,16 +151,6 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
     </transition>
 
     <!-- ANCHOR - Next Button -->
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[18, 18]"
-    >
-      <q-btn
-        fab
-        icon="eva-arrow-forward-outline"
-        color="primary"
-        @click="currentStep++"
-      />
-    </q-page-sticky>
+    <NextButton @btn-click="currentStep++" />
   </q-page>
 </template>

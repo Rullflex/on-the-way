@@ -7,6 +7,7 @@ interface IProps {
   color?: NamedColor;
   icon?: string;
   chevron?: boolean;
+  active?: boolean;
 }
 
 const props = defineProps<IProps>();
@@ -15,7 +16,8 @@ const props = defineProps<IProps>();
 <template>
   <q-item
     class="rounded-borders"
-    :class="props.color && `text-${props.color}`"
+    :class="[props.color && `text-${props.color}`, 'borders-primary']"
+    :active="props.active"
   >
     <q-item-section
       v-if="props.icon"
@@ -51,7 +53,10 @@ const props = defineProps<IProps>();
       v-if="props.chevron"
       side
     >
-      <q-icon name="eva-chevron-right-outline" />
+      <q-icon
+        :color="props.active ? 'primary' : ''"
+        name="eva-chevron-right-outline"
+      />
     </q-item-section>
   </q-item>
 </template>

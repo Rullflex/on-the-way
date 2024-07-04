@@ -3,6 +3,7 @@ import { MyItem } from 'src/shared/ui';
 
 defineProps<{
   title: string,
+  cityName: string,
   cityList: string[],
 }>();
 
@@ -17,6 +18,7 @@ defineProps<{
         v-for="name in cityList"
         :key="name"
         :label="name"
+        :active="name === cityName"
         chevron
         clickable
         @click="$emit('listItemClick', name)"
