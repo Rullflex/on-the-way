@@ -20,7 +20,21 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const isStepValid = ref(false)
+const isNextButtonVisible = computed<boolean>(() => {
+  if (currentStep.value === StepNames.departureCity) {
+    return Boolean(departureCity.value.city);
+  } else if (currentStep.value === StepNames.departureLocation) {
+    return Boolean(departureCity.value.location) || departureCity.value.canDriveToPassengerLocation;
+  } else if (currentStep.value === StepNames.destinationCity) {
+    return Boolean(destinationCity.value.city);
+  } else if (currentStep.value === StepNames.destinationLocation) {
+    return Boolean(destinationCity.value.location) || destinationCity.value.canDriveToPassengerLocation;
+  } else if (currentStep.value === StepNames.intermediateCities) {
+    return Boolean(intermediateCities.value.length);
+  }
+
+  return false;
+});
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -49,12 +63,13 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.departureLocation"
         title="Укажите точный адрес отправления"
         :city="departureCity"
-        :options="['Я заберу пассажиров с места', 'Договорно']"
+        :options="['Я заберу пассажиров с места']"
         @location-input="(value) => {
           departureCity.location = value
+          departureCity.canDriveToPassengerLocation = false
         }"
         @option-click="(option) => {
-          departureCity.location = option
+          departureCity.canDriveToPassengerLocation = true
           currentStep++
         }"
       />
@@ -74,12 +89,13 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.destinationLocation"
         title="Укажите точный адрес прибытия"
         :city="destinationCity"
-        :options="['Я довезу пассажиров до места', 'Договорно']"
+        :options="['Я довезу пассажиров до места']"
         @location-input="(value) => {
           destinationCity.location = value
+          destinationCity.canDriveToPassengerLocation = false
         }"
         @option-click="(option) => {
-          destinationCity.location = option
+          destinationCity.canDriveToPassengerLocation = true
           currentStep++
         }"
       />
@@ -140,7 +156,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
     </transition>
 
     <NextButton
-      v-if="isStepValid"
+      v-if="isNextButtonVisible"
       @btn-click="currentStep++"
     />
   </q-page>
