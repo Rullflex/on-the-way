@@ -24,11 +24,11 @@ const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
     return Boolean(departureCity.value.city);
   } else if (currentStep.value === StepNames.departureLocation) {
-    return Boolean(departureCity.value.location);
+    return Boolean(departureCity.value.location) || Boolean(departureCity.value.option);
   } else if (currentStep.value === StepNames.destinationCity) {
     return Boolean(destinationCity.value.city);
   } else if (currentStep.value === StepNames.destinationLocation) {
-    return Boolean(destinationCity.value.location);
+    return Boolean(destinationCity.value.location) || Boolean(destinationCity.value.option);
   } else if (currentStep.value === StepNames.intermediateCities) {
     return Boolean(intermediateCities.value.length);
   }
@@ -66,9 +66,10 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         :options="['Я заберу пассажиров с места', 'Договорно']"
         @location-input="(value) => {
           departureCity.location = value
+          departureCity.option = ''
         }"
         @option-click="(option) => {
-          departureCity.location = option
+          departureCity.option = option
           currentStep++
         }"
       />
@@ -91,9 +92,10 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         :options="['Я довезу пассажиров до места', 'Договорно']"
         @location-input="(value) => {
           destinationCity.location = value
+          destinationCity.option = ''
         }"
         @option-click="(option) => {
-          destinationCity.location = option
+          destinationCity.option = option
           currentStep++
         }"
       />
