@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
-import { ICityInfo } from 'stores/publish-settings';
+import { ICityInfo } from 'pages/publish/index.vue';
 
 const props = defineProps<{
   title: string,
