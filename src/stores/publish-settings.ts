@@ -3,7 +3,7 @@ import { ITravelOptions } from 'src/shared/types/travelTypes';
 export interface ICityInfo {
   city: string,
   location: string,
-  option: string,
+  canDriveToPassengerLocation: boolean,
 }
 
 interface State {
@@ -20,12 +20,12 @@ export const usePublishSettingsStore = defineStore('publish-settings', {
     departureCity: {
       city: '',
       location: '',
-      option: ''
+      canDriveToPassengerLocation: false
     },
     destinationCity: {
       city: '',
       location: '',
-      option: ''
+      canDriveToPassengerLocation: false
     },
     intermediateCities: [],
     travelOptions: {

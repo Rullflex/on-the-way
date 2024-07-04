@@ -28,7 +28,7 @@ const locationInputValue = ref(props.city.location);
       v-for="option in options"
       :key="option"
       :label="option"
-      :active="city.option === option"
+      :active="city.canDriveToPassengerLocation"
       chevron
       clickable
       @click="$emit('optionClick', option)"

@@ -24,11 +24,11 @@ const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
     return Boolean(departureCity.value.city);
   } else if (currentStep.value === StepNames.departureLocation) {
-    return Boolean(departureCity.value.location) || Boolean(departureCity.value.option);
+    return Boolean(departureCity.value.location) || departureCity.value.canDriveToPassengerLocation;
   } else if (currentStep.value === StepNames.destinationCity) {
     return Boolean(destinationCity.value.city);
   } else if (currentStep.value === StepNames.destinationLocation) {
-    return Boolean(destinationCity.value.location) || Boolean(destinationCity.value.option);
+    return Boolean(destinationCity.value.location) || destinationCity.value.canDriveToPassengerLocation;
   } else if (currentStep.value === StepNames.intermediateCities) {
     return Boolean(intermediateCities.value.length);
   }
@@ -63,13 +63,13 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.departureLocation"
         title="Укажите точный адрес отправления"
         :city="departureCity"
-        :options="['Я заберу пассажиров с места', 'Договорно']"
+        :options="['Я заберу пассажиров с места']"
         @location-input="(value) => {
           departureCity.location = value
-          departureCity.option = ''
+          departureCity.canDriveToPassengerLocation = false
         }"
         @option-click="(option) => {
-          departureCity.option = option
+          departureCity.canDriveToPassengerLocation = true
           currentStep++
         }"
       />
@@ -89,13 +89,13 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         v-else-if="currentStep === StepNames.destinationLocation"
         title="Укажите точный адрес прибытия"
         :city="destinationCity"
-        :options="['Я довезу пассажиров до места', 'Договорно']"
+        :options="['Я довезу пассажиров до места']"
         @location-input="(value) => {
           destinationCity.location = value
-          destinationCity.option = ''
+          destinationCity.canDriveToPassengerLocation = false
         }"
         @option-click="(option) => {
-          destinationCity.option = option
+          destinationCity.canDriveToPassengerLocation = true
           currentStep++
         }"
       />
