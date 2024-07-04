@@ -20,15 +20,17 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const isStepValid = computed<boolean>(() => {
-  if (currentStep.value === StepNames.departureCity && departureCity.value.city) {
-    return true;
-  } else if (currentStep.value === StepNames.departureLocation && departureCity.value.location) {
-    return true;
-  } else if (currentStep.value === StepNames.destinationCity && destinationCity.value.city) {
-    return true;
-  } else if (currentStep.value === StepNames.destinationLocation && destinationCity.value.location) {
-    return true;
+const isNextButtonVisible = computed<boolean>(() => {
+  if (currentStep.value === StepNames.departureCity) {
+    return Boolean(departureCity.value.city);
+  } else if (currentStep.value === StepNames.departureLocation) {
+    return Boolean(departureCity.value.location);
+  } else if (currentStep.value === StepNames.destinationCity) {
+    return Boolean(destinationCity.value.city);
+  } else if (currentStep.value === StepNames.destinationLocation) {
+    return Boolean(destinationCity.value.location);
+  } else if (currentStep.value === StepNames.intermediateCities) {
+    return Boolean(intermediateCities.value.length);
   }
 
   return false;
@@ -152,7 +154,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
     </transition>
 
     <NextButton
-      v-if="isStepValid"
+      v-if="isNextButtonVisible"
       @btn-click="currentStep++"
     />
   </q-page>
