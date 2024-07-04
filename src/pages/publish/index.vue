@@ -20,17 +20,16 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const isStepValid = ref(false)
+const isStepValid = ref(false);
 
 const handleStepValidChange = (isValid: boolean) => {
-  isStepValid.value = isValid
-}
+  isStepValid.value = isValid;
+};
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
 <template>
   <q-page>
-    <!-- ANCHOR - Back Button -->
     <my-back-btn
       v-if="currentStep !== StepNames.departureCity"
       class="q-ml-md q-mt-md"
