@@ -8,7 +8,9 @@ const props = defineProps<{
   options: string[]
 }>();
 
-const locationInputValue = ref(props.city.location);
+const locationInputValue = ref(
+  props.options.includes(props.city.location) ? '' : props.city.location
+);
 </script>
 
 <template>
@@ -28,6 +30,7 @@ const locationInputValue = ref(props.city.location);
       v-for="option in options"
       :key="option"
       :label="option"
+      :active="city.location === option"
       chevron
       clickable
       @click="$emit('optionClick', option)"

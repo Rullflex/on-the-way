@@ -20,7 +20,19 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const isStepValid = ref(false)
+const isStepValid = computed<boolean>(() => {
+  if (currentStep.value === StepNames.departureCity && departureCity.value.city) {
+    return true;
+  } else if (currentStep.value === StepNames.departureLocation && departureCity.value.location) {
+    return true;
+  } else if (currentStep.value === StepNames.destinationCity && destinationCity.value.city) {
+    return true;
+  } else if (currentStep.value === StepNames.destinationLocation && destinationCity.value.location) {
+    return true;
+  }
+
+  return false;
+});
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
