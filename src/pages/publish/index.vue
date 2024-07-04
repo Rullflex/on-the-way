@@ -21,6 +21,10 @@ const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 const isStepValid = ref(false)
+
+const handleStepValidChange = (isValid: boolean) => {
+  isStepValid.value = isValid
+}
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -37,12 +41,13 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       <CityStep
         v-if="currentStep === StepNames.departureCity"
         title="Откуда вы выезжаете?"
-        :city-name="departureCity.city"
+        :city="departureCity"
         :city-list="CITY_NAMES"
         @list-item-click="(name) => {
         currentStep++;
         departureCity.city = name;
         }"
+        @step-valid-change="handleStepValidChange"
       />
 
       <LocationStep
@@ -57,17 +62,19 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           departureCity.location = option
           currentStep++
         }"
+        @step-valid-change="handleStepValidChange"
       />
 
       <CityStep
         v-else-if="currentStep === StepNames.destinationCity"
         title="Куда вы едете?"
-        :city-name="destinationCity.city"
+        :city="destinationCity"
         :city-list="CITY_NAMES"
         @list-item-click="(name) => {
           destinationCity.city = name;
           currentStep++;
         }"
+        @step-valid-change="handleStepValidChange"
       />
 
       <LocationStep
@@ -82,6 +89,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           destinationCity.location = option
           currentStep++
         }"
+        @step-valid-change="handleStepValidChange"
       />
 
       <div

@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
+import { ICityInfo } from 'stores/publish-settings';
 
-defineProps<{
+const props = defineProps<{
   title: string,
-  cityName: string,
+  city: ICityInfo,
   cityList: string[],
 }>();
+
+const emit = defineEmits(['listItemClick', 'stepValidChange']);
+
+onMounted(() => {
+  emit('stepValidChange', props.city.city);
+});
 
 </script>
 
@@ -18,7 +25,7 @@ defineProps<{
         v-for="name in cityList"
         :key="name"
         :label="name"
-        :active="name === cityName"
+        :active="name === city.city"
         chevron
         clickable
         @click="$emit('listItemClick', name)"

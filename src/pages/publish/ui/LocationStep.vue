@@ -7,8 +7,13 @@ const props = defineProps<{
   city: ICityInfo,
   options: string[]
 }>();
+const emit = defineEmits(['locationInput', 'optionClick', 'stepValidChange']);
 
 const locationInputValue = ref(props.city.location);
+
+onMounted(() => {
+  emit('stepValidChange', props.city.location);
+});
 </script>
 
 <template>
