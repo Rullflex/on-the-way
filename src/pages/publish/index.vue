@@ -3,6 +3,9 @@ import { CITY_NAMES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import { usePublishSettingsStore } from 'stores/publish-settings';
+import CityStep from './ui/CityStep.vue';
+import LocationStep from './ui/LocationStep.vue';
+import NextButton from './ui/NextButton.vue';
 
 enum StepNames {
   departureCity,
@@ -17,7 +20,7 @@ enum StepNames {
 const store = usePublishSettingsStore();
 const { departureCity, destinationCity, intermediateCities, date, time } = storeToRefs(store);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-
+const isStepValid = ref(false)
 const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
@@ -31,115 +34,56 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
     />
 
     <transition :name="stepAnimationName">
-      <!-- SECTION - Step Departure City -->
-      <div
+      <CityStep
         v-if="currentStep === StepNames.departureCity"
-        class="absolute full-width"
-      >
-        <h4 class="q-ma-lg">Откуда вы выезжаете?</h4>
+        title="Откуда вы выезжаете?"
+        :city-name="departureCity.city"
+        :city-list="CITY_NAMES"
+        @list-item-click="(name) => {
+        currentStep++;
+        departureCity.city = name;
+        }"
+      />
 
-        <q-list class="q-px-sm">
-          <my-item
-            v-for="name in CITY_NAMES"
-            :key="name"
-            :label="name"
-            chevron
-            clickable
-            @click="
-              departureCity.city = name;
-              currentStep++;
-            "
-          />
-        </q-list>
-      </div>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Departure Location -->
-      <div
+      <LocationStep
         v-else-if="currentStep === StepNames.departureLocation"
-        class="q-pa-lg absolute full-width"
-      >
-        <h4 class="q-mb-lg">Укажите точный адрес отправления</h4>
+        title="Укажите точный адрес отправления"
+        :city="departureCity"
+        :options="['Я заберу пассажиров с места', 'Договорно']"
+        @location-input="(value) => {
+          departureCity.location = value
+        }"
+        @option-click="(option) => {
+          departureCity.location = option
+          currentStep++
+        }"
+      />
 
-        <q-input
-          v-model="departureCity.location"
-          outlined
-          maxlength="20"
-          :prefix="`${departureCity.city},`"
-          placeholder="Ленина 24"
-        />
-
-        <my-item
-          label="Я заберу пассажиров с места"
-          chevron
-          clickable
-          @click="currentStep++"
-        />
-
-        <my-item
-          label="Договорно"
-          chevron
-          clickable
-          @click="currentStep++"
-        />
-      </div>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Destination City -->
-      <div
+      <CityStep
         v-else-if="currentStep === StepNames.destinationCity"
-        class="q-pa-md absolute full-width"
-      >
-        <h4 class="q-mb-md">Куда вы едете?</h4>
+        title="Куда вы едете?"
+        :city-name="destinationCity.city"
+        :city-list="CITY_NAMES"
+        @list-item-click="(name) => {
+          destinationCity.city = name;
+          currentStep++;
+        }"
+      />
 
-        <q-list>
-          <my-item
-            v-for="name in CITY_NAMES"
-            :key="name"
-            :label="name"
-            chevron
-            clickable
-            @click="
-              destinationCity.city = name;
-              currentStep++;
-            "
-          />
-        </q-list>
-      </div>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Destination Location -->
-      <div
+      <LocationStep
         v-else-if="currentStep === StepNames.destinationLocation"
-        class="q-pa-lg absolute full-width"
-      >
-        <h4 class="q-mb-lg">Укажите точный адрес прибытия</h4>
+        title="Укажите точный адрес прибытия"
+        :city="destinationCity"
+        :options="['Я довезу пассажиров до места', 'Договорно']"
+        @location-input="(value) => {
+          destinationCity.location = value
+        }"
+        @option-click="(option) => {
+          destinationCity.location = option
+          currentStep++
+        }"
+      />
 
-        <q-input
-          v-model="destinationCity.location"
-          outlined
-          maxlength="20"
-          :prefix="`${destinationCity.city},`"
-          placeholder="Ленина 24"
-        />
-
-        <my-item
-          label="Я довезу пассажиров до места"
-          chevron
-          clickable
-          @click="currentStep++"
-        />
-
-        <my-item
-          label="Договорно"
-          chevron
-          clickable
-          @click="currentStep++"
-        />
-      </div>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Intermediate Cities -->
       <div
         v-else-if="currentStep === StepNames.intermediateCities"
         class="q-pa-md absolute full-width"
@@ -157,9 +101,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           />
         </q-list>
       </div>
-      <!-- !SECTION -->
 
-      <!-- SECTION - Step Date -->
       <div
         v-else-if="currentStep === StepNames.date"
         class="q-pa-md absolute full-width"
@@ -181,7 +123,6 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
           @update:model-value="currentStep++"
         ></q-date>
       </div>
-      <!-- !SECTION -->
 
       <div
         v-else-if="currentStep === StepNames.time"
@@ -198,17 +139,9 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
       </div>
     </transition>
 
-    <!-- ANCHOR - Next Button -->
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[18, 18]"
-    >
-      <q-btn
-        fab
-        icon="eva-arrow-forward-outline"
-        color="primary"
-        @click="currentStep++"
-      />
-    </q-page-sticky>
+    <NextButton
+      v-if="isStepValid"
+      @btn-click="currentStep++"
+    />
   </q-page>
 </template>

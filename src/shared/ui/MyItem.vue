@@ -51,7 +51,9 @@ const props = defineProps<IProps>();
       v-if="props.chevron"
       side
     >
-      <q-icon name="eva-chevron-right-outline" />
+      <q-icon
+        name="eva-chevron-right-outline"
+      />
     </q-item-section>
   </q-item>
 </template>
