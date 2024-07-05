@@ -6,7 +6,8 @@ import CityStep from './ui/CityStep.vue';
 import LocationStep from './ui/LocationStep.vue';
 import NextButton from './ui/NextButton.vue';
 import IntermediateCitiesStep from './ui/IntermediateCitiesStep.vue';
-import DateTimeStep from 'pages/publish/ui/DateTimeStep.vue';
+import DateStep from 'pages/publish/ui/DateStep.vue';
+import TimeStep from 'pages/publish/ui/TimeStep.vue';
 
 enum StepNames {
   departureCity,
@@ -14,7 +15,8 @@ enum StepNames {
   destinationCity,
   destinationLocation,
   intermediateCities,
-  dateTime,
+  date,
+  time
 }
 
 export interface ICityInfo {
@@ -47,8 +49,10 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(destinationCity.value.location) || destinationCity.value.canDriveToPassengerLocation;
   } else if (currentStep.value === StepNames.intermediateCities) {
     return Boolean(intermediateCities.value.length);
-  } else if (currentStep.value === StepNames.dateTime) {
-    return Boolean(date.value) && Boolean(time.value);
+  } else if (currentStep.value === StepNames.date) {
+    return Boolean(date.value);
+  } else if (currentStep.value === StepNames.time) {
+    return Boolean(time.value);
   }
 
   return false;
@@ -121,11 +125,16 @@ const handleCityOptionChoose = (city: ICityInfo) => {
         v-model="intermediateCities"
       />
 
-      <DateTimeStep
-        v-else-if="currentStep === StepNames.dateTime"
-        v-model:date="date"
-        v-model:time="time"
+      <DateStep
+        v-else-if="currentStep === StepNames.date"
+        v-model="date"
       />
+
+      <TimeStep
+        v-else-if="currentStep === StepNames.time"
+        v-model="time"
+      />
+
     </transition>
 
     <NextButton

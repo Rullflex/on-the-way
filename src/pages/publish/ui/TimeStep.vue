@@ -4,14 +4,14 @@ const time = defineModel({ default: '' });
 
 <template>
   <div
-    class="q-pa-md absolute full-width"
+    class="absolute full-width"
   >
-    <h4 class="q-mb-md">Во сколько заберете пассажиров?</h4>
+    <h4 class="q-ma-lg q-pb-sm">Во сколько заберете пассажиров?</h4>
 
-    <q-time
-      flat
-      now-btn
-      class="full-width"
+    <q-input
+      class="q-mx-lg"
+      type="time"
+      outlined
       v-model="time"
     />
   </div>
