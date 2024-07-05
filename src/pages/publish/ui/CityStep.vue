@@ -13,7 +13,7 @@ defineProps<{
   <div class="absolute full-width">
     <h4 class="q-ma-lg">{{ title }}</h4>
 
-    <q-list class="q-px-sm">
+    <q-list class="q-px-sm" style="padding-bottom: 74px;">
       <my-item
         v-for="name in cityList"
         :key="name"
