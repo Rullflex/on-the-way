@@ -1,6 +1,6 @@
-export const useDrivesStore = defineStore('drives', {
+export const useTripsStore = defineStore('trips', {
   state: () => ({
-    drives: [
+    trips: [
       {
         id: 1,
         price: '900',
@@ -25,6 +25,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Алексей',
           car: 'TOYOTA COROLA XXL 22',
+          licensePlate: 'А123ВС59',
           avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
           phone: '+7 (999) 999-99-99',
         },
@@ -53,6 +54,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Алина',
           car: 'ВАЗ 1122',
+          licensePlate: 'В456ЕР18',
           avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
           phone: '+7 (999) 999-99-99',
         },
@@ -81,6 +83,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Мария',
           car: 'Jerry Tiger 2020',
+          licensePlate: 'С789МН43',
           avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
           phone: '+7 (999) 999-99-99',
         },
@@ -109,6 +112,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Иван',
           car: 'Ford Focus',
+          licensePlate: 'К321ОР11',
           avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
           phone: '+7 (999) 123-45-67',
         },
@@ -137,6 +141,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Ольга',
           car: 'Hyundai Solaris',
+          licensePlate: 'А654ВК02',
           avatar: 'https://cdn.quasar.dev/img/avatar6.jpg',
           phone: '+7 (999) 234-56-78',
         },
@@ -165,6 +170,7 @@ export const useDrivesStore = defineStore('drives', {
         driver: {
           name: 'Сергей',
           car: 'Mazda 3',
+          licensePlate: 'Е987ТП16',
           avatar: 'https://cdn.quasar.dev/img/avatar7.jpg',
           phone: '+7 (999) 345-67-89',
         },
@@ -172,13 +178,13 @@ export const useDrivesStore = defineStore('drives', {
     ],
   }),
   getters: {
-    driveById: (state) => (id: number) => {
-      return state.drives.find((drive) => drive.id === id);
+    tripById: (state) => (id: number) => {
+      return state.trips.find((trip) => trip.id === id);
     },
   },
   actions: {},
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useDrivesStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useTripsStore, import.meta.hot));
 }

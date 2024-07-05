@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { getPluralNoun } from 'src/shared/utils';
-import { useDrivesStore } from 'src/stores/drives';
+import { useTripsStore } from 'stores/trips';
 import { MyBackBtn } from 'src/shared/ui';
 
 const props = defineProps<{ id: string }>();
-const driveId = computed(() => Number(props.id));
-const drivesStore = useDrivesStore();
-const drive = computed(() => drivesStore.driveById(driveId.value));
+const tripId = computed(() => Number(props.id));
+const tripsStore = useTripsStore();
+const trip = computed(() => tripsStore.tripById(tripId.value));
 </script>
 
 <template>
   <q-layout>
     <q-page-container>
       <q-page
-        v-if="drive"
+        v-if="trip"
         class="q-pb-lg q-pt-sm"
       >
         <my-back-btn
-          fallback-route="/drives/list"
+          fallback-route="/trips/list"
           class="q-ml-md q-mb-md"
         />
 
@@ -27,8 +27,8 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
 
           <div class="column">
             <span class="text-bold">Ленина 25 (автовокзал)</span>
-            <span class="text-subtitle2">{{ drive.origin.place }}</span>
-            <span class="text-subtitle2">{{ drive.origin.time }}</span>
+            <span class="text-subtitle2">{{ trip.origin.place }}</span>
+            <span class="text-subtitle2">{{ trip.origin.time }}</span>
 
             <q-icon
               name="eva-more-vertical-outline"
@@ -36,8 +36,8 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
             />
 
             <span class="text-bold">Довезу до места</span>
-            <span class="text-subtitle2">{{ drive.destination.place }}</span>
-            <span class="text-subtitle2">{{ drive.destination.time }}</span>
+            <span class="text-subtitle2">{{ trip.destination.place }}</span>
+            <span class="text-subtitle2">{{ trip.destination.time }}</span>
           </div>
         </div>
 
@@ -47,9 +47,9 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
         />
 
         <div class="q-px-lg">
-          <span class="text-h6">{{ drive.price }} ₽</span> за 1 пассажира, осталось
-          {{ drive.passengers - drive.reserved }}
-          {{ getPluralNoun(drive.passengers - drive.reserved, 'место', 'места', 'мест') }}
+          <span class="text-h6">{{ trip.price }} ₽</span> за 1 пассажира, осталось
+          {{ trip.passengers - trip.reserved }}
+          {{ getPluralNoun(trip.passengers - trip.reserved, 'место', 'места', 'мест') }}
         </div>
 
         <q-separator
@@ -60,7 +60,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
         <q-list class="q-px-sm">
           <my-item
             chevron
-            :label="drive.driver.name"
+            :label="trip.driver.name"
             to="/profile/preview/1"
           >
             <template #append>
@@ -69,7 +69,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
                 text-color="white"
                 size="2.5rem"
               >
-                <img :src="drive.driver.avatar" />
+                <img :src="trip.driver.avatar" />
               </q-avatar>
             </template>
           </my-item>
@@ -83,7 +83,7 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
                 padding="6px"
                 label="Позвонить"
                 icon="eva-phone-outline"
-                :href="`tel:${drive.driver.phone}`"
+                :href="`tel:${trip.driver.phone}`"
               />
             </q-item-section>
 
@@ -115,12 +115,18 @@ const drive = computed(() => drivesStore.driveById(driveId.value));
             inset
           />
 
-          <my-item
-            chevron
-            icon="eva-car-outline"
-            :label="drive.driver.car"
-            caption="2010, черный"
-          />
+          <q-item>
+            <q-item-section side>
+              <q-icon name="eva-car-outline" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ trip.driver.car }}</q-item-label>
+              <q-item-label caption
+              >2010, черный
+                <q-chip dense>A123BC45</q-chip>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
 
           <q-separator
             spaced

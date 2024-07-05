@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useDriveSettingsStore } from 'src/stores/drive-settings';
+import { useTripSettingsStore } from 'stores/trip-settings';
 import { CITY_NAMES } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
 const router = useRouter();
-const store = useDriveSettingsStore();
+const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
 const datePickerModel = ref<string>('');
@@ -67,7 +67,7 @@ const onSearchClicked = () => {
   } else if (!passengers.value) {
     showDialog('passengers');
   } else {
-    router.push('/drives/list');
+    router.push('/trips/list');
   }
 };
 </script>
