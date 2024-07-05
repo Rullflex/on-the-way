@@ -1,27 +1,33 @@
 <script setup lang="ts">
-import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { MyAvatar, MyItem } from 'src/shared/ui';
+import { createCar, getAllCars, ICar } from 'src/shared/api/cars';
+import { captureApiException, Response } from 'src/shared/api';
 
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
-const carInfoStore = useCarInfoStore();
-const cars = computed(() => carInfoStore.cars);
-
+const $q = useQuasar();
+const cars = ref<Response<ICar>[]>([]);
 const isDialogVisible = ref(false);
 
-const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
-  carInfoStore.addCar({
-    id: Date.now(),
-    ...payload,
-  });
+const handleAddedCar = async (payload: ICar) => {
+  $q.loading.show();
+  await createCar(payload).catch(captureApiException);
+  $q.loading.hide();
   isDialogVisible.value = false;
 };
+
+onMounted(async () => {
+  $q.loading.show();
+  await getAllCars()
+    .then((response) => (cars.value = response.documents))
+    .catch(captureApiException);
+  $q.loading.hide();
+});
 </script>
 
 <template>
   <q-page>
     <q-list class="q-px-sm q-py-md">
-      <!-- ANCHOR - Personal Data -->
       <q-item
         class="rounded-borders"
         to="/profile/preview/1"
@@ -43,7 +49,6 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         </q-item-section>
       </q-item>
 
-      <!-- ANCHOR - Edit Profile -->
       <my-item
         color="primary"
         to="/profile/edit"
@@ -56,16 +61,14 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         spaced="1rem"
       />
 
-      <!-- SECTION - Cars -->
       <q-item-label header>Машины</q-item-label>
 
-      <!-- ANCHOR - Список машин -->
       <template v-if="cars.length">
         <q-item
           v-for="car in cars"
           :key="car.licensePlate"
           clickable
-          :to="`/cars/preview/${car.id}`"
+          :to="`/cars/preview/${car.$id}`"
           class="rounded-borders"
         >
           <q-item-section>
@@ -84,7 +87,6 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         </q-item>
       </template>
 
-      <!-- ANCHOR - Add Car -->
       <my-item
         clickable
         color="primary"
@@ -92,14 +94,12 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         icon="eva-plus-circle-outline"
         @click="isDialogVisible = true"
       />
-      <!-- !SECTION -->
 
       <q-separator
         inset
         spaced="1rem"
       />
 
-      <!-- ANCHOR - Extra Links -->
       <my-item
         v-for="link in ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение']"
         :key="link"
@@ -113,7 +113,6 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
         spaced="1rem"
       />
 
-      <!-- ANCHOR - Log Out -->
       <my-item
         clickable
         color="negative"
@@ -122,7 +121,6 @@ const handleAddedCar = (payload: Omit<CarInfo, 'id'>) => {
     </q-list>
   </q-page>
 
-  <!-- ANCHOR - Add Car Dialog -->
   <q-dialog
     v-model="isDialogVisible"
     maximized

@@ -1,14 +1,12 @@
-import { Client, Databases, ID, Models, Query } from 'appwrite';
+import { Client, Databases, ID } from 'appwrite';
+import { Response, Payload } from './types';
 
 const DATABASE_ID = '66863b850005490bca32';
 
 const client = new Client().setEndpoint(process.env.APP_WRITE_API_URL).setProject(process.env.APP_WRITE_PROJECT_ID);
 const databases = new Databases(client);
 
-type Document<T> = Models.Document & T;
-type Payload<T> = Omit<Document<T>, keyof Models.Document>;
-
-class AppWriteApi {
+export class AppWriteApi {
   private readonly databaseId: string;
   private readonly collectionId: string;
 
@@ -18,24 +16,22 @@ class AppWriteApi {
   }
 
   getById<T>(id: string, queries?: string[]) {
-    return databases.getDocument<Document<T>>(this.databaseId, this.collectionId, id, queries);
+    return databases.getDocument<Response<T>>(this.databaseId, this.collectionId, id, queries);
   }
 
   getAll<T>(queries?: string[]) {
-    return databases.listDocuments<Document<T>>(this.databaseId, this.collectionId, queries);
+    return databases.listDocuments<Response<T>>(this.databaseId, this.collectionId, queries);
   }
 
   create<T>(payload: Payload<T>, permissions?: string[]) {
-    return databases.createDocument<Document<T>>(this.databaseId, this.collectionId, ID.unique(), payload, permissions);
+    return databases.createDocument<Response<T>>(this.databaseId, this.collectionId, ID.unique(), payload, permissions);
   }
 
   update<T>(id: string, payload?: Payload<T>, permissions?: string[]) {
-    return databases.updateDocument<Document<T>>(this.databaseId, this.collectionId, id, payload, permissions);
+    return databases.updateDocument<Response<T>>(this.databaseId, this.collectionId, id, payload, permissions);
   }
 
   delete(id: string) {
     return databases.deleteDocument(this.databaseId, this.collectionId, id);
   }
 }
-
-export { AppWriteApi, Query };

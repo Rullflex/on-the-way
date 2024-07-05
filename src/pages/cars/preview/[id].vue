@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
+import { deleteCar, getCarById, updateCar, ICar } from 'src/shared/api/cars';
+import { captureApiException, Response } from 'src/shared/api';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
 
 const $q = useQuasar();
 const router = useRouter();
-const store = useCarInfoStore();
 
 const isDialogVisible = ref(false);
-
-const currentCarId = computed(() => Number(props.id));
+const carResponse = ref<Response<ICar>>();
 
 const listItems = computed(() => {
-  const { licensePlate, name, year, bodyType, color } = store.carById(currentCarId.value) ?? {};
+  const { licensePlate, name, year, bodyType, color } = carResponse.value || {};
 
   return [
     { label: 'Регистрационный номер', value: licensePlate || '-' },
@@ -30,16 +29,29 @@ const handleDeleteCard = () => {
     message: 'Вы уверены, что хотите удалить данные о машине?',
     persistent: true,
     cancel: true,
-  }).onOk(() => {
-    store.deleteCar(currentCarId.value);
+  }).onOk(async () => {
+    $q.loading.show();
+    await deleteCar(props.id).catch(captureApiException);
+    $q.loading.hide();
     router.back();
   });
 };
 
-const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
-  store.updateCar(currentCarId.value, payload);
+const handleUpdateCar = async (payload: ICar) => {
+  $q.loading.show();
+  await updateCar(props.id, payload).catch(captureApiException);
+  $q.loading.hide();
+
   isDialogVisible.value = false;
 };
+
+onMounted(async () => {
+  $q.loading.show();
+  await getCarById(props.id)
+    .then((response) => (carResponse.value = response))
+    .catch(captureApiException);
+  $q.loading.hide();
+});
 </script>
 
 <template>
@@ -101,7 +113,7 @@ const handleUpdateCar = (payload: Omit<CarInfo, 'id'>) => {
     maximized
   >
     <UpdateCar
-      :id="currentCarId"
+      :id="props.id"
       @updated="handleUpdateCar"
     />
   </q-dialog>

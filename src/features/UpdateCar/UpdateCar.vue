@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { MyBackBtn, MyItem } from 'src/shared/ui';
-import { CarInfo, useCarInfoStore } from 'src/stores/car-info';
 import { useStep } from 'src/shared/hooks/useStep';
+import { getCarById, ICar } from 'src/shared/api/cars';
+import { captureApiException } from 'src/shared/api';
 
 enum Steps {
   LicensePlate,
@@ -12,34 +13,24 @@ enum Steps {
 }
 
 interface IProps {
-  id?: number;
+  id?: string;
 }
 
 interface IEmits {
-  (e: 'updated', payload: Omit<CarInfo, 'id'>): void;
+  (e: 'updated', payload: ICar): void;
 }
 
 const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
 
+const $q = useQuasar();
 const { currentStep, stepAnimationName } = useStep(Steps.LicensePlate);
 
 const licensePlate = ref<string | null>();
 const name = ref<string | null>();
 const bodyType = ref<string | null>();
 const color = ref<string | null>();
-const year = ref<string | null>();
-
-const carInfoStore = useCarInfoStore();
-
-if (props.id && carInfoStore.carById(props.id)) {
-  const car = carInfoStore.carById(props.id);
-  licensePlate.value = car?.licensePlate;
-  name.value = car?.name;
-  bodyType.value = car?.bodyType;
-  color.value = car?.color;
-  year.value = car?.year;
-}
+const year = ref<number | null>();
 
 const isBtnNextVisible = computed<boolean>(() => {
   if (currentStep.value === Steps.LicensePlate) {
@@ -49,6 +40,22 @@ const isBtnNextVisible = computed<boolean>(() => {
   }
 
   return false;
+});
+
+onMounted(async () => {
+  if (props.id) {
+    $q.loading.show();
+    await getCarById(props.id)
+      .then((response) => {
+        licensePlate.value = response.licensePlate;
+        name.value = response.name;
+        bodyType.value = response.bodyType;
+        color.value = response.color;
+        year.value = response.year;
+      })
+      .catch(captureApiException);
+    $q.loading.hide();
+  }
 });
 </script>
 
@@ -218,7 +225,7 @@ const isBtnNextVisible = computed<boolean>(() => {
 
         <!-- ANCHOR - Submit Button -->
         <q-btn
-          v-if="year?.length === 4 && Number(year) <= new Date().getFullYear()"
+          v-if="String(year)?.length === 4 && Number(year) <= new Date().getFullYear()"
           unelevated
           color="primary"
           label="Сохранить"
@@ -229,7 +236,7 @@ const isBtnNextVisible = computed<boolean>(() => {
               name: name ?? '',
               bodyType: bodyType ?? '',
               color: color ?? '',
-              year: year ?? '',
+              year: Number(year) ?? 1000,
             })
           "
         />
