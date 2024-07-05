@@ -1,9 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  time: string
-}>();
-
-const time = ref(props.time);
+const time = defineModel({ default: '' });
 </script>
 
 <template>
@@ -17,7 +13,6 @@ const time = ref(props.time);
       now-btn
       class="full-width"
       v-model="time"
-      @update:model-value="$emit('timeUpdate', time)"
     />
   </div>
 </template>

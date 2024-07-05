@@ -3,10 +3,19 @@ import { MyItem } from 'src/shared/ui';
 
 defineProps<{
   cityList: string[],
-  hasIntermediateCity: (name: string) => boolean,
-  toggleIntermediateCity: (name: string) => void
 }>();
 
+const intermediateCities = defineModel<string[]>({ default: [] });
+
+const toggleIntermediateCity = (city: string) => {
+  if (intermediateCities.value.includes(city)) {
+    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
+  } else {
+    intermediateCities.value.push(city);
+  }
+};
+
+const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
 <template>

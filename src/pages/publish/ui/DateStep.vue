@@ -1,9 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  date: string
-}>();
-
-const date = ref(props.date);
+const date = defineModel({ default: '' });
 </script>
 
 <template>
@@ -24,7 +20,6 @@ const date = ref(props.date);
               return new Date(date) >= today;
             }
           "
-      @update:model-value="$emit('dateUpdate', date)"
     ></q-date>
   </div>
 </template>

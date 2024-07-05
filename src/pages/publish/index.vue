@@ -50,9 +50,9 @@ const isNextButtonVisible = computed<boolean>(() => {
   } else if (currentStep.value === StepNames.intermediateCities) {
     return Boolean(intermediateCities.value.length);
   } else if (currentStep.value === StepNames.date) {
-    return Boolean(date);
+    return Boolean(date.value);
   } else if (currentStep.value === StepNames.time) {
-    return Boolean(time);
+    return Boolean(time.value);
   }
 
   return false;
@@ -73,24 +73,7 @@ const handleCityOptionChoose = (city: ICityInfo) => {
   currentStep.value++;
 };
 
-const handleDateUpdate = (newDate: string) => {
-  date.value = newDate;
-  currentStep.value++;
-};
 
-const handleTimeUpdate = (newTime: string) => {
-  time.value = newTime;
-  currentStep.value++;
-};
-
-const toggleIntermediateCity = (city: string) => {
-  if (intermediateCities.value.includes(city)) {
-    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
-  } else {
-    intermediateCities.value.push(city);
-  }
-};
-const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
 </script>
 
 <template>
@@ -107,7 +90,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Откуда вы выезжаете?"
         :city-name="departureCity.city"
         :city-list="CITY_NAMES"
-        @list-item-click="(cityName) => handleCityChoose(departureCity, cityName)"
+        @list-item-click="handleCityChoose(departureCity, $event)"
       />
 
       <LocationStep
@@ -115,8 +98,8 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Укажите точный адрес отправления"
         :city="departureCity"
         :options="['Я заберу пассажиров с места']"
-        @location-input="(value) => handleCityLocationChange(departureCity, value)"
-        @option-click="() => handleCityOptionChoose(departureCity)"
+        @location-input="handleCityLocationChange(departureCity, $event)"
+        @option-click="handleCityOptionChoose(departureCity)"
       />
 
       <CityStep
@@ -124,7 +107,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Куда вы едете?"
         :city-name="destinationCity.city"
         :city-list="CITY_NAMES"
-        @list-item-click="(cityName) => handleCityChoose(destinationCity, cityName)"
+        @list-item-click="handleCityChoose(destinationCity, $event)"
       />
 
       <LocationStep
@@ -132,27 +115,24 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Укажите точный адрес прибытия"
         :city="destinationCity"
         :options="['Я довезу пассажиров до места']"
-        @location-input="(value) => handleCityLocationChange(destinationCity, value)"
-        @option-click="() => handleCityOptionChoose(destinationCity)"
+        @location-input="handleCityLocationChange(destinationCity, $event)"
+        @option-click="handleCityOptionChoose(destinationCity)"
       />
 
       <IntermediateCitiesStep
         v-else-if="currentStep === StepNames.intermediateCities"
         :city-list="CITY_NAMES"
-        :has-intermediate-city="hasIntermediateCity"
-        :toggle-intermediate-city="toggleIntermediateCity"
+        v-model="intermediateCities"
       />
 
       <DateStep
         v-else-if="currentStep === StepNames.date"
-        :date="date"
-        @date-update="handleDateUpdate"
+        v-model="date"
       />
 
       <TimeStep
         v-else-if="currentStep === StepNames.time"
-        :time="time"
-        @time-update="handleTimeUpdate"
+        v-model="time"
       />
     </transition>
 
