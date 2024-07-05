@@ -2,11 +2,36 @@
 import { useDriveSettingsStore } from 'src/stores/drive-settings';
 import { useDrivesStore } from 'src/stores/drives';
 import { getPluralNoun } from 'src/shared/utils';
+import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
+import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
+import { MyItem } from 'src/shared/ui';
 
 const store = useDriveSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
 const drivesStore = useDrivesStore();
+
+const isDialogVisible = ref<boolean>(false);
+const showDialog = () => {
+  isDialogVisible.value = true;
+};
+
+const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
+
+const selectedSortOption = ref(null);
+
+const travelConveniences = ref<TravelConveniences>({
+  arePetsAllowed: false,
+  hasBaggageTransportation: false,
+  hasPackageDelivery: false,
+  hasChildSeat: false,
+  hasAirConditioner: false,
+  isMaxTwoInTheBack: false,
+});
+
+const toggleConvenience = (name: keyof TravelConveniences) => {
+  travelConveniences.value[name] = !travelConveniences.value[name];
+};
 </script>
 
 <template>
@@ -40,6 +65,7 @@ const drivesStore = useDrivesStore();
         icon="eva-options-2-outline"
         flat
         dense
+        @click="showDialog()"
       />
     </q-header>
     <!-- !SECTION -->
@@ -109,9 +135,16 @@ const drivesStore = useDrivesStore();
 
               <div class="row q-mt-auto gap-sm justify-end">
                 <q-icon
-                  v-for="name in ['cube', 'briefcase', 'pin']"
-                  :key="name"
-                  :name="`eva-${name}-outline`"
+                  v-for="icon in [
+                    { name: 'cube', type: 'eva' },
+                    { name: 'briefcase', type: 'eva' },
+                    { name: 'air', type: 'material' },
+                    { name: 'child_care', type: 'material' },
+                    { name: 'pets', type: 'material' },
+                    { name: 'social_distance', type: 'material' },
+                  ]"
+                  :key="icon.name"
+                  :name="icon.type === 'eva' ? `eva-${icon.name}-outline` : icon.name"
                   size="1.2rem"
                 />
               </div>
@@ -119,6 +152,57 @@ const drivesStore = useDrivesStore();
           </q-item>
         </q-list>
       </q-page>
+
+      <q-dialog
+        maximized
+        v-model="isDialogVisible"
+      >
+        <q-card>
+          <q-card-section class="sticky-top bg-white z-top">
+            <q-btn
+              v-close-popup
+              icon="eva-close"
+              flat
+              dense
+            />
+          </q-card-section>
+
+          <q-card-section class="q-px-lg q-pt-none">
+            <h4>Фильтровать</h4>
+          </q-card-section>
+
+          <q-card-section class="q-px-lg">
+            <h6 class="q-mb-md">Сортировать</h6>
+
+            <q-select
+              outlined
+              :options="sortOptions"
+              v-model="selectedSortOption"
+            />
+          </q-card-section>
+
+          <q-card-section class="q-px-lg">
+            <h6>Удобства</h6>
+          </q-card-section>
+
+          <q-list class="q-px-sm">
+            <my-item
+              v-for="convenience in TRAVEL_CONVENIENCES"
+              :key="convenience.name"
+              :label="convenience.title"
+              :icon="travelConveniences[convenience.name as keyof TravelConveniences] ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
+              clickable
+              @click="toggleConvenience(convenience.name as keyof TravelConveniences)"
+            >
+              <template v-slot:append>
+                <q-item-section side>
+                  <q-icon :name="convenience.icon" />
+                </q-item-section>
+              </template>
+            </my-item>
+          </q-list>
+        </q-card>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
