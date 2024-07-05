@@ -15,12 +15,14 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
     <q-page-container>
       <q-page
         v-if="trip"
-        class="q-pb-lg q-pt-sm"
+        class="q-pb-lg"
       >
-        <my-back-btn
-          fallback-route="/trips/list"
-          class="q-ml-md q-mb-md"
-        />
+        <div class="sticky-top bg-white q-pt-sm z-top">
+          <my-back-btn
+            fallback-route="/trips/list"
+            class="q-ml-md q-mb-sm"
+          />
+        </div>
 
         <div class="q-px-lg">
           <h5 class="q-mb-lg">Чт 27 июня</h5>
