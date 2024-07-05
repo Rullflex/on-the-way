@@ -185,7 +185,7 @@ const onSearchClicked = () => {
     maximized
     v-model="isDialogVisible"
   >
-    <q-card class="column">
+    <q-card>
       <!-- ANCHOR - Row with close button -->
       <q-card-section class="sticky-top bg-white z-top">
         <q-btn
