@@ -31,7 +31,7 @@ const locationInputValue = ref(props.city.location);
       :active="city.canDriveToPassengerLocation"
       chevron
       clickable
-      @click="$emit('optionClick', option)"
+      @click="$emit('optionClick')"
     />
   </div>
 </template>
