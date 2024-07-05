@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { CITY_NAMES } from 'src/shared/constants';
-import { MyBackBtn, MyItem } from 'src/shared/ui';
+import { MyBackBtn } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import CityStep from './ui/CityStep.vue';
 import LocationStep from './ui/LocationStep.vue';
 import NextButton from './ui/NextButton.vue';
+import IntermediateCitiesStep from './ui/IntermediateCitiesStep.vue';
+import DateStep from './ui/DateStep.vue';
+import TimeStep from 'pages/publish/ui/TimeStep.vue';
 
 enum StepNames {
   departureCity,
@@ -22,21 +25,11 @@ export interface ICityInfo {
   canDriveToPassengerLocation: boolean,
 }
 
-const initialCityState = {
+const initialCityState: ICityInfo = {
   city: '',
   location: '',
   canDriveToPassengerLocation: false
 };
-
-// Ожидает страницы отправки поездки
-// interface publishFormData {
-//   departureCity: ICityInfo,
-//   destinationCity: ICityInfo,
-//   intermediateCities: string[],
-//   travelOptions: ITravelOptions,
-//   date: '',
-//   time: ''
-// }
 
 const departureCity = ref<ICityInfo>({ ...initialCityState });
 const destinationCity = ref<ICityInfo>({ ...initialCityState });
@@ -56,24 +49,35 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(destinationCity.value.location) || destinationCity.value.canDriveToPassengerLocation;
   } else if (currentStep.value === StepNames.intermediateCities) {
     return Boolean(intermediateCities.value.length);
+  } else if (currentStep.value === StepNames.date) {
+    return Boolean(date.value);
+  } else if (currentStep.value === StepNames.time) {
+    return Boolean(time.value);
   }
 
   return false;
 });
 
-const toggleIntermediateCity = (city: string) => {
-  if (intermediateCities.value.includes(city)) {
-    intermediateCities.value = intermediateCities.value.filter((item) => item !== city);
-  } else {
-    intermediateCities.value.push(city);
-  }
+const handleCityChoose = (city: ICityInfo, cityName: string) => {
+  city.city = cityName;
+  currentStep.value++;
 };
-const hasIntermediateCity = (city: string) => intermediateCities.value.includes(city);
+
+const handleCityLocationChange = (city: ICityInfo, value: string) => {
+  city.location = value;
+  city.canDriveToPassengerLocation = false;
+};
+
+const handleCityOptionChoose = (city: ICityInfo) => {
+  city.canDriveToPassengerLocation = true;
+  currentStep.value++;
+};
+
+
 </script>
 
 <template>
   <q-page>
-    <!-- ANCHOR - Back Button -->
     <my-back-btn
       v-if="currentStep !== StepNames.departureCity"
       class="q-ml-md q-mt-md"
@@ -86,10 +90,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Откуда вы выезжаете?"
         :city-name="departureCity.city"
         :city-list="CITY_NAMES"
-        @list-item-click="(name) => {
-        currentStep++;
-        departureCity.city = name;
-        }"
+        @list-item-click="handleCityChoose(departureCity, $event)"
       />
 
       <LocationStep
@@ -97,14 +98,8 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Укажите точный адрес отправления"
         :city="departureCity"
         :options="['Я заберу пассажиров с места']"
-        @location-input="(value) => {
-          departureCity.location = value
-          departureCity.canDriveToPassengerLocation = false
-        }"
-        @option-click="(option) => {
-          departureCity.canDriveToPassengerLocation = true
-          currentStep++
-        }"
+        @location-input="handleCityLocationChange(departureCity, $event)"
+        @option-click="handleCityOptionChoose(departureCity)"
       />
 
       <CityStep
@@ -112,10 +107,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Куда вы едете?"
         :city-name="destinationCity.city"
         :city-list="CITY_NAMES"
-        @list-item-click="(name) => {
-          destinationCity.city = name;
-          currentStep++;
-        }"
+        @list-item-click="handleCityChoose(destinationCity, $event)"
       />
 
       <LocationStep
@@ -123,69 +115,25 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         title="Укажите точный адрес прибытия"
         :city="destinationCity"
         :options="['Я довезу пассажиров до места']"
-        @location-input="(value) => {
-          destinationCity.location = value
-          destinationCity.canDriveToPassengerLocation = false
-        }"
-        @option-click="(option) => {
-          destinationCity.canDriveToPassengerLocation = true
-          currentStep++
-        }"
+        @location-input="handleCityLocationChange(destinationCity, $event)"
+        @option-click="handleCityOptionChoose(destinationCity)"
       />
 
-      <div
+      <IntermediateCitiesStep
         v-else-if="currentStep === StepNames.intermediateCities"
-        class="q-pa-md absolute full-width"
-      >
-        <h5 class="q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
+        :city-list="CITY_NAMES"
+        v-model="intermediateCities"
+      />
 
-        <q-list>
-          <my-item
-            v-for="name in CITY_NAMES"
-            :icon="hasIntermediateCity(name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
-            :key="name"
-            :label="name"
-            clickable
-            @click="toggleIntermediateCity(name)"
-          />
-        </q-list>
-      </div>
-
-      <div
+      <DateStep
         v-else-if="currentStep === StepNames.date"
-        class="q-pa-md absolute full-width"
-      >
-        <h4 class="q-mb-md">Когда поездка?</h4>
+        v-model="date"
+      />
 
-        <q-date
-          v-model="date"
-          flat
-          minimal
-          class="full-width"
-          :options="
-            (date) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              return new Date(date) >= today;
-            }
-          "
-          @update:model-value="currentStep++"
-        ></q-date>
-      </div>
-
-      <div
+      <TimeStep
         v-else-if="currentStep === StepNames.time"
-        class="q-pa-md absolute full-width"
-      >
-        <h4 class="q-mb-md">Во сколько заберете пассажиров?</h4>
-
-        <q-time
-          flat
-          now-btn
-          class="full-width"
-          v-model="time"
-        />
-      </div>
+        v-model="time"
+      />
     </transition>
 
     <NextButton
