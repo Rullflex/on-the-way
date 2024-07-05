@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="absolute full-width">
+  <div class=" absolute full-width" style="padding-bottom: 74px">
     <h4 class="q-ma-lg">{{ title }}</h4>
 
     <q-list class="q-px-sm">
@@ -26,3 +26,4 @@ defineProps<{
     </q-list>
   </div>
 </template>
+
