@@ -20,9 +20,9 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 
 <template>
   <div
-    class="q-pa-md absolute full-width"
+    class="q-py-md absolute full-width"
   >
-    <h5 class="q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
+    <h5 class="q-mb-md q-px-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
 
     <q-list>
       <my-item

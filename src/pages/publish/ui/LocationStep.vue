@@ -12,10 +12,11 @@ const locationInputValue = ref(props.city.location);
 </script>
 
 <template>
-  <div class="q-pa-lg absolute full-width">
-    <h4 class="q-mb-lg">{{ title }}</h4>
+  <div class="absolute full-width">
+    <h4 class="q-ma-lg q-pb-sm">{{ title }}</h4>
 
     <q-input
+      class="q-mx-lg q-mb-sm"
       v-model="locationInputValue"
       @update:model-value="$emit('locationInput', locationInputValue)"
       outlined
@@ -23,15 +24,16 @@ const locationInputValue = ref(props.city.location);
       :prefix="`${city.city},`"
       placeholder="Ленина 24"
     />
-
-    <my-item
-      v-for="option in options"
-      :key="option"
-      :label="option"
-      :active="city.canDriveToPassengerLocation"
-      chevron
-      clickable
-      @click="$emit('optionClick')"
-    />
+    <q-list class="q-px-sm">
+      <my-item
+        v-for="option in options"
+        :key="option"
+        :label="option"
+        :active="city.canDriveToPassengerLocation"
+        chevron
+        clickable
+        @click="$emit('optionClick')"
+      />
+    </q-list>
   </div>
 </template>
