@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useDriveSettingsStore } from 'src/stores/drive-settings';
-import { useDrivesStore } from 'src/stores/drives';
+import { useTripSettingsStore } from 'stores/trip-settings';
+import { useTripsStore } from 'stores/trips';
 import { getPluralNoun } from 'src/shared/utils';
 import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
 
-const store = useDriveSettingsStore();
+const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
-const drivesStore = useDrivesStore();
+const tripsStore = useTripsStore();
 
 const isDialogVisible = ref<boolean>(false);
 const showDialog = () => {
@@ -76,27 +76,27 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 
         <q-list class="column gap-sm">
           <q-item
-            v-for="drive in drivesStore.drives"
-            :key="drive.id"
+            v-for="trip in tripsStore.trips"
+            :key="trip.id"
             clickable
-            :disable="drive.reserved === drive.passengers"
+            :disable="trip.reserved === trip.passengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
-            :to="`/drives/preview/${drive.id}`"
+            :to="`/trips/preview/${trip.id}`"
           >
             <div
               class="column overflow-hidden"
               style="width: 72px"
             >
-              <span class="text-subtitle2">{{ drive.origin.place }}</span>
-              <span class="text-caption">{{ drive.origin.time }}</span>
+              <span class="text-subtitle2">{{ trip.origin.place }}</span>
+              <span class="text-caption">{{ trip.origin.time }}</span>
 
               <q-icon
                 name="eva-more-vertical-outline"
                 class="q-my-sm"
               />
 
-              <span class="text-subtitle2">{{ drive.destination.place }}</span>
-              <span class="text-caption">{{ drive.destination.time }}</span>
+              <span class="text-subtitle2">{{ trip.destination.place }}</span>
+              <span class="text-caption">{{ trip.destination.time }}</span>
             </div>
 
             <q-separator
@@ -112,15 +112,15 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
                   text-color="white"
                   size="2.5rem"
                 >
-                  <img :src="drive.driver.avatar" />
+                  <img :src="trip.driver.avatar" />
                 </q-avatar>
 
                 <div class="col-auto column items-end">
                   <span class="text-bold">{{
-                    drive.reserved === drive.passengers ? 'Мест нет' : drive.price + ' ₽'
+                    trip.reserved === trip.passengers ? 'Мест нет' : trip.price + ' ₽'
                   }}</span>
                   <div class="row items-center gap-xs text-caption">
-                    <span>{{ drive.reserved }}/{{ drive.passengers }}</span>
+                    <span>{{ trip.reserved }}/{{ trip.passengers }}</span>
                     <q-icon name="eva-people-outline" />
                   </div>
                 </div>
@@ -128,8 +128,8 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 
               <div class="row">
                 <div class="column">
-                  <span class="text-subtitle2">{{ drive.driver.name }}</span>
-                  <span class="text-caption">{{ drive.driver.car }}</span>
+                  <span class="text-subtitle2">{{ trip.driver.name }}</span>
+                  <span class="text-caption">{{ trip.driver.car }}</span>
                 </div>
               </div>
 
