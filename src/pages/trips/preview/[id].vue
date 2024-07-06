@@ -17,11 +17,8 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
         v-if="trip"
         class="q-pb-lg"
       >
-        <div class="sticky-top bg-white q-pt-sm z-top">
-          <my-back-btn
-            fallback-route="/trips/list"
-            class="q-ml-md q-mb-sm"
-          />
+        <div class="sticky-top bg-white q-pa-md z-top">
+          <my-back-btn fallback-route="/trips/list" />
         </div>
 
         <div class="q-px-lg">
@@ -124,7 +121,7 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
             <q-item-section>
               <q-item-label>{{ trip.driver.car }}</q-item-label>
               <q-item-label caption
-              >2010, черный
+                >2010, черный
                 <q-chip dense>A123BC45</q-chip>
               </q-item-label>
             </q-item-section>
