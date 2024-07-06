@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { deleteCar, getCarById, updateCar, ICar, captureApiException, Response } from 'src/shared/api';
+import { deleteCar, getCarById, updateCar, ICar, Response } from 'src/shared/api';
+import { captureApiException } from 'src/shared/utils';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
