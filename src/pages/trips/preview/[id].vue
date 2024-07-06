@@ -15,12 +15,11 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
     <q-page-container>
       <q-page
         v-if="trip"
-        class="q-pb-lg q-pt-sm"
+        class="q-pb-lg"
       >
-        <my-back-btn
-          fallback-route="/trips/list"
-          class="q-ml-md q-mb-md"
-        />
+        <div class="sticky-top bg-white q-pa-md z-top">
+          <my-back-btn fallback-route="/trips/list" />
+        </div>
 
         <div class="q-px-lg">
           <h5 class="q-mb-lg">Чт 27 июня</h5>
@@ -122,7 +121,7 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
             <q-item-section>
               <q-item-label>{{ trip.driver.car }}</q-item-label>
               <q-item-label caption
-              >2010, черный
+                >2010, черный
                 <q-chip dense>A123BC45</q-chip>
               </q-item-label>
             </q-item-section>
