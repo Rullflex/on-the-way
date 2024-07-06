@@ -20,11 +20,11 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 
 <template>
   <div
-    class="q-pa-md absolute full-width"
+    class="absolute full-width"
   >
-    <h5 class="q-mb-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
+    <h5 class="q-ma-lg">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
 
-    <q-list>
+    <q-list class="q-mx-sm">
       <my-item
         v-for="name in cityList"
         :icon="hasIntermediateCity(name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"

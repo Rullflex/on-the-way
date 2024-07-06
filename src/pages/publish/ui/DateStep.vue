@@ -4,9 +4,9 @@ const date = defineModel({ default: '' });
 
 <template>
   <div
-    class="q-pa-md absolute full-width"
+    class="absolute full-width"
   >
-    <h4 class="q-mb-md">Когда поездка?</h4>
+    <h4 class="q-ma-lg">Когда поездка?</h4>
 
     <q-date
       v-model="date"
