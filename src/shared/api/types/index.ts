@@ -1,4 +1,7 @@
-import { Models } from 'appwrite';
-
-export type Response<T> = Models.Document & T;
-export type Payload<T> = Omit<Models.Document & T, keyof Models.Document>;
+export interface ICar {
+  licensePlate: string;
+  name: string;
+  bodyType: string;
+  color: string;
+  year: number;
+}
