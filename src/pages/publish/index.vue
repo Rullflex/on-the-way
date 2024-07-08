@@ -12,6 +12,8 @@ import TravelConveniencesStep from 'pages/publish/ui/TravelConveniencesStep.vue'
 import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
+import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
+import { ICar } from 'src/shared/api';
 
 enum StepNames {
   departureCity,
@@ -21,8 +23,9 @@ enum StepNames {
   intermediateCities,
   date,
   time,
-  price,
+  car,
   travelConveniences,
+  price,
 }
 
 export interface ICityInfo {
@@ -43,6 +46,7 @@ const intermediateCities = ref<string[]>([]);
 const date = ref('');
 const time = ref('');
 const price = ref('');
+const car = ref<ICar | null>(null);
 const travelConveniences = ref<TravelConveniences>({
   arePetsAllowed: false,
   hasAirConditioner: false,
@@ -68,6 +72,10 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(date.value);
   } else if (currentStep.value === StepNames.time) {
     return Boolean(time.value);
+  } else if (currentStep.value === StepNames.car) {
+    return Boolean(car.value);
+  } else if (currentStep.value === StepNames.travelConveniences) {
+    return true;
   } else if (currentStep.value === StepNames.price) {
     return Boolean(price.value);
   }
@@ -87,6 +95,11 @@ const handleCityLocationChange = (city: ICityInfo, value: string) => {
 
 const handleCityOptionChoose = (city: ICityInfo) => {
   city.canDriveToPassengerLocation = true;
+  currentStep.value++;
+};
+
+const handleCarSelect = (selectedCar: ICar) => {
+  car.value = selectedCar;
   currentStep.value++;
 };
 
@@ -151,15 +164,23 @@ const handleCityOptionChoose = (city: ICityInfo) => {
         v-model="time"
       />
 
-      <PriceStep
-        v-else-if="currentStep === StepNames.price"
-        v-model="price"
+      <CarSelectionStep
+        v-else-if="currentStep === StepNames.car"
+        :selected-car="car"
+        @car-select="handleCarSelect"
+
       />
 
       <TravelConveniencesStep
         v-else-if="currentStep === StepNames.travelConveniences"
         v-model="travelConveniences"
       />
+
+      <PriceStep
+        v-else-if="currentStep === StepNames.price"
+        v-model="price"
+      />
+
 
     </transition>
 
@@ -168,8 +189,8 @@ const handleCityOptionChoose = (city: ICityInfo) => {
       @btn-click="currentStep++"
     />
 
-    <PublishButton
-      v-else-if="currentStep === StepNames.travelConveniences"
-    />
+    <!--    <PublishButton-->
+    <!--      v-else-if="currentStep === StepNames.travelConveniences"-->
+    <!--    />-->
   </q-page>
 </template>
