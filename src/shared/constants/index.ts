@@ -1,4 +1,17 @@
-export const CITY_NAMES = ['Пермь', 'Кудымкар', 'Карагай', 'Юрла', 'Юсьва', 'Ленинск', 'Белоево', 'Кочёво', 'Менделеево', 'Гайны'];
+export { MONTHS_NAMES_IN_GENITIVE } from './monthNamesInGenitive';
+
+export const CITY_NAMES = [
+  'Пермь',
+  'Кудымкар',
+  'Карагай',
+  'Юрла',
+  'Юсьва',
+  'Ленинск',
+  'Белоево',
+  'Кочёво',
+  'Менделеево',
+  'Гайны',
+];
 
 export const TRAVEL_CONVENIENCES = [
   {

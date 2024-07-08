@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import MyItem from 'src/shared/ui/MyItem.vue';
-import { getPluralNoun } from 'src/shared/utils';
-import { useTripsStore } from 'stores/trips';
+import { captureApiException, getPluralNoun } from 'src/shared/utils';
+import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { MyBackBtn } from 'src/shared/ui';
+import { getTripById, ITrip, Response } from 'src/shared/api';
+import { Loading, date as QDate } from 'quasar';
 
 const props = defineProps<{ id: string }>();
-const tripId = computed(() => Number(props.id));
-const tripsStore = useTripsStore();
-const trip = computed(() => tripsStore.tripById(tripId.value));
+const trip = ref<Response<ITrip>>();
+
+const tripDate = computed(() => {
+  const monthIndex = Number(QDate.formatDate(trip.value?.departureTime, 'M')) - 1;
+  return `${QDate.formatDate(trip.value?.departureTime, 'ddd, D')} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
+});
+
+Loading.show();
+getTripById(props.id)
+  .then((response) => (trip.value = response))
+  .catch(captureApiException)
+  .finally(Loading.hide);
 </script>
 
 <template>
@@ -22,21 +33,21 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
         </div>
 
         <div class="q-px-lg">
-          <h5 class="q-mb-lg">Чт 27 июня</h5>
+          <h5 class="q-mb-lg">{{ tripDate }}</h5>
 
           <div class="column">
-            <span class="text-bold">Ленина 25 (автовокзал)</span>
-            <span class="text-subtitle2">{{ trip.origin.place }}</span>
-            <span class="text-subtitle2">{{ trip.origin.time }}</span>
+            <span class="text-bold">{{ trip.canPickUpFromPlace ? 'Заберу с места' : trip.departureAddress }}</span>
+            <span class="text-subtitle2">{{ trip.departureCity }}</span>
+            <span class="text-subtitle2">{{ QDate.formatDate(trip.departureTime, 'HH:mm') }}</span>
 
             <q-icon
               name="eva-more-vertical-outline"
               class="q-my-sm"
             />
 
-            <span class="text-bold">Довезу до места</span>
-            <span class="text-subtitle2">{{ trip.destination.place }}</span>
-            <span class="text-subtitle2">{{ trip.destination.time }}</span>
+            <span class="text-bold">{{ trip.canDriveToPlace ? 'Довезу до места' : trip.arrivalAddress }}</span>
+            <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
+            <span class="text-subtitle2">{{ QDate.formatDate(trip.arrivalTime, 'HH:mm') }}</span>
           </div>
         </div>
 
@@ -47,8 +58,8 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
 
         <div class="q-px-lg">
           <span class="text-h6">{{ trip.price }} ₽</span> за 1 пассажира, осталось
-          {{ trip.passengers - trip.reserved }}
-          {{ getPluralNoun(trip.passengers - trip.reserved, 'место', 'места', 'мест') }}
+          {{ trip.totalPassengers - trip.alreadyReserved }}
+          {{ getPluralNoun(trip.totalPassengers - trip.alreadyReserved, 'место', 'места', 'мест') }}
         </div>
 
         <q-separator
@@ -68,7 +79,6 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
                 text-color="white"
                 size="2.5rem"
               >
-                <img :src="trip.driver.avatar" />
               </q-avatar>
             </template>
           </my-item>
@@ -101,11 +111,7 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
           <q-item>
             <q-item-section>
               <q-item-label caption>Комментарий</q-item-label>
-              <q-item-label>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ipsa placeat magnam quas officia optio
-                sit voluptates quaerat, suscipit laborum obcaecati accusamus doloremque omnis iure asperiores rerum
-                quibusdam consectetur maxime!
-              </q-item-label>
+              <q-item-label>{{ trip.comment }}</q-item-label>
             </q-item-section>
           </q-item>
 
@@ -119,10 +125,10 @@ const trip = computed(() => tripsStore.tripById(tripId.value));
               <q-icon name="eva-car-outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ trip.driver.car }}</q-item-label>
-              <q-item-label caption
-                >2010, черный
-                <q-chip dense>A123BC45</q-chip>
+              <q-item-label>{{ trip.driver.cars[0]?.name }}</q-item-label>
+              <q-item-label caption>
+                {{ trip.driver.cars[0]?.year }}, {{ trip.driver.cars[0]?.color }}
+                <q-chip dense>{{ trip.driver.cars[0]?.licensePlate }}</q-chip>
               </q-item-label>
             </q-item-section>
           </q-item>

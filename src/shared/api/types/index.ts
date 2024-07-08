@@ -22,6 +22,7 @@ export interface ITrip {
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
   driver: IUser;
+  comment: string;
 }
 
 export interface ICar {

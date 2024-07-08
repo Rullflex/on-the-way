@@ -1,74 +1,21 @@
 <script setup lang="ts">
-import { useTripSettingsStore } from 'stores/trip-settings';
-import { useTripsStore } from 'stores/trips';
-import { getPluralNoun } from 'src/shared/utils';
-import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
-import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
-import { MyItem } from 'src/shared/ui';
+import { captureApiException } from 'src/shared/utils';
+import { Loading, date as QDate } from 'quasar';
+import { getAllTrips, ITrip, Response } from 'src/shared/api';
+import PageHeader from './ui/PageHeader.vue';
 
-const store = useTripSettingsStore();
-const { origin, destination, date, passengers } = storeToRefs(store);
+const trips = ref<Response<ITrip>[]>([]);
 
-const tripsStore = useTripsStore();
-
-const isDialogVisible = ref<boolean>(false);
-const showDialog = () => {
-  isDialogVisible.value = true;
-};
-
-const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
-
-const selectedSortOption = ref(null);
-
-const travelConveniences = ref<TravelConveniences>({
-  arePetsAllowed: false,
-  hasBaggageTransportation: false,
-  hasPackageDelivery: false,
-  hasChildSeat: false,
-  hasAirConditioner: false,
-  isMaxTwoInTheBack: false,
-});
-
-const toggleConvenience = (name: keyof TravelConveniences) => {
-  travelConveniences.value[name] = !travelConveniences.value[name];
-};
+Loading.show();
+getAllTrips()
+  .then((response) => (trips.value = response.documents))
+  .catch(captureApiException)
+  .finally(Loading.hide);
 </script>
 
 <template>
   <q-layout>
-    <!-- SECTION - Header -->
-    <q-header
-      reveal
-      bordered
-      class="bg-white text-dark row q-pa-sm justify-between items-center"
-    >
-      <q-btn
-        icon="eva-chevron-left-outline"
-        flat
-        dense
-        to="/search"
-      />
-
-      <div style="font-size: 0.75rem">
-        <div class="row flex-center gap-xs">
-          <span>{{ origin }}</span>
-          <q-icon name="eva-arrow-forward-outline" />
-          <span>{{ destination }}</span>
-        </div>
-
-        <div class="text-grey-8 text-center">
-          {{ date }}, {{ passengers }} {{ getPluralNoun(passengers, 'пассажир', 'пассажира', 'пассажиров') }}
-        </div>
-      </div>
-
-      <q-btn
-        icon="eva-options-2-outline"
-        flat
-        dense
-        @click="showDialog()"
-      />
-    </q-header>
-    <!-- !SECTION -->
+    <PageHeader />
 
     <q-page-container>
       <q-page class="q-pa-lg">
@@ -76,27 +23,27 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 
         <q-list class="column gap-sm">
           <q-item
-            v-for="trip in tripsStore.trips"
-            :key="trip.id"
+            v-for="trip in trips"
+            :key="trip.$id"
             clickable
-            :disable="trip.reserved === trip.passengers"
+            :disable="trip.alreadyReserved === trip.totalPassengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
-            :to="`/trips/preview/${trip.id}`"
+            :to="`/trips/preview/${trip.$id}`"
           >
             <div
               class="column overflow-hidden"
               style="width: 72px"
             >
-              <span class="text-subtitle2">{{ trip.origin.place }}</span>
-              <span class="text-caption">{{ trip.origin.time }}</span>
+              <span class="text-subtitle2">{{ trip.departureCity }}</span>
+              <span class="text-caption">{{ QDate.formatDate(trip.departureTime, 'HH:mm') }}</span>
 
               <q-icon
                 name="eva-more-vertical-outline"
                 class="q-my-sm"
               />
 
-              <span class="text-subtitle2">{{ trip.destination.place }}</span>
-              <span class="text-caption">{{ trip.destination.time }}</span>
+              <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
+              <span class="text-caption">{{ QDate.formatDate(trip.arrivalTime, 'HH:mm') }}</span>
             </div>
 
             <q-separator
@@ -112,15 +59,14 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
                   text-color="white"
                   size="2.5rem"
                 >
-                  <img :src="trip.driver.avatar" />
                 </q-avatar>
 
                 <div class="col-auto column items-end">
                   <span class="text-bold">{{
-                    trip.reserved === trip.passengers ? 'Мест нет' : trip.price + ' ₽'
+                    trip.alreadyReserved === trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
                   }}</span>
                   <div class="row items-center gap-xs text-caption">
-                    <span>{{ trip.reserved }}/{{ trip.passengers }}</span>
+                    <span>{{ trip.alreadyReserved }}/{{ trip.totalPassengers }}</span>
                     <q-icon name="eva-people-outline" />
                   </div>
                 </div>
@@ -129,7 +75,7 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
               <div class="row">
                 <div class="column">
                   <span class="text-subtitle2">{{ trip.driver.name }}</span>
-                  <span class="text-caption">{{ trip.driver.car }}</span>
+                  <span class="text-caption">{{ trip.driver.cars[0]?.name }}</span>
                 </div>
               </div>
 
@@ -152,57 +98,6 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
           </q-item>
         </q-list>
       </q-page>
-
-      <q-dialog
-        maximized
-        v-model="isDialogVisible"
-      >
-        <q-card>
-          <q-card-section class="sticky-top bg-white z-top">
-            <q-btn
-              v-close-popup
-              icon="eva-close"
-              flat
-              dense
-            />
-          </q-card-section>
-
-          <q-card-section class="q-px-lg q-pt-none">
-            <h4>Фильтровать</h4>
-          </q-card-section>
-
-          <q-card-section class="q-px-lg">
-            <h6 class="q-mb-md">Сортировать</h6>
-
-            <q-select
-              outlined
-              :options="sortOptions"
-              v-model="selectedSortOption"
-            />
-          </q-card-section>
-
-          <q-card-section class="q-px-lg">
-            <h6>Удобства</h6>
-          </q-card-section>
-
-          <q-list class="q-px-sm">
-            <my-item
-              v-for="convenience in TRAVEL_CONVENIENCES"
-              :key="convenience.name"
-              :label="convenience.title"
-              :icon="travelConveniences[convenience.name as keyof TravelConveniences] ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
-              clickable
-              @click="toggleConvenience(convenience.name as keyof TravelConveniences)"
-            >
-              <template v-slot:append>
-                <q-item-section side>
-                  <q-icon :name="convenience.icon" />
-                </q-item-section>
-              </template>
-            </my-item>
-          </q-list>
-        </q-card>
-      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
