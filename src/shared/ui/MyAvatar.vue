@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<IProps>(), {
   size: '2.5rem',
 });
 const userInfoStore = useUserInfoStore();
-const src = computed(() => props.src || userInfoStore.avatarURL);
+const src = computed(() => props.src ?? userInfoStore.avatarURL);
 </script>
 
 <template>
