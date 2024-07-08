@@ -14,8 +14,75 @@
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
     <link rel="icon" type="image/ico" href="favicon.ico">
+
+    <style>
+      .loader-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #939393;
+        z-index: 1001;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loader {
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        animation: rotate 1s linear infinite;
+      }
+
+      .loader::before {
+        content: "";
+        box-sizing: border-box;
+        position: absolute;
+        inset: 0px;
+        border-radius: 50%;
+        border: 8px solid #FFF;
+        animation: prixClipFix 2s linear infinite ;
+      }
+
+      @keyframes rotate {
+        100%   {transform: rotate(360deg)}
+      }
+
+      @keyframes prixClipFix {
+        0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+        25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+        50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+        75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+        100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+      }
+
+      .loaded_hiding .loader-wrapper {
+        transition: 0.3s opacity;
+        opacity: 0;
+      }
+
+      .loaded .loader-wrapper {
+        display: none;
+      }
+    </style>
   </head>
   <body>
-    <!-- quasar:entry-point -->
+  <div class="loader-wrapper">
+    <div class="loader"></div>
+  </div>
+
+  <!-- quasar:entry-point -->
+  <script>
+    window.onload = function () {
+      document.body.classList.add('loaded_hiding');
+      window.setTimeout(function () {
+        document.body.classList.add('loaded');
+        document.body.classList.remove('loaded_hiding');
+      }, 500);
+    }
+  </script>
   </body>
 </html>
