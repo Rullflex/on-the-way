@@ -19,7 +19,7 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 </script>
 
 <template>
-  <div>
+  <div class="absolute full-width">
     <h4 class="q-ma-lg">Выберите удобства, доступные пассажирам</h4>
     <q-list class="q-px-sm">
       <my-item

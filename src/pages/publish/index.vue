@@ -196,7 +196,7 @@ const handleCarSelect = (selectedCar: ICar) => {
     />
 
     <PublishButton
-      v-else-if="currentStep === StepNames.comment"
+      v-else-if="currentStep === Object.values(StepNames).pop()"
     />
   </q-page>
 </template>
