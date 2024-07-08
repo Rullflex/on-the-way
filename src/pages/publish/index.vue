@@ -11,6 +11,7 @@ import TimeStep from 'pages/publish/ui/TimeStep.vue';
 import TravelConveniencesStep from 'pages/publish/ui/TravelConveniencesStep.vue';
 import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 import PublishButton from 'pages/publish/ui/PublishButton.vue';
+import PriceStep from 'pages/publish/ui/PriceStep.vue';
 
 enum StepNames {
   departureCity,
@@ -20,6 +21,7 @@ enum StepNames {
   intermediateCities,
   date,
   time,
+  price,
   travelConveniences,
 }
 
@@ -40,6 +42,7 @@ const destinationCity = ref<ICityInfo>({ ...initialCityState });
 const intermediateCities = ref<string[]>([]);
 const date = ref('');
 const time = ref('');
+const price = ref('');
 const travelConveniences = ref<TravelConveniences>({
   arePetsAllowed: false,
   hasAirConditioner: false,
@@ -65,6 +68,8 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(date.value);
   } else if (currentStep.value === StepNames.time) {
     return Boolean(time.value);
+  } else if (currentStep.value === StepNames.price) {
+    return Boolean(price.value);
   }
 
   return false;
@@ -144,6 +149,11 @@ const handleCityOptionChoose = (city: ICityInfo) => {
       <TimeStep
         v-else-if="currentStep === StepNames.time"
         v-model="time"
+      />
+
+      <PriceStep
+        v-else-if="currentStep === StepNames.price"
+        v-model="price"
       />
 
       <TravelConveniencesStep
