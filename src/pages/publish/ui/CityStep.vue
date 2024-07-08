@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
+import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 defineProps<{
   title: string,
@@ -10,7 +11,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="absolute full-width" style="padding-bottom: 74px">
+  <StepContainer>
     <h4 class="q-ma-lg">{{ title }}</h4>
 
     <q-list class="q-px-sm">
@@ -24,5 +25,5 @@ defineProps<{
         @click="$emit('listItemClick', name)"
       />
     </q-list>
-  </div>
+  </StepContainer>
 </template>
