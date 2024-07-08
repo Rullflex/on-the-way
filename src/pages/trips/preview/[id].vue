@@ -2,8 +2,8 @@
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { captureApiException, getPluralNoun } from 'src/shared/utils';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
-import { MyBackBtn } from 'src/shared/ui';
-import { getTripById, ITrip, Response } from 'src/shared/api';
+import { MyAvatar, MyBackBtn } from 'src/shared/ui';
+import { getAvatarURL, getTripById, ITrip, Response } from 'src/shared/api';
 import { Loading, date as QDate } from 'quasar';
 
 const props = defineProps<{ id: string }>();
@@ -74,12 +74,7 @@ getTripById(props.id)
             to="/profile/preview/1"
           >
             <template #append>
-              <q-avatar
-                color="grey-4"
-                text-color="white"
-                size="2.5rem"
-              >
-              </q-avatar>
+              <my-avatar :src="trip.driver.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />
             </template>
           </my-item>
 

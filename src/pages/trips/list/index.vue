@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { captureApiException } from 'src/shared/utils';
 import { Loading, date as QDate } from 'quasar';
-import { getAllTrips, ITrip, Response } from 'src/shared/api';
+import { getAllTrips, getAvatarURL, ITrip, Response } from 'src/shared/api';
 import PageHeader from './ui/PageHeader.vue';
+import { MyAvatar } from 'src/shared/ui';
 
 const trips = ref<Response<ITrip>[]>([]);
 
@@ -54,12 +55,7 @@ getAllTrips()
 
             <div class="col column gap-sm">
               <div class="row justify-between">
-                <q-avatar
-                  color="grey-4"
-                  text-color="white"
-                  size="2.5rem"
-                >
-                </q-avatar>
+                <my-avatar :src="trip.driver.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />
 
                 <div class="col-auto column items-end">
                   <span class="text-bold">{{
