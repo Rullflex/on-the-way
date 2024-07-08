@@ -14,6 +14,7 @@ import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
 import { ICar } from 'src/shared/api';
+import CommentStep from 'pages/publish/ui/CommentStep.vue';
 
 enum StepNames {
   departureCity,
@@ -26,6 +27,7 @@ enum StepNames {
   car,
   travelConveniences,
   price,
+  comment
 }
 
 export interface ICityInfo {
@@ -56,6 +58,7 @@ const travelConveniences = ref<TravelConveniences>({
   isMaxTwoInTheBack: false
 });
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
+const comment = ref('')
 
 const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
@@ -181,7 +184,10 @@ const handleCarSelect = (selectedCar: ICar) => {
         v-model="price"
       />
 
-
+      <CommentStep
+        v-else-if="currentStep === StepNames.comment"
+        v-model="comment"
+      />
     </transition>
 
     <NextButton
@@ -189,8 +195,8 @@ const handleCarSelect = (selectedCar: ICar) => {
       @btn-click="currentStep++"
     />
 
-    <!--    <PublishButton-->
-    <!--      v-else-if="currentStep === StepNames.travelConveniences"-->
-    <!--    />-->
+    <PublishButton
+      v-else-if="currentStep === StepNames.comment"
+    />
   </q-page>
 </template>
