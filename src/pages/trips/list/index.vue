@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { useTripsStore } from 'stores/trips';
+import { captureApiException } from 'src/shared/utils';
+import { Loading, date as QDate } from 'quasar';
+import { getAllTrips, ITrip, Response } from 'src/shared/api';
 import PageHeader from './ui/PageHeader.vue';
 
-const tripsStore = useTripsStore();
+const trips = ref<Response<ITrip>[]>([]);
+
+Loading.show();
+getAllTrips()
+  .then((response) => (trips.value = response.documents))
+  .catch(captureApiException)
+  .finally(Loading.hide);
 </script>
 
 <template>
@@ -15,27 +23,27 @@ const tripsStore = useTripsStore();
 
         <q-list class="column gap-sm">
           <q-item
-            v-for="trip in tripsStore.trips"
-            :key="trip.id"
+            v-for="trip in trips"
+            :key="trip.$id"
             clickable
-            :disable="trip.reserved === trip.passengers"
+            :disable="trip.alreadyReserved === trip.totalPassengers"
             class="row rounded-borders bg-white shadow-2 q-pa-md"
-            :to="`/trips/preview/${trip.id}`"
+            :to="`/trips/preview/${trip.$id}`"
           >
             <div
               class="column overflow-hidden"
               style="width: 72px"
             >
-              <span class="text-subtitle2">{{ trip.origin.place }}</span>
-              <span class="text-caption">{{ trip.origin.time }}</span>
+              <span class="text-subtitle2">{{ trip.departureCity }}</span>
+              <span class="text-caption">{{ QDate.formatDate(trip.departureTime, 'HH:mm') }}</span>
 
               <q-icon
                 name="eva-more-vertical-outline"
                 class="q-my-sm"
               />
 
-              <span class="text-subtitle2">{{ trip.destination.place }}</span>
-              <span class="text-caption">{{ trip.destination.time }}</span>
+              <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
+              <span class="text-caption">{{ QDate.formatDate(trip.arrivalTime, 'HH:mm') }}</span>
             </div>
 
             <q-separator
@@ -51,15 +59,14 @@ const tripsStore = useTripsStore();
                   text-color="white"
                   size="2.5rem"
                 >
-                  <img :src="trip.driver.avatar" />
                 </q-avatar>
 
                 <div class="col-auto column items-end">
                   <span class="text-bold">{{
-                    trip.reserved === trip.passengers ? 'Мест нет' : trip.price + ' ₽'
+                    trip.alreadyReserved === trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
                   }}</span>
                   <div class="row items-center gap-xs text-caption">
-                    <span>{{ trip.reserved }}/{{ trip.passengers }}</span>
+                    <span>{{ trip.alreadyReserved }}/{{ trip.totalPassengers }}</span>
                     <q-icon name="eva-people-outline" />
                   </div>
                 </div>
@@ -68,7 +75,7 @@ const tripsStore = useTripsStore();
               <div class="row">
                 <div class="column">
                   <span class="text-subtitle2">{{ trip.driver.name }}</span>
-                  <span class="text-caption">{{ trip.driver.car }}</span>
+                  <span class="text-caption">{{ trip.driver.cars[0]?.name }}</span>
                 </div>
               </div>
 
