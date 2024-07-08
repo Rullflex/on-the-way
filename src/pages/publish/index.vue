@@ -8,6 +8,9 @@ import NextButton from './ui/NextButton.vue';
 import IntermediateCitiesStep from './ui/IntermediateCitiesStep.vue';
 import DateStep from './ui/DateStep.vue';
 import TimeStep from 'pages/publish/ui/TimeStep.vue';
+import TravelConveniencesStep from 'pages/publish/ui/TravelConveniencesStep.vue';
+import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
+import PublishButton from 'pages/publish/ui/PublishButton.vue';
 
 enum StepNames {
   departureCity,
@@ -17,6 +20,7 @@ enum StepNames {
   intermediateCities,
   date,
   time,
+  travelConveniences,
 }
 
 export interface ICityInfo {
@@ -36,6 +40,14 @@ const destinationCity = ref<ICityInfo>({ ...initialCityState });
 const intermediateCities = ref<string[]>([]);
 const date = ref('');
 const time = ref('');
+const travelConveniences = ref<TravelConveniences>({
+  arePetsAllowed: false,
+  hasAirConditioner: false,
+  hasBaggageTransportation: false,
+  hasChildSeat: false,
+  hasPackageDelivery: false,
+  isMaxTwoInTheBack: false
+});
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 
 const isNextButtonVisible = computed<boolean>(() => {
@@ -72,7 +84,6 @@ const handleCityOptionChoose = (city: ICityInfo) => {
   city.canDriveToPassengerLocation = true;
   currentStep.value++;
 };
-
 
 </script>
 
@@ -134,11 +145,21 @@ const handleCityOptionChoose = (city: ICityInfo) => {
         v-else-if="currentStep === StepNames.time"
         v-model="time"
       />
+
+      <TravelConveniencesStep
+        v-else-if="currentStep === StepNames.travelConveniences"
+        v-model="travelConveniences"
+      />
+
     </transition>
 
     <NextButton
       v-if="isNextButtonVisible"
       @btn-click="currentStep++"
+    />
+
+    <PublishButton
+      v-else-if="currentStep === StepNames.travelConveniences"
     />
   </q-page>
 </template>
