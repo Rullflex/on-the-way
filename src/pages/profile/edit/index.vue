@@ -1,21 +1,7 @@
 <script setup lang="ts">
 import { useUserInfoStore } from 'src/stores/user-info';
 import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
-
-const monthNames = [
-  'января',
-  'февраля',
-  'марта',
-  'апреля',
-  'мая',
-  'июня',
-  'июля',
-  'августа',
-  'сентября',
-  'октября',
-  'ноября',
-  'декабря',
-];
+import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 
 type ItemType = 'name' | 'surname' | 'dateOfBirth' | 'email' | 'phone';
 type IListItem = { label: string; value: string; type: ItemType };
@@ -26,7 +12,7 @@ const { avatar, name, surname, dateOfBirth, email, phone } = storeToRefs(userInf
 const formattedDateOfBirth = computed(() => {
   if (dateOfBirth.value) {
     const [year, month, day] = dateOfBirth.value.split('/');
-    return `${day} ${monthNames[Number(month) - 1]} ${year}`;
+    return `${day} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]} ${year}`;
   }
   return '';
 });

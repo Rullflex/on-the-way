@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
-import { CITY_NAMES } from 'src/shared/constants';
+import { CITY_NAMES, MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
@@ -20,22 +20,7 @@ watch(datePickerModel, (newValue) => {
     date.value = 'Завтра';
   } else {
     const monthIndex = Number(month) - 1;
-    const monthNames = [
-      'января',
-      'февраля',
-      'марта',
-      'апреля',
-      'мая',
-      'июня',
-      'июля',
-      'августа',
-      'сентября',
-      'октября',
-      'ноября',
-      'декабря',
-    ];
-
-    date.value = `${dayOfWeek} ${dayOfMonth} ${monthNames[monthIndex]}`;
+    date.value = `${dayOfWeek} ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
   }
 });
 
