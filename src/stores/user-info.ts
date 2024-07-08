@@ -1,12 +1,21 @@
+import { getAvatarURL, IUser } from 'src/shared/api';
+
+type State = Omit<IUser, 'cars' | 'trips'> & { id: string };
+
 export const useUserInfoStore = defineStore('user-info', {
-  state: () => ({
-    avatar: '',
-    name: 'Дмитрий',
-    surname: 'Горшков',
-    dateOfBirth: '1999/03/26',
-    email: 'libafer99@gmail.com',
-    phone: '+7 (999) 999-99-99',
-  }),
+  state: () =>
+    ({
+      id: '',
+      name: '',
+      surname: '',
+      email: '',
+      phone: '',
+      dateOfBirth: '',
+      avatarFileId: '',
+    } as State),
+  getters: {
+    avatarURL: (state) => (state.avatarFileId ? getAvatarURL(state.avatarFileId) : ''),
+  },
 });
 
 if (import.meta.hot) {

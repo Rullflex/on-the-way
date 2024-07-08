@@ -2,32 +2,38 @@
 import { useUserInfoStore } from 'src/stores/user-info';
 import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
+import { AppwriteException, updateUser, uploadAvatar } from 'src/shared/api';
+import { captureApiException } from 'src/shared/utils';
+import { Loading } from 'quasar';
 
 type ItemType = 'name' | 'surname' | 'dateOfBirth' | 'email' | 'phone';
 type IListItem = { label: string; value: string; type: ItemType };
 
 const userInfoStore = useUserInfoStore();
-const { avatar, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
+const { id, avatarFileId, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
 
 const formattedDateOfBirth = computed(() => {
-  if (dateOfBirth.value) {
-    const [year, month, day] = dateOfBirth.value.split('/');
-    return `${day} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]} ${year}`;
+  if (!dateOfBirth.value) {
+    return '';
   }
-  return '';
+
+  const date = new Date(dateOfBirth.value);
+  const [day, month, year] = [date.getDate(), date.getMonth(), date.getFullYear()];
+
+  return `${day} ${MONTHS_NAMES_IN_GENITIVE[month]} ${year}`;
 });
 
 const listItems = computed<IListItem[]>(() => [
-  { label: 'Имя', value: name.value, type: 'name' },
-  { label: 'Фамилия', value: surname.value, type: 'surname' },
+  { label: 'Имя', value: name.value ?? '', type: 'name' },
+  { label: 'Фамилия', value: surname.value ?? '', type: 'surname' },
   { label: 'Дата рождения', value: formattedDateOfBirth.value, type: 'dateOfBirth' },
-  { label: 'Адрес эл. почты', value: email.value, type: 'email' },
-  { label: 'Номер телефона', value: phone.value, type: 'phone' },
+  { label: 'Адрес эл. почты', value: email.value ?? '', type: 'email' },
+  { label: 'Номер телефона', value: phone.value ?? '', type: 'phone' },
 ]);
 
 const isDialogVisible = ref(false);
 const dialogType = ref<ItemType>('name');
-const dialogModel = ref<string | null>('');
+const dialogModel = ref<string>('');
 const dialogTitle = computed(() => {
   switch (dialogType.value) {
     case 'name':
@@ -48,34 +54,34 @@ const dialogTitle = computed(() => {
 const showDialogByType = (type: ItemType) => {
   isDialogVisible.value = true;
   dialogType.value = type;
-  dialogModel.value = userInfoStore[type];
+  dialogModel.value = userInfoStore[type] ?? '';
 };
 
-const handleAvatarChange = (event: Event) => {
+const handleAvatarChange = async (event: Event) => {
   const target = event.target as HTMLInputElement;
-  if (target.files) {
-    avatar.value = URL.createObjectURL(target.files[0]);
+  if (!target.files) {
+    return;
+  }
+
+  Loading.show();
+  try {
+    const response = await uploadAvatar(target.files[0]);
+    await updateUser(id.value, { avatarFileId: response.$id });
+    avatarFileId.value = response.$id;
+  } catch (error) {
+    captureApiException(error as AppwriteException);
+  } finally {
+    Loading.hide();
   }
 };
 
-const handleSave = () => {
-  switch (dialogType.value) {
-    case 'name':
-      name.value = dialogModel.value ?? '';
-      break;
-    case 'surname':
-      surname.value = dialogModel.value ?? '';
-      break;
-    case 'dateOfBirth':
-      dateOfBirth.value = dialogModel.value ?? '';
-      break;
-    case 'email':
-      email.value = dialogModel.value ?? '';
-      break;
-    case 'phone':
-      phone.value = dialogModel.value ?? '';
-      break;
-  }
+const handleSave = async () => {
+  Loading.show();
+  await updateUser(id.value, { [dialogType.value]: dialogModel.value })
+    .then(() => userInfoStore.$patch({ [dialogType.value]: dialogModel.value }))
+    .catch(captureApiException);
+  Loading.hide();
+
   isDialogVisible.value = false;
   dialogModel.value = '';
 };
@@ -94,15 +100,12 @@ const handleSave = () => {
       <my-item
         tag="label"
         color="primary"
-        :icon="avatar ? 'eva-edit-outline' : 'eva-plus-circle-outline'"
-        :label="`${avatar ? 'Изменить' : 'Добавить'} фото профиля`"
+        :icon="avatarFileId ? 'eva-edit-outline' : 'eva-plus-circle-outline'"
+        :label="`${avatarFileId ? 'Изменить' : 'Добавить'} фото профиля`"
       >
         <template #append>
           <q-item-section avatar>
-            <my-avatar
-              self
-              size="5rem"
-            />
+            <my-avatar size="5rem" />
           </q-item-section>
         </template>
 

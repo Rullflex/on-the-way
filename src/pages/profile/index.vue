@@ -38,10 +38,7 @@ onMounted(async () => {
         </q-item-section>
 
         <q-item-section avatar>
-          <my-avatar
-            self
-            size="5rem"
-          />
+          <my-avatar size="5rem" />
         </q-item-section>
 
         <q-item-section side>
