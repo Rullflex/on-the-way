@@ -2,6 +2,7 @@
 import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
 import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 import { MyItem } from 'src/shared/ui';
+import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 const travelConveniences = defineModel({
   default: {
@@ -19,7 +20,7 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 </script>
 
 <template>
-  <div class="absolute full-width">
+  <StepContainer>
     <h4 class="q-ma-lg">Выберите удобства, доступные пассажирам</h4>
     <q-list class="q-px-sm">
       <my-item
@@ -37,7 +38,7 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
         </template>
       </my-item>
     </q-list>
-  </div>
+  </StepContainer>
 </template>
 
 

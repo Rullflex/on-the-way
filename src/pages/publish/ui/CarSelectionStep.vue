@@ -3,6 +3,7 @@ import { Response } from 'src/plugins/appwrite/types';
 import { createCar, getAllCars, ICar } from 'src/shared/api';
 import { captureApiException } from 'src/shared/utils';
 import { MyItem } from 'src/shared/ui';
+import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 defineProps<{
   selectedCar: ICar | null
@@ -33,7 +34,7 @@ const handleAddedCar = async (payload: ICar) => {
 </script>
 
 <template>
-  <div class="absolute full-width">
+  <StepContainer>
     <h4 class="q-ma-lg">Выберите автомобиль для поездки</h4>
     <div
       v-if="cars.length"
@@ -78,5 +79,5 @@ const handleAddedCar = async (payload: ICar) => {
     >
       <UpdateCar @updated="handleAddedCar" />
     </q-dialog>
-  </div>
+  </StepContainer>
 </template>

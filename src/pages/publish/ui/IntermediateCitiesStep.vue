@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
+import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 defineProps<{
   cityList: string[],
@@ -19,9 +20,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 </script>
 
 <template>
-  <div
-    class="absolute full-width"
-  >
+  <StepContainer>
     <h5 class="q-ma-lg">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
 
     <q-list class="q-mx-sm">
@@ -34,5 +33,5 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
         @click="toggleIntermediateCity(name)"
       />
     </q-list>
-  </div>
+  </StepContainer>
 </template>

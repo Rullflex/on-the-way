@@ -70,7 +70,7 @@ const isNextButtonVisible = computed<boolean>(() => {
   } else if (currentStep.value === StepNames.destinationLocation) {
     return Boolean(destinationCity.value.location) || destinationCity.value.canDriveToPassengerLocation;
   } else if (currentStep.value === StepNames.intermediateCities) {
-    return Boolean(intermediateCities.value.length);
+    return true;
   } else if (currentStep.value === StepNames.date) {
     return Boolean(date.value);
   } else if (currentStep.value === StepNames.time) {
