@@ -1,16 +1,16 @@
 import { AppWriteApi } from 'src/plugins/appwrite';
 import { IUser } from './types';
 
-const api = new AppWriteApi({
-  collectionId: '6686664d002982e9dffd',
+export const usersApi = new AppWriteApi({
+  collectionId: '6686cabb000af597fb29',
 });
 
-export const getUserById = (id: string) => api.getById<IUser>(id);
+export const getUserById = (id: string) => usersApi.getById<IUser>(id);
 
-export const getAllUsers = () => api.getAll<IUser>();
+export const getAllUsers = () => usersApi.getAll<IUser>();
 
-export const createUser = (payload: IUser) => api.create(payload);
+export const createUser = (payload: IUser) => usersApi.create(payload);
 
-export const deleteUser = (id: string) => api.delete(id);
+export const deleteUser = (id: string) => usersApi.delete(id);
 
-export const updateUser = (id: string, payload: Partial<IUser>) => api.update(id, payload);
+export const updateUser = (id: string, payload: Partial<IUser>) => usersApi.update(id, payload);

@@ -5,3 +5,4 @@ export { type IUser, type ICar, type ITrip } from './types';
 export * from './cars';
 export * from './trips';
 export * from './users';
+export * from './avatars';

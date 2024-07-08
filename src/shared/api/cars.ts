@@ -1,16 +1,16 @@
 import { AppWriteApi } from 'src/plugins/appwrite';
 import { ICar } from './types';
 
-const api = new AppWriteApi({
+export const carsApi = new AppWriteApi({
   collectionId: '6686664d002982e9dffd',
 });
 
-export const getCarById = (id: string) => api.getById<ICar>(id);
+export const getCarById = (id: string) => carsApi.getById<ICar>(id);
 
-export const getAllCars = () => api.getAll<ICar>();
+export const getAllCars = () => carsApi.getAll<ICar>();
 
-export const createCar = (payload: ICar) => api.create(payload);
+export const createCar = (payload: ICar) => carsApi.create(payload);
 
-export const deleteCar = (id: string) => api.delete(id);
+export const deleteCar = (id: string) => carsApi.delete(id);
 
-export const updateCar = (id: string, payload: Partial<ICar>) => api.update(id, payload);
+export const updateCar = (id: string, payload: Partial<ICar>) => carsApi.update(id, payload);

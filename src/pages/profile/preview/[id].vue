@@ -5,13 +5,7 @@ import { date as qDate } from 'quasar';
 import { getPluralNoun } from 'src/shared/utils';
 
 const userStore = useUserInfoStore();
-const age = computed(() => qDate.getDateDiff(new Date(), userStore.dateOfBirth, 'years'));
-
-// interface IProps {
-//   id: string;
-// }
-
-// const props = defineProps<IProps>();
+const age = computed(() => userStore.dateOfBirth && qDate.getDateDiff(new Date(), userStore.dateOfBirth, 'years'));
 </script>
 
 <template>
@@ -26,14 +20,15 @@ const age = computed(() => qDate.getDateDiff(new Date(), userStore.dateOfBirth, 
           <q-item>
             <q-item-section>
               <q-item-label class="text-h5">{{ userStore.name }}</q-item-label>
-              <q-item-label caption>{{ age }} {{ getPluralNoun(age, 'год', 'года', 'лет') }}</q-item-label>
+              <q-item-label
+                v-if="age"
+                caption
+                >{{ age }} {{ getPluralNoun(age, 'год', 'года', 'лет') }}</q-item-label
+              >
             </q-item-section>
 
             <q-item-section avatar>
-              <my-avatar
-                :src="userStore.avatar"
-                size="5rem"
-              />
+              <my-avatar size="5rem" />
             </q-item-section>
           </q-item>
 
@@ -51,11 +46,11 @@ const age = computed(() => qDate.getDateDiff(new Date(), userStore.dateOfBirth, 
           <q-item-label header>Личные данные</q-item-label>
 
           <my-item
-            :label="userStore.phone"
+            :label="userStore.phone ?? 'Не указан'"
             caption="Номер телефона"
           />
           <my-item
-            :label="userStore.email"
+            :label="userStore.email ?? 'Не указан'"
             caption="Адрес эл. почты"
           />
         </q-list>
