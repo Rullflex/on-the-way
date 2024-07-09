@@ -17,6 +17,7 @@ const navigation = [
   {
     title: 'Ваши поездки',
     icon: 'eva-map-outline',
+    to: '/rides',
   },
   {
     title: 'Входящие',
