@@ -10,7 +10,7 @@ const price = defineModel({ default: '' });
 
     <q-input
       type="number"
-      placeholder="500"
+      placeholder="XXX"
       outlined
       class="q-mx-lg q-pt-sm"
       v-model="price"
