@@ -13,7 +13,7 @@ import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
-import { ICar } from 'src/shared/api';
+import { ICar } from 'src/shared/types';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
 import PassengersAmoutStep from 'pages/publish/ui/PassengersAmountStep.vue';
 

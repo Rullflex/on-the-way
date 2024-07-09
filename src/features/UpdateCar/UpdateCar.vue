@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
-import { getCarById, ICar } from 'src/shared/api';
+import { getCarById } from 'src/shared/api';
+import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
 
 enum Steps {

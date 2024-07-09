@@ -1,5 +1,5 @@
 import { AppWriteApi } from 'src/plugins/appwrite';
-import { ICar } from './types';
+import { ICar } from 'src/shared/types';
 
 export const carsApi = new AppWriteApi({
   collectionId: '6686664d002982e9dffd',
