@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Response } from 'src/plugins/appwrite/types';
-import { createCar, getAllCars, ICar } from 'src/shared/api';
+import { createCar, getAllCars } from 'src/shared/api';
+import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
 import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';

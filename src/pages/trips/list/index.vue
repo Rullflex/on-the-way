@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { captureApiException } from 'src/shared/utils';
 import { Loading } from 'quasar';
-import { getAllTrips, ITrip, Response } from 'src/shared/api';
+import { getAllTrips, Response } from 'src/shared/api';
+import { ITrip } from 'src/shared/types';
 import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 

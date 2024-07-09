@@ -1,4 +1,5 @@
-import { getAvatarURL, IUser } from 'src/shared/api';
+import { getAvatarURL } from 'src/shared/api';
+import { IUser } from 'src/shared/types';
 
 type State = Omit<IUser, 'cars' | 'trips'> & { id: string };
 

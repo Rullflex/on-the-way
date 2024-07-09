@@ -1,5 +1,5 @@
 import { AppWriteApi } from 'src/plugins/appwrite';
-import { ITrip } from './types';
+import { ITrip } from 'src/shared/types';
 
 export const tripsApi = new AppWriteApi({
   collectionId: '6686b44d001c31636f7e',

@@ -1,5 +1,5 @@
 import { AppWriteApi } from 'src/plugins/appwrite';
-import { IUser } from './types';
+import { IUser } from 'src/shared/types';
 
 export const usersApi = new AppWriteApi({
   collectionId: '6686cabb000af597fb29',
