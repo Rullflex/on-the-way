@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { date as QDate } from 'quasar';
-import { getAvatarURL, ITrip } from 'src/shared/api';
+import { getAvatarURL } from 'src/shared/api';
+import { ITrip } from 'src/shared/types';
 import { MyAvatar } from 'src/shared/ui';
 
 interface IProps {
