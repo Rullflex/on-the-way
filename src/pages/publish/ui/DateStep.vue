@@ -6,7 +6,7 @@ const date = defineModel({ default: '' });
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Когда поездка?</h4>
+    <h4 class="q-mx-lg q-mt-md">Когда поездка?</h4>
 
     <q-date
       v-model="date"

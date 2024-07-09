@@ -6,7 +6,7 @@ const passengersAmount = defineModel({ default: 4 });
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Сколько пассажиров вы планируете взять в поездку?</h4>
+    <h4 class="q-mx-lg q-my-md">Сколько пассажиров вы планируете взять в поездку?</h4>
 
     <div class="column items-center gap-lg">
       <div class="row items-center">

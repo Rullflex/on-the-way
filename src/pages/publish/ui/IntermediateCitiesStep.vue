@@ -21,7 +21,7 @@ const hasIntermediateCity = (city: string) => intermediateCities.value.includes(
 
 <template>
   <StepContainer>
-    <h5 class="q-ma-lg">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
+    <h5 class="q-mx-lg q-my-md">Добавьте промежуточные остановки, чтобы найти больше пассажиров</h5>
 
     <q-list class="q-mx-sm">
       <my-item

@@ -6,7 +6,7 @@ const time = defineModel({ default: '' });
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Во сколько заберете пассажиров?</h4>
+    <h4 class="q-mx-lg q-my-md">Во сколько заберете пассажиров?</h4>
 
     <q-input
       type="time"

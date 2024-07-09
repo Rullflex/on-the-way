@@ -6,7 +6,7 @@ const comment = defineModel({ default: '' });
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Добавьте комментарий к поездке</h4>
+    <h4 class="q-mx-lg q-my-md">Добавьте комментарий к поездке</h4>
     <q-input
       type="textarea"
       outlined

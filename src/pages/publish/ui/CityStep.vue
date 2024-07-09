@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">{{ title }}</h4>
+    <h4 class="q-mx-lg q-mt-lg q-mb-md">{{ title }}</h4>
 
     <q-list class="q-px-sm">
       <my-item

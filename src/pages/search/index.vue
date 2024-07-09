@@ -187,7 +187,7 @@ const onSearchClicked = () => {
         v-if="dialogType === 'origin' || dialogType === 'destination'"
         class="q-px-sm q-pt-none"
       >
-        <h4 class="q-mx-md q-mb-lg">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
+        <h4 class="q-mx-md q-mb-md">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
 
         <q-list>
           <my-item
@@ -206,7 +206,7 @@ const onSearchClicked = () => {
         v-else-if="dialogType === 'date'"
         class="q-px-none q-pt-none"
       >
-        <h4 class="q-mx-lg q-mb-lg">Когда вы едете?</h4>
+        <h4 class="q-mx-lg">Когда вы едете?</h4>
 
         <q-date
           v-model="datePickerModel"
@@ -230,9 +230,9 @@ const onSearchClicked = () => {
         v-else-if="dialogType === 'passengers'"
         class="q-px-lg q-pt-none col column justify-between"
       >
-        <h4>Количество бронируемых мест</h4>
+        <h4 class='q-pb-md'>Количество бронируемых мест</h4>
 
-        <div class="column items-center gap-lg">
+        <div class="column items-center gap-lg q-pb-md">
           <div class="row items-center">
             <q-btn
               flat

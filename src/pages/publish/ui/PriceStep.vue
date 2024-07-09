@@ -6,7 +6,7 @@ const price = defineModel({ default: '' });
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Сколько будет стоить поездка для одного пассажира?</h4>
+    <h4 class="q-mx-lg q-my-md">Сколько будет стоить поездка для одного пассажира?</h4>
 
     <q-input
       type="number"

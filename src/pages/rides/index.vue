@@ -13,9 +13,9 @@ import { MyItem } from 'src/shared/ui';
       />
     </div>
 
-    <h4 class="q-pa-md q-mb-sm">Здесь появятся ваши будущие поездки.</h4>
+    <h4 class="q-px-md q-py-sm">Здесь появятся ваши будущие поездки.</h4>
 
-    <p class="text-subtitle2 q-pa-md">
+    <p class="text-subtitle2 q-px-md q-pt-md q-pb-sm">
       Выбирайте из тысячи направлений или опубликуйте поездку, чтобы разделить расходы с&nbsp;попутчиками.
     </p>
 

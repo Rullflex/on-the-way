@@ -4,7 +4,7 @@ import { MyItem, MyAvatar } from 'src/shared/ui';
 
 <template>
   <q-page>
-    <h4 class="q-ma-lg">Входящие</h4>
+    <h4 class="q-mx-lg q-mt-lg q-mb-md">Входящие</h4>
 
     <q-list class="q-px-sm">
       <my-item

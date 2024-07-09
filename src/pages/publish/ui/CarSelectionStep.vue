@@ -36,7 +36,7 @@ const handleAddedCar = async (payload: ICar) => {
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Выберите автомобиль для поездки</h4>
+    <h4 class="q-mx-lg q-my-md">Выберите автомобиль для поездки</h4>
     <div
       v-if="cars.length"
       class="q-mx-sm"

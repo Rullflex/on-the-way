@@ -14,10 +14,10 @@ const locationInputValue = ref(props.city.location);
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">{{ title }}</h4>
+    <h4 class="q-mx-lg q-mt-md q-mb-lg">{{ title }}</h4>
 
     <q-input
-      class="q-mx-lg q-py-sm"
+      class="q-mx-lg q-pb-sm"
       v-model="locationInputValue"
       @update:model-value="$emit('locationInput', locationInputValue)"
       outlined

@@ -21,7 +21,7 @@ const toggleConvenience = (name: keyof TravelConveniences) => {
 
 <template>
   <StepContainer>
-    <h4 class="q-ma-lg">Выберите удобства, доступные пассажирам</h4>
+    <h4 class="q-mx-lg q-mt-md q-mb-sm">Выберите удобства, доступные пассажирам</h4>
     <q-list class="q-px-sm">
       <my-item
         v-for="convenience in TRAVEL_CONVENIENCES"
