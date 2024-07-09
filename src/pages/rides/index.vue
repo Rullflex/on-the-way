@@ -21,8 +21,8 @@ import { MyItem } from 'src/shared/ui';
 
     <MyItem
       chevron
-      clickable
       label="Архив поездок"
+      to="/rides/archive"
     />
   </q-page>
 </template>
