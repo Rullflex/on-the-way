@@ -15,6 +15,7 @@ import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
 import { ICar } from 'src/shared/api';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
+import PassengersAmoutStep from 'pages/publish/ui/PassengersAmountStep.vue';
 
 enum StepNames {
   departureCity,
@@ -25,8 +26,9 @@ enum StepNames {
   date,
   time,
   car,
-  travelConveniences,
+  passengersAmount,
   price,
+  travelConveniences,
   comment
 }
 
@@ -49,6 +51,7 @@ const date = ref('');
 const time = ref('');
 const price = ref('');
 const car = ref<ICar | null>(null);
+const passengersAmount = ref(4);
 const travelConveniences = ref<TravelConveniences>({
   arePetsAllowed: false,
   hasAirConditioner: false,
@@ -58,7 +61,7 @@ const travelConveniences = ref<TravelConveniences>({
   isMaxTwoInTheBack: false
 });
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
-const comment = ref('')
+const comment = ref('');
 
 const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
@@ -77,6 +80,8 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(time.value);
   } else if (currentStep.value === StepNames.car) {
     return Boolean(car.value);
+  } else if (currentStep.value === StepNames.passengersAmount) {
+    return Boolean(passengersAmount);
   } else if (currentStep.value === StepNames.travelConveniences) {
     return true;
   } else if (currentStep.value === StepNames.price) {
@@ -171,7 +176,11 @@ const handleCarSelect = (selectedCar: ICar) => {
         v-else-if="currentStep === StepNames.car"
         :selected-car="car"
         @car-select="handleCarSelect"
+      />
 
+      <PassengersAmoutStep
+        v-else-if="currentStep === StepNames.passengersAmount"
+        v-model="passengersAmount"
       />
 
       <TravelConveniencesStep
