@@ -24,10 +24,10 @@ const handleUserLogin = async () => {
       dateOfBirth: user.dateOfBirth,
       email: user.email,
       phone: user.phone,
-      cars: user.cars,
+      cars: user.cars
     });
 
-    router.push('/search');
+    await router.push({ path: '/search', replace: true });
   } catch (error) {
     captureApiException(error as AppwriteException);
   } finally {
@@ -84,7 +84,8 @@ const handleUserLogin = async () => {
             <router-link
               to="/register"
               class="text-primary"
-              >Зарегистрироваться</router-link
+            >Зарегистрироваться
+            </router-link
             >
           </p>
         </q-form>
@@ -95,5 +96,5 @@ const handleUserLogin = async () => {
 
 <route lang="yaml">
 meta:
-  layout: blank
+layout: blank
 </route>
