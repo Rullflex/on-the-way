@@ -12,7 +12,6 @@ const testTripData = {
   departureCity: 'Москва',
   arrivalCity: 'Санкт-Петербург',
   departureTime: Date(),
-  arrivalTime: Date(),
   alreadyReserved: 0,
   totalPassengers: 4,
   comment: 'Комментарий',

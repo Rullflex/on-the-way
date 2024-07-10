@@ -16,7 +16,6 @@ export interface ITrip {
   price: number;
   departureDate: string;
   departureTime: string;
-  arrivalTime: string;
   totalPassengers: number;
   alreadyReserved: number;
   conveniences: string[];
@@ -28,6 +27,7 @@ export interface ITrip {
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
   driver: Response<IUser>;
+  car: Response<ICar>;
   comment: string;
 }
 

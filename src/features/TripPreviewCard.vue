@@ -31,7 +31,6 @@ const props = defineProps<IProps>();
       />
 
       <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
-      <span class="text-caption">{{ QDate.formatDate(trip.arrivalTime, 'HH:mm') }}</span>
     </div>
 
     <q-separator

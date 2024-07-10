@@ -13,13 +13,16 @@ import { TripConveniencesNames } from 'src/shared/enums';
 import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
-import { ICar } from 'src/shared/types';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
 import PassengersAmountStep from 'pages/publish/ui/PassengersAmountStep.vue';
-import { createTrip, TCreateTripData } from 'src/shared/api';
+import { createTrip } from 'src/shared/api';
 import { useUserStore } from 'stores/user';
 import { captureApiException } from 'src/shared/utils';
 import { AppwriteException } from 'appwrite';
+
+defineOptions({
+  name: 'PublishPage',
+});
 
 enum StepNames {
   departureCity,
@@ -37,15 +40,15 @@ enum StepNames {
 }
 
 export interface ICityInfo {
-  city: string,
-  location: string,
-  canDriveToPassengerLocation: boolean,
+  city: string;
+  location: string;
+  canDriveToPassengerLocation: boolean;
 }
 
 const initialCityState: ICityInfo = {
   city: '',
   location: '',
-  canDriveToPassengerLocation: false
+  canDriveToPassengerLocation: false,
 };
 
 const userStore = useUserStore();
@@ -57,8 +60,8 @@ const destinationCity = ref<ICityInfo>({ ...initialCityState });
 const intermediateCities = ref<string[]>([]);
 const date = ref('');
 const time = ref('');
-const price = ref<number | null>(null);
-const car = ref<ICar | null>(null);
+const price = ref('');
+const carId = ref('');
 const passengersAmount = ref(4);
 const tripConveniences = shallowRef<TripConveniencesNames[]>([]);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
@@ -80,13 +83,13 @@ const isNextButtonVisible = computed<boolean>(() => {
   } else if (currentStep.value === StepNames.time) {
     return Boolean(time.value);
   } else if (currentStep.value === StepNames.car) {
-    return Boolean(car.value);
+    return Boolean(carId.value);
   } else if (currentStep.value === StepNames.passengersAmount) {
     return Boolean(passengersAmount);
   } else if (currentStep.value === StepNames.tripConveniences) {
     return true;
   } else if (currentStep.value === StepNames.price && price.value) {
-    return price.value > 0;
+    return parseInt(price.value) > 0;
   }
 
   return false;
@@ -107,20 +110,14 @@ const handleCityOptionChoose = (city: ICityInfo) => {
   currentStep.value++;
 };
 
-const handleCarSelect = (selectedCar: ICar) => {
-  car.value = selectedCar;
-  currentStep.value++;
-};
-
 const router = useRouter();
 const handlePublishBtnClick = async () => {
   $q.loading.show();
 
-  const tripData: TCreateTripData = {
-    price: price.value as number,
+  const tripData: Parameters<typeof createTrip>[0] = {
+    price: parseInt(price.value),
     departureDate: date.value,
     departureTime: time.value,
-    arrivalTime: '',
     totalPassengers: passengersAmount.value,
     alreadyReserved: 0,
     conveniences: tripConveniences.value,
@@ -131,16 +128,16 @@ const handlePublishBtnClick = async () => {
     intermediateCities: intermediateCities.value,
     canPickUpFromPlace: departureCity.value.canDriveToPassengerLocation,
     canDriveToPlace: destinationCity.value.canDriveToPassengerLocation,
-    driver: [userStore.accountId],
-    comment: comment.value
+    driver: userStore.accountId,
+    comment: comment.value,
+    car: carId.value,
   };
   try {
     await createTrip(tripData);
     $q.notify({
       message: 'Поездка успешно опубликована',
       position: 'top',
-      color: 'primary',
-      actions: [{ icon: 'close', color: 'white', round: true }]
+      color: 'positive',
     });
     await router.push({ path: '/rides' });
   } catch (error) {
@@ -203,6 +200,7 @@ const handlePublishBtnClick = async () => {
       <DateStep
         v-else-if="currentStep === StepNames.date"
         v-model="date"
+        @update:model-value="currentStep++"
       />
 
       <TimeStep
@@ -212,8 +210,8 @@ const handlePublishBtnClick = async () => {
 
       <CarSelectionStep
         v-else-if="currentStep === StepNames.car"
-        :selected-car="car"
-        @car-select="handleCarSelect"
+        v-model="carId"
+        @update:model-value="currentStep++"
       />
 
       <PassengersAmountStep

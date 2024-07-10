@@ -48,7 +48,6 @@ getTripById(props.id)
 
             <span class="text-bold">{{ trip.canDriveToPlace ? 'Довезу до места' : trip.arrivalAddress }}</span>
             <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
-            <span class="text-subtitle2">{{ QDate.formatDate(trip.arrivalTime, 'HH:mm') }}</span>
           </div>
         </div>
 
@@ -150,7 +149,7 @@ getTripById(props.id)
           size="0.5rem"
         />
 
-        <q-list class='q-px-sm'>
+        <q-list class="q-px-sm">
           <my-item
             color="primary"
             label="Поделиться поездкой"

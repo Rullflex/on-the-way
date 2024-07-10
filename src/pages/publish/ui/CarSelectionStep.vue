@@ -6,9 +6,7 @@ import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 import { useUserStore } from 'stores/user';
 
-defineProps<{
-  selectedCar: ICar | null
-}>();
+const carId = defineModel({ default: '' });
 
 const $q = useQuasar();
 const userStore = useUserStore();
@@ -16,14 +14,11 @@ const cars = computed(() => userStore.cars);
 const isDialogVisible = ref(false);
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
-const emit = defineEmits(['carSelect']);
-
 const handleAddedCar = async (payload: ICar) => {
   $q.loading.show();
-  await createCar(payload).catch(captureApiException);
+  await createCar(payload).then(({ $id }) => (carId.value = $id), captureApiException);
   $q.loading.hide();
   isDialogVisible.value = false;
-  emit('carSelect', payload);
 };
 </script>
 
@@ -36,10 +31,10 @@ const handleAddedCar = async (payload: ICar) => {
     >
       <q-item
         v-for="car in cars"
-        :key="car.licensePlate"
+        :key="car.$id"
         clickable
-        :active="selectedCar && selectedCar.licensePlate === car.licensePlate"
-        @click="$emit('carSelect', car)"
+        :active="carId === car.$id"
+        @click="carId = car.$id"
         class="rounded-borders"
       >
         <q-item-section>
