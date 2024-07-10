@@ -2,7 +2,7 @@
 import { getPluralNoun } from 'src/shared/utils';
 import { useTripSettingsStore } from 'stores/trip-settings';
 import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
-import { MyItem } from 'src/shared/ui';
+import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
 
 const store = useTripSettingsStore();
@@ -17,7 +17,7 @@ const travelConveniences = ref<TravelConveniences>({
   hasPackageDelivery: false,
   hasChildSeat: false,
   hasAirConditioner: false,
-  isMaxTwoInTheBack: false,
+  isMaxTwoInTheBack: false
 });
 
 const toggleConvenience = (name: keyof TravelConveniences) => {
@@ -36,12 +36,7 @@ const showDialog = () => {
     bordered
     class="bg-white text-dark row q-pa-sm justify-between items-center"
   >
-    <q-btn
-      icon="eva-chevron-left-outline"
-      flat
-      dense
-      to="/search"
-    />
+    <my-back-btn fallback-route="/search" />
 
     <div style="font-size: 0.75rem">
       <div class="row flex-center gap-xs">

@@ -2,6 +2,7 @@
 import { deleteCar, getCarById, updateCar, Response } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
+import { MyBackBtn } from 'src/shared/ui';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
@@ -59,12 +60,7 @@ onMounted(async () => {
   <q-layout>
     <q-page-container>
       <q-page class="q-pa-lg">
-        <q-btn
-          @click="$router.back()"
-          icon="eva-arrow-back-outline"
-          flat
-          dense
-        />
+        <my-back-btn fallback-route="/profile"/>
 
         <h5 class="q-mb-lg q-mt-md">Информация о машине</h5>
 
