@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
-const price = defineModel({ default: '' });
+const price = defineModel({ default: null });
 </script>
 
 <template>
