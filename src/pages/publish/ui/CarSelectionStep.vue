@@ -1,29 +1,23 @@
 <script setup lang="ts">
 import { Response } from 'src/plugins/appwrite/types';
-import { createCar, getAllCars } from 'src/shared/api';
+import { createCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
 import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
+import { useUserInfoStore } from 'stores/user-info';
 
 defineProps<{
   selectedCar: ICar | null
 }>();
 
 const $q = useQuasar();
-const cars = ref<Response<ICar>[]>([]);
+const userStore = useUserInfoStore();
+const cars = ref<Response<ICar>[]>(userStore.cars);
 const isDialogVisible = ref(false);
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const emit = defineEmits(['carSelect']);
-
-onMounted(async () => {
-  $q.loading.show();
-  await getAllCars()
-    .then((response) => (cars.value = response.documents))
-    .catch(captureApiException);
-  $q.loading.hide();
-});
 
 const handleAddedCar = async (payload: ICar) => {
   $q.loading.show();

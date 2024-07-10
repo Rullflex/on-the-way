@@ -17,7 +17,7 @@ import { ICar, ITrip } from 'src/shared/types';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
 import PassengersAmountStep from 'pages/publish/ui/PassengersAmountStep.vue';
 import { useUserInfoStore } from 'stores/user-info';
-import { createTrip } from 'src/shared/api';
+import { createTrip, getUserById } from 'src/shared/api';
 
 enum StepNames {
   departureCity,
@@ -120,6 +120,7 @@ const handleCarSelect = (selectedCar: ICar) => {
 const router = useRouter();
 const handlePublishBtnClick = async () => {
   $q.loading.show();
+  const user = await getUserById(userStore.$id);
 
   const tripData: ITrip = {
     price: price.value as number,
@@ -138,11 +139,9 @@ const handlePublishBtnClick = async () => {
     intermediateCities: intermediateCities.value,
     canPickUpFromPlace: departureCity.value.canDriveToPassengerLocation,
     canDriveToPlace: destinationCity.value.canDriveToPassengerLocation,
-    driver: { ...userStore, cars: [], trips: [] },
+    driver: user,
     comment: comment.value
   };
-
-  tripData.alreadyReserved = 1;
 
   await createTrip(tripData)
     .then(() => {
