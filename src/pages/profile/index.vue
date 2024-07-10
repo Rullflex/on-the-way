@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MyAvatar, MyItem } from 'src/shared/ui';
-import { createCar, getAllCars, Response } from 'src/shared/api';
+import { createCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
 import { useUserInfoStore } from 'src/stores/user-info';
@@ -10,7 +10,6 @@ const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/Upda
 
 const $q = useQuasar();
 const router = useRouter();
-const cars = ref<Response<ICar>[]>([]);
 const isDialogVisible = ref(false);
 const userInfoStore = useUserInfoStore();
 
@@ -26,14 +25,6 @@ const logout = async () => {
   userInfoStore.$reset();
   router.push('/login');
 };
-
-onMounted(async () => {
-  $q.loading.show();
-  await getAllCars()
-    .then((response) => (cars.value = response.documents))
-    .catch(captureApiException);
-  $q.loading.hide();
-});
 </script>
 
 <template>
@@ -71,9 +62,9 @@ onMounted(async () => {
 
       <q-item-label header>Машины</q-item-label>
 
-      <template v-if="cars.length">
+      <template v-if="userInfoStore.cars.length">
         <q-item
-          v-for="car in cars"
+          v-for="car in userInfoStore.cars"
           :key="car.licensePlate"
           clickable
           :to="`/cars/preview/${car.$id}`"

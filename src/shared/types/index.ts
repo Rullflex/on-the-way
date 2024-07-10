@@ -1,3 +1,5 @@
+import { Response } from '../api';
+
 export interface IUser {
   name: string;
   surname: string | null;
@@ -5,8 +7,8 @@ export interface IUser {
   phone: string | null;
   dateOfBirth: string | null;
   avatarFileId: string | null;
-  cars: ICar[];
-  trips: ITrip[];
+  cars: Response<ICar>[];
+  trips: Response<ICar>[];
 }
 
 export interface ITrip {
@@ -22,7 +24,7 @@ export interface ITrip {
   arrivalAddress: string;
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
-  driver: IUser;
+  driver: Response<IUser>;
   comment: string;
 }
 
