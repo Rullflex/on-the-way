@@ -82,7 +82,7 @@ const showDialog = () => {
       </q-card-section>
 
       <q-card-section class="q-px-lg">
-        <h6 class="q-mb-md">Сортировать</h6>
+        <h6 class="q-pb-md">Сортировать</h6>
 
         <q-select
           outlined

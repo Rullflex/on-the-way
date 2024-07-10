@@ -150,7 +150,7 @@ getTripById(props.id)
           size="0.5rem"
         />
 
-        <q-list>
+        <q-list class='q-px-sm'>
           <my-item
             color="primary"
             label="Поделиться поездкой"

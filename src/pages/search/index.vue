@@ -158,7 +158,7 @@ const onSearchClicked = () => {
           color="primary"
           class="full-width"
           @click="onSearchClicked"
-          >Поиск
+        >Поиск
         </q-btn>
       </div>
     </q-card>
@@ -170,14 +170,13 @@ const onSearchClicked = () => {
     maximized
     v-model="isDialogVisible"
   >
-    <q-card>
+    <q-card class="column">
       <!-- ANCHOR - Row with close button -->
       <q-card-section class="sticky-top bg-white z-top">
         <q-btn
           v-close-popup
           icon="eva-close"
           flat
-          round
           dense
         />
       </q-card-section>
@@ -232,7 +231,7 @@ const onSearchClicked = () => {
       >
         <h4>Количество бронируемых мест</h4>
 
-        <div class="column items-center gap-lg">
+        <div class="column items-center gap-lg" style="flex: 1; justify-content: center;">
           <div class="row items-center">
             <q-btn
               flat
@@ -262,6 +261,7 @@ const onSearchClicked = () => {
           color="primary"
           label="Подтвердить"
           @click="isDialogVisible = false"
+          class="full-width q-fixed-bottom q-mb-sm"
         />
       </q-card-section>
     </q-card>
