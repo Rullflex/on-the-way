@@ -1,77 +1,107 @@
 <script setup lang="ts">
-import { MyBackBtn, MyAvatar, MyItem } from 'src/shared/ui';
-import { useUserStore } from 'src/stores/user';
+import { MyAvatar, MyItem } from 'src/shared/ui';
+import { captureApiException, getPluralNoun } from 'src/shared/utils';
+import { getAvatarURL, getUserById } from 'src/shared/api';
 import { date as qDate } from 'quasar';
-import { getPluralNoun } from 'src/shared/utils';
+import { Loading } from 'quasar';
+import { IUser } from 'src/shared/types';
 
-const userStore = useUserStore();
-const age = computed(() => userStore.dateOfBirth && qDate.getDateDiff(new Date(), userStore.dateOfBirth, 'years'));
+interface IProps {
+  id: string;
+}
+
+const props = defineProps<IProps>();
+const user = ref<Omit<IUser, 'cars' | 'trips' | 'surname'>>();
+
+const userAge = computed(() => {
+  if (!user.value?.dateOfBirth) {
+    return '';
+  }
+
+  const years = qDate.getDateDiff(new Date(), user.value.dateOfBirth, 'years');
+  return `${years} ${getPluralNoun(years, 'год', 'года', 'лет')}`;
+});
+
+const userAvatar = computed(() => {
+  return user.value?.avatarFileId ? getAvatarURL(user.value.avatarFileId) : '';
+});
+
+Loading.show();
+getUserById(props.id)
+  .then((response) => {
+    user.value = {
+      name: response.name,
+      email: response.email,
+      phone: response.phone,
+      dateOfBirth: response.dateOfBirth,
+      avatarFileId: response.avatarFileId,
+    };
+  })
+  .catch(captureApiException)
+  .finally(Loading.hide);
 </script>
 
 <template>
-  <q-layout>
-    <q-page-container>
-      <q-page>
-        <div class="sticky-top bg-white q-pa-md z-top">
-          <my-back-btn fallback-route="/profile" />
-        </div>
+  <q-page v-if="user">
+    <q-list class="q-px-sm">
+      <q-item>
+        <q-item-section>
+          <q-item-label class="text-h5">{{ user.name }}</q-item-label>
+          <q-item-label
+            v-if="userAge"
+            caption
+          >
+            {{ userAge }}
+          </q-item-label>
+        </q-item-section>
 
-        <q-list class="q-px-sm">
-          <q-item>
-            <q-item-section>
-              <q-item-label class="text-h5">{{ userStore.name }}</q-item-label>
-              <q-item-label
-                v-if="age"
-                caption
-                >{{ age }} {{ getPluralNoun(age, 'год', 'года', 'лет') }}</q-item-label
-              >
-            </q-item-section>
-
-            <q-item-section avatar>
-              <my-avatar size="5rem" />
-            </q-item-section>
-          </q-item>
-
-          <my-item
-            color="positive"
-            icon="eva-done-all-outline"
-            label="Профиль подтвержден"
+        <q-item-section avatar>
+          <my-avatar
+            size="5rem"
+            :src="userAvatar"
           />
+        </q-item-section>
+      </q-item>
 
-          <q-separator
-            spaced
-            inset
-          />
+      <my-item
+        color="positive"
+        icon="eva-done-all-outline"
+        label="Профиль подтвержден"
+      />
 
-          <q-item-label header>Личные данные</q-item-label>
+      <q-separator
+        spaced
+        inset
+      />
 
-          <my-item
-            :label="userStore.phone ?? 'Не указан'"
-            caption="Номер телефона"
-          />
-          <my-item
-            :label="userStore.email ?? 'Не указан'"
-            caption="Адрес эл. почты"
-          />
-        </q-list>
+      <q-item-label header>Личные данные</q-item-label>
 
-        <q-separator
-          spaced="1rem"
-          size="0.5rem"
-        />
+      <my-item
+        :label="user.phone ?? 'Не указан'"
+        caption="Номер телефона"
+      />
 
-        <q-list class="q-px-sm">
-          <my-item
-            color="negative"
-            label="Пожаловаться на пользователя"
-          />
-        </q-list>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+      <my-item
+        :label="user.email ?? 'Не указан'"
+        caption="Адрес эл. почты"
+      />
+    </q-list>
+
+    <q-separator
+      spaced="1rem"
+      size="0.5rem"
+    />
+
+    <q-list class="q-px-sm">
+      <my-item
+        color="negative"
+        label="Пожаловаться на пользователя"
+      />
+    </q-list>
+  </q-page>
 </template>
 
 <route lang="yaml">
 meta:
-  layout: blank
+  layout: subPage
 </route>

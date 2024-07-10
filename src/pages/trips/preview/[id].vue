@@ -72,7 +72,7 @@ getTripById(props.id)
           <my-item
             chevron
             :label="trip.driver.name"
-            to="/profile/preview/1"
+            :to="`/profile/preview/${trip.driver.$id}`"
           >
             <template #append>
               <my-avatar :src="trip.driver.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />

@@ -32,7 +32,7 @@ const logout = async () => {
     <q-list class="q-px-sm q-py-md">
       <q-item
         class="rounded-borders"
-        to="/profile/preview/1"
+        :to="`/profile/preview/${userStore.accountId}`"
       >
         <q-item-section>
           <q-item-label class="text-h5 text-blue-grey-9">{{ userStore.name }}</q-item-label>
