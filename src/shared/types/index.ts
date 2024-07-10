@@ -13,6 +13,7 @@ export interface IUser {
 
 export interface ITrip {
   price: number;
+  departureDate: string;
   departureTime: string;
   arrivalTime: string;
   totalPassengers: number;
@@ -22,6 +23,7 @@ export interface ITrip {
   arrivalCity: string;
   departureAddress: string;
   arrivalAddress: string;
+  intermediateCities: string[];
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
   driver: Response<IUser>;

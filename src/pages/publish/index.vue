@@ -15,7 +15,11 @@ import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
 import { ICar } from 'src/shared/types';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
-import PassengersAmoutStep from 'pages/publish/ui/PassengersAmountStep.vue';
+import PassengersAmountStep from 'pages/publish/ui/PassengersAmountStep.vue';
+import { createTrip, TCreateTripData } from 'src/shared/api';
+import { useUserStore } from 'stores/user';
+import { captureApiException } from 'src/shared/utils';
+import { AppwriteException } from 'appwrite';
 
 enum StepNames {
   departureCity,
@@ -44,12 +48,16 @@ const initialCityState: ICityInfo = {
   canDriveToPassengerLocation: false
 };
 
+const userStore = useUserStore();
+
+const $q = useQuasar();
+
 const departureCity = ref<ICityInfo>({ ...initialCityState });
 const destinationCity = ref<ICityInfo>({ ...initialCityState });
 const intermediateCities = ref<string[]>([]);
 const date = ref('');
 const time = ref('');
-const price = ref('');
+const price = ref<number | null>(null);
 const car = ref<ICar | null>(null);
 const passengersAmount = ref(4);
 const travelConveniences = ref<TravelConveniences>({
@@ -84,8 +92,8 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(passengersAmount);
   } else if (currentStep.value === StepNames.travelConveniences) {
     return true;
-  } else if (currentStep.value === StepNames.price) {
-    return Boolean(price.value);
+  } else if (currentStep.value === StepNames.price && price.value) {
+    return price.value > 0;
   }
 
   return false;
@@ -111,6 +119,45 @@ const handleCarSelect = (selectedCar: ICar) => {
   currentStep.value++;
 };
 
+const router = useRouter();
+const handlePublishBtnClick = async () => {
+  $q.loading.show();
+
+  const tripData: TCreateTripData = {
+    price: price.value as number,
+    departureDate: date.value,
+    departureTime: time.value,
+    arrivalTime: '',
+    totalPassengers: passengersAmount.value,
+    alreadyReserved: 0,
+    conveniences: Object.keys(travelConveniences.value)
+      .map((key: string) => travelConveniences.value[key as keyof TravelConveniences] ? key : '')
+      .filter(convenience => Boolean(convenience)),
+    departureCity: departureCity.value.city,
+    arrivalCity: destinationCity.value.city,
+    departureAddress: departureCity.value.location,
+    arrivalAddress: destinationCity.value.location,
+    intermediateCities: intermediateCities.value,
+    canPickUpFromPlace: departureCity.value.canDriveToPassengerLocation,
+    canDriveToPlace: destinationCity.value.canDriveToPassengerLocation,
+    driver: [userStore.accountId],
+    comment: comment.value
+  };
+  try {
+    await createTrip(tripData);
+    $q.notify({
+      message: 'Поездка успешно опубликована',
+      position: 'top',
+      color: 'primary',
+      actions: [{ icon: 'close', color: 'white', round: true }]
+    });
+    await router.push({ path: '/rides' });
+  } catch (error) {
+    captureApiException(error as AppwriteException);
+  } finally {
+    $q.loading.hide();
+  }
+};
 </script>
 
 <template>
@@ -178,7 +225,7 @@ const handleCarSelect = (selectedCar: ICar) => {
         @car-select="handleCarSelect"
       />
 
-      <PassengersAmoutStep
+      <PassengersAmountStep
         v-else-if="currentStep === StepNames.passengersAmount"
         v-model="passengersAmount"
       />
@@ -206,6 +253,7 @@ const handleCarSelect = (selectedCar: ICar) => {
 
     <PublishButton
       v-else-if="currentStep === Object.values(StepNames).pop()"
+      @click="handlePublishBtnClick"
     />
   </q-page>
 </template>
