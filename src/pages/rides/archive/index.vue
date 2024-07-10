@@ -35,7 +35,7 @@ const testTripData = {
     ],
     trips: [],
   },
-} as ITrip;
+} as unknown as ITrip;
 </script>
 
 <template>

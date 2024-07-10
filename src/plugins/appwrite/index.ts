@@ -1,4 +1,4 @@
-import { Client, Databases, ID, ImageFormat, ImageGravity, Storage, UploadProgress } from 'appwrite';
+import { Account, Client, Databases, ID, ImageFormat, ImageGravity, Storage, UploadProgress } from 'appwrite';
 import { Response, Payload } from './types';
 
 const DATABASE_ID = '66863b850005490bca32';
@@ -6,6 +6,7 @@ const DATABASE_ID = '66863b850005490bca32';
 const client = new Client().setEndpoint(process.env.APP_WRITE_API_URL).setProject(process.env.APP_WRITE_PROJECT_ID);
 const databases = new Databases(client);
 const storage = new Storage(client);
+export const account = new Account(client);
 
 export class AppWriteApi {
   private readonly databaseId: string;

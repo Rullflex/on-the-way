@@ -1,9 +1,9 @@
 export interface IUser {
-  dateOfBirth: string | null;
   name: string;
   surname: string | null;
   email: string | null;
-  phone: string;
+  phone: string | null;
+  dateOfBirth: string | null;
   avatarFileId: string | null;
   cars: ICar[];
   trips: ITrip[];

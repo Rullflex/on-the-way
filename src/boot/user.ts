@@ -1,22 +1,32 @@
 import { boot } from 'quasar/wrappers';
-import { Query, usersApi } from 'src/shared/api';
+import { getUserById } from 'src/shared/api';
 import { useUserInfoStore } from 'stores/user-info';
+import { account } from 'src/plugins/appwrite';
 
-export default boot(async () => {
-  // TODO: обработка исключения
-  // TODO: захардкоженный id поменять при появлении авторизации
-  const response = await usersApi.getById('6686cf1c002a99921ec3', [
-    Query.select(['name', 'surname', 'dateOfBirth', 'email', 'phone', 'avatarFileId']),
-  ]);
-
+export default boot(async ({ router }) => {
   const userStore = useUserInfoStore();
-  userStore.$patch({
-    id: '6686cf1c002a99921ec3',
-    avatarFileId: response.avatarFileId,
-    name: response.name,
-    surname: response.surname,
-    dateOfBirth: response.dateOfBirth,
-    email: response.email,
-    phone: response.phone,
+
+  try {
+    const { $id: accountId } = await account.get();
+    const user = await getUserById(accountId);
+
+    userStore.$patch({
+      accountId: user.$id,
+      avatarFileId: user.avatarFileId,
+      name: user.name,
+      surname: user.surname,
+      dateOfBirth: user.dateOfBirth,
+      email: user.email,
+      phone: user.phone,
+      cars: user.cars,
+    });
+  } catch (error) {}
+
+  router.beforeEach((to, _from, next) => {
+    if (to.path !== '/login' && !userStore.accountId) {
+      next({ path: '/login' });
+    } else {
+      next();
+    }
   });
 });

@@ -10,7 +10,7 @@ type ItemType = 'name' | 'surname' | 'dateOfBirth' | 'email' | 'phone';
 type IListItem = { label: string; value: string; type: ItemType };
 
 const userInfoStore = useUserInfoStore();
-const { id, avatarFileId, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
+const { accountId, avatarFileId, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
 
 const formattedDateOfBirth = computed(() => {
   if (!dateOfBirth.value) {
@@ -66,7 +66,7 @@ const handleAvatarChange = async (event: Event) => {
   Loading.show();
   try {
     const response = await uploadAvatar(target.files[0]);
-    await updateUser(id.value, { avatarFileId: response.$id });
+    await updateUser(accountId.value, { avatarFileId: response.$id });
     avatarFileId.value = response.$id;
   } catch (error) {
     captureApiException(error as AppwriteException);
@@ -77,7 +77,7 @@ const handleAvatarChange = async (event: Event) => {
 
 const handleSave = async () => {
   Loading.show();
-  await updateUser(id.value, { [dialogType.value]: dialogModel.value })
+  await updateUser(accountId.value, { [dialogType.value]: dialogModel.value })
     .then(() => userInfoStore.$patch({ [dialogType.value]: dialogModel.value }))
     .catch(captureApiException);
   Loading.hide();

@@ -3,18 +3,28 @@ import { MyAvatar, MyItem } from 'src/shared/ui';
 import { createCar, getAllCars, Response } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
+import { useUserInfoStore } from 'src/stores/user-info';
+import { account } from 'src/plugins/appwrite';
 
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const $q = useQuasar();
+const router = useRouter();
 const cars = ref<Response<ICar>[]>([]);
 const isDialogVisible = ref(false);
+const userInfoStore = useUserInfoStore();
 
 const handleAddedCar = async (payload: ICar) => {
   $q.loading.show();
   await createCar(payload).catch(captureApiException);
   $q.loading.hide();
   isDialogVisible.value = false;
+};
+
+const logout = async () => {
+  account.deleteSession('current');
+  userInfoStore.$reset();
+  router.push('/login');
 };
 
 onMounted(async () => {
@@ -34,7 +44,7 @@ onMounted(async () => {
         to="/profile/preview/1"
       >
         <q-item-section>
-          <q-item-label class="text-h5 text-blue-grey-9">Дмитрий</q-item-label>
+          <q-item-label class="text-h5 text-blue-grey-9">{{ userInfoStore.name }}</q-item-label>
           <q-item-label caption>Личные данные</q-item-label>
         </q-item-section>
 
@@ -115,6 +125,7 @@ onMounted(async () => {
         clickable
         color="negative"
         label="Выйти"
+        @click="logout"
       />
     </q-list>
   </q-page>

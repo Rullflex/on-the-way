@@ -1,18 +1,19 @@
 import { getAvatarURL } from 'src/shared/api';
 import { IUser } from 'src/shared/types';
 
-type State = Omit<IUser, 'cars' | 'trips'> & { id: string };
+type State = Omit<IUser, 'trips'> & { accountId: string };
 
 export const useUserInfoStore = defineStore('user-info', {
   state: () =>
     ({
-      id: '',
+      accountId: '',
       name: '',
       surname: '',
       email: '',
       phone: '',
       dateOfBirth: '',
       avatarFileId: '',
+      cars: [],
     } as State),
   getters: {
     avatarURL: (state) => (state.avatarFileId ? getAvatarURL(state.avatarFileId) : ''),
