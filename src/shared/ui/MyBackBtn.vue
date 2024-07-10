@@ -5,15 +5,8 @@ interface IProps {
   fallbackRoute?: RouteLocationRaw;
 }
 
-const router = useRouter();
 const props = defineProps<IProps>();
-const handleButtonClick = () => {
-  if (!history.state.back && props.fallbackRoute) {
-    router.push(props.fallbackRoute);
-  } else {
-    router.go(-1);
-  }
-};
+const backRoute = computed(() => history.state.back ?? props.fallbackRoute);
 </script>
 
 <template>
@@ -21,6 +14,6 @@ const handleButtonClick = () => {
     flat
     dense
     icon="eva-arrow-back-outline"
-    @click="handleButtonClick"
+    :to="fallbackRoute && backRoute"
   />
 </template>
