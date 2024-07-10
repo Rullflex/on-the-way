@@ -1,3 +1,4 @@
+export { type ITripConvenience } from './tripConvenience';
 import { Response } from '../api';
 
 export interface IUser {

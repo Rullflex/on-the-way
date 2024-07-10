@@ -8,8 +8,8 @@ import NextButton from './ui/NextButton.vue';
 import IntermediateCitiesStep from './ui/IntermediateCitiesStep.vue';
 import DateStep from './ui/DateStep.vue';
 import TimeStep from 'pages/publish/ui/TimeStep.vue';
-import TravelConveniencesStep from 'pages/publish/ui/TravelConveniencesStep.vue';
-import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
+import TripConveniencesStep from 'pages/publish/ui/TripConveniencesStep.vue';
+import { TripConveniencesNames } from 'src/shared/enums';
 import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
@@ -32,8 +32,8 @@ enum StepNames {
   car,
   passengersAmount,
   price,
-  travelConveniences,
-  comment
+  tripConveniences,
+  comment,
 }
 
 export interface ICityInfo {
@@ -60,14 +60,7 @@ const time = ref('');
 const price = ref<number | null>(null);
 const car = ref<ICar | null>(null);
 const passengersAmount = ref(4);
-const travelConveniences = ref<TravelConveniences>({
-  arePetsAllowed: false,
-  hasAirConditioner: false,
-  hasBaggageTransportation: false,
-  hasChildSeat: false,
-  hasPackageDelivery: false,
-  isMaxTwoInTheBack: false
-});
+const tripConveniences = shallowRef<TripConveniencesNames[]>([]);
 const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
 const comment = ref('');
 
@@ -90,7 +83,7 @@ const isNextButtonVisible = computed<boolean>(() => {
     return Boolean(car.value);
   } else if (currentStep.value === StepNames.passengersAmount) {
     return Boolean(passengersAmount);
-  } else if (currentStep.value === StepNames.travelConveniences) {
+  } else if (currentStep.value === StepNames.tripConveniences) {
     return true;
   } else if (currentStep.value === StepNames.price && price.value) {
     return price.value > 0;
@@ -130,9 +123,7 @@ const handlePublishBtnClick = async () => {
     arrivalTime: '',
     totalPassengers: passengersAmount.value,
     alreadyReserved: 0,
-    conveniences: Object.keys(travelConveniences.value)
-      .map((key: string) => travelConveniences.value[key as keyof TravelConveniences] ? key : '')
-      .filter(convenience => Boolean(convenience)),
+    conveniences: tripConveniences.value,
     departureCity: departureCity.value.city,
     arrivalCity: destinationCity.value.city,
     departureAddress: departureCity.value.location,
@@ -230,9 +221,9 @@ const handlePublishBtnClick = async () => {
         v-model="passengersAmount"
       />
 
-      <TravelConveniencesStep
-        v-else-if="currentStep === StepNames.travelConveniences"
-        v-model="travelConveniences"
+      <TripConveniencesStep
+        v-else-if="currentStep === StepNames.tripConveniences"
+        v-model="tripConveniences"
       />
 
       <PriceStep

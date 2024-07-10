@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getPluralNoun } from 'src/shared/utils';
 import { useTripSettingsStore } from 'stores/trip-settings';
-import { TRAVEL_CONVENIENCES } from 'src/shared/constants';
+import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
-import { TravelConveniences } from 'src/shared/types/travelConveniencesTypes';
+import { TripConveniencesNames } from 'src/shared/enums';
 
 const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
@@ -11,17 +11,14 @@ const { origin, destination, date, passengers } = storeToRefs(store);
 const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
 const selectedSortOption = ref(null);
 
-const travelConveniences = ref<TravelConveniences>({
-  arePetsAllowed: false,
-  hasBaggageTransportation: false,
-  hasPackageDelivery: false,
-  hasChildSeat: false,
-  hasAirConditioner: false,
-  isMaxTwoInTheBack: false
-});
+const tripConveniences = ref<Set<TripConveniencesNames>>(new Set());
 
-const toggleConvenience = (name: keyof TravelConveniences) => {
-  travelConveniences.value[name] = !travelConveniences.value[name];
+const toggleConvenience = (name: TripConveniencesNames) => {
+  if (tripConveniences.value.has(name)) {
+    tripConveniences.value.delete(name);
+  } else {
+    tripConveniences.value.add(name);
+  }
 };
 const isDialogVisible = ref<boolean>(false);
 
@@ -34,7 +31,7 @@ const showDialog = () => {
   <q-header
     reveal
     bordered
-    class="bg-white text-dark row q-pa-sm justify-between items-center"
+    class="bg-white text-dark row q-pa-md justify-between items-center"
   >
     <my-back-btn fallback-route="/search" />
 
@@ -92,12 +89,12 @@ const showDialog = () => {
 
       <q-list class="q-px-sm">
         <my-item
-          v-for="convenience in TRAVEL_CONVENIENCES"
+          v-for="convenience in TRIP_CONVENIENCES"
           :key="convenience.name"
           :label="convenience.title"
-          :icon="travelConveniences[convenience.name as keyof TravelConveniences] ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
+          :icon="tripConveniences.has(convenience.name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
           clickable
-          @click="toggleConvenience(convenience.name as keyof TravelConveniences)"
+          @click="toggleConvenience(convenience.name)"
         >
           <template v-slot:append>
             <q-item-section side>
