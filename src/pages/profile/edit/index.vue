@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from 'src/stores/user';
-import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
+import { MyAvatar, MyHistoryBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { AppwriteException, updateUser, uploadAvatar } from 'src/shared/api';
 import { captureApiException } from 'src/shared/utils';
@@ -90,7 +90,7 @@ const handleSave = async () => {
 <template>
   <q-page>
     <div class="sticky-top bg-white q-pa-md z-top">
-      <my-back-btn fallback-route="/profile" />
+      <MyHistoryBackBtn fallback-route="/profile" />
     </div>
 
     <h5 class="q-mb-lg q-mx-lg">Редактирование профиля</h5>

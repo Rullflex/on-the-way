@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MyBackBtn, MyItem } from 'src/shared/ui';
+import { MyStepBackBtn, MyItem } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import { getCarById } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
@@ -72,9 +72,9 @@ onMounted(async () => {
         icon="eva-close"
       />
 
-      <my-back-btn
+      <MyStepBackBtn
         v-else
-        @click="currentStep--"
+        v-model="currentStep"
       />
     </q-card-section>
 

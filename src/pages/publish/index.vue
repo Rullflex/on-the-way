@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CITY_NAMES } from 'src/shared/constants';
-import { MyBackBtn } from 'src/shared/ui';
+import { MyStepBackBtn } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import CityStep from './ui/CityStep.vue';
 import LocationStep from './ui/LocationStep.vue';
@@ -162,10 +162,10 @@ const handlePublishBtnClick = async () => {
 
 <template>
   <q-page>
-    <my-back-btn
+    <MyStepBackBtn
       v-if="currentStep !== StepNames.departureCity"
       class="q-ml-md q-mt-md"
-      @click="currentStep--"
+      v-model="currentStep"
     />
 
     <transition :name="stepAnimationName">

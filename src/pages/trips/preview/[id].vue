@@ -2,7 +2,7 @@
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { captureApiException, getPluralNoun } from 'src/shared/utils';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
-import { MyAvatar, MyBackBtn } from 'src/shared/ui';
+import { MyAvatar, MyHistoryBackBtn } from 'src/shared/ui';
 import { getAvatarURL, getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import { Loading, date as QDate } from 'quasar';
@@ -30,7 +30,7 @@ getTripById(props.id)
         class="q-pb-lg"
       >
         <div class="sticky-top bg-white q-pa-md z-top">
-          <my-back-btn fallback-route="/trips/list" />
+          <MyHistoryBackBtn fallback-route="/trips/list" />
         </div>
 
         <div class="q-px-lg">

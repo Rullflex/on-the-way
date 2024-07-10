@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { MyBackBtn } from 'src/shared/ui';
+import { MyHistoryBackBtn } from 'src/shared/ui';
 
 defineOptions({
-  name: 'SubPageLayout',
+  name: 'SubPageLayout'
 });
 </script>
 
@@ -12,7 +12,7 @@ defineOptions({
       reveal
       class="bg-white text-blue-grey-8 q-pa-md"
     >
-      <my-back-btn fallback-route="/search" />
+      <MyHistoryBackBtn fallback-route="/search" />
     </q-header>
 
     <q-page-container>

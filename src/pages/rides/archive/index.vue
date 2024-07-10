@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { ITrip } from 'src/shared/types';
-import { MyBackBtn } from 'src/shared/ui';
+import { MyHistoryBackBtn } from 'src/shared/ui';
 
 const testTripData = {
   price: 1000,
@@ -44,7 +44,7 @@ const testTripData = {
       reveal
       class="bg-white text-blue-grey-8 q-pa-md"
     >
-      <MyBackBtn fallback-route="/rides" />
+      <MyHistoryBackBtn fallback-route="/rides" />
     </q-header>
 
     <q-page-container>
