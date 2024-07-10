@@ -3,7 +3,7 @@ import { IUser } from 'src/shared/types';
 
 type State = Omit<IUser, 'trips'> & { accountId: string };
 
-export const useUserInfoStore = defineStore('user-info', {
+export const useUserStore = defineStore('user', {
   state: () =>
     ({
       accountId: '',
@@ -21,5 +21,5 @@ export const useUserInfoStore = defineStore('user-info', {
 });
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useUserInfoStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
 }

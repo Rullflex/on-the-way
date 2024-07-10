@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserInfoStore } from 'src/stores/user-info';
+import { useUserStore } from 'src/stores/user';
 import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { AppwriteException, updateUser, uploadAvatar } from 'src/shared/api';
@@ -9,8 +9,8 @@ import { Loading } from 'quasar';
 type ItemType = 'name' | 'surname' | 'dateOfBirth' | 'email' | 'phone';
 type IListItem = { label: string; value: string; type: ItemType };
 
-const userInfoStore = useUserInfoStore();
-const { accountId, avatarFileId, name, surname, dateOfBirth, email, phone } = storeToRefs(userInfoStore);
+const userStore = useUserStore();
+const { accountId, avatarFileId, name, surname, dateOfBirth, email, phone } = storeToRefs(userStore);
 
 const formattedDateOfBirth = computed(() => {
   if (!dateOfBirth.value) {
@@ -54,7 +54,7 @@ const dialogTitle = computed(() => {
 const showDialogByType = (type: ItemType) => {
   isDialogVisible.value = true;
   dialogType.value = type;
-  dialogModel.value = userInfoStore[type] ?? '';
+  dialogModel.value = userStore[type] ?? '';
 };
 
 const handleAvatarChange = async (event: Event) => {
@@ -78,7 +78,7 @@ const handleAvatarChange = async (event: Event) => {
 const handleSave = async () => {
   Loading.show();
   await updateUser(accountId.value, { [dialogType.value]: dialogModel.value })
-    .then(() => userInfoStore.$patch({ [dialogType.value]: dialogModel.value }))
+    .then(() => userStore.$patch({ [dialogType.value]: dialogModel.value }))
     .catch(captureApiException);
   Loading.hide();
 

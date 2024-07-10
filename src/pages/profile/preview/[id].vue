@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { MyBackBtn, MyAvatar, MyItem } from 'src/shared/ui';
-import { useUserInfoStore } from 'src/stores/user-info';
+import { useUserStore } from 'src/stores/user';
 import { date as qDate } from 'quasar';
 import { getPluralNoun } from 'src/shared/utils';
 
-const userStore = useUserInfoStore();
+const userStore = useUserStore();
 const age = computed(() => userStore.dateOfBirth && qDate.getDateDiff(new Date(), userStore.dateOfBirth, 'years'));
 </script>
 

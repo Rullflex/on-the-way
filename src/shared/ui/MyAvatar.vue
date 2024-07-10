@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserInfoStore } from 'src/stores/user-info';
+import { useUserStore } from 'src/stores/user';
 
 interface IProps {
   src?: string;
@@ -9,8 +9,8 @@ interface IProps {
 const props = withDefaults(defineProps<IProps>(), {
   size: '2.5rem',
 });
-const userInfoStore = useUserInfoStore();
-const src = computed(() => props.src ?? userInfoStore.avatarURL);
+const userStore = useUserStore();
+const src = computed(() => props.src ?? userStore.avatarURL);
 </script>
 
 <template>

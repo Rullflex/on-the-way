@@ -2,20 +2,19 @@
 import { account } from 'src/plugins/appwrite';
 import { AppwriteException, getUserById } from 'src/shared/api';
 import { captureApiException } from 'src/shared/utils';
-import { useUserInfoStore } from 'stores/user-info';
+import { useUserStore } from 'stores/user';
 
 const email = ref('');
 const password = ref('');
 const isPasswordVisible = ref(false);
 const isPending = ref(false);
-const userStore = useUserInfoStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 const handleUserLogin = async () => {
   isPending.value = true;
   try {
     const { userId } = await account.createEmailPasswordSession(email.value, password.value);
-    // TODO: подумать на счет переноса в store.actions
     const user = await getUserById(userId);
     userStore.$patch({
       accountId: userId,

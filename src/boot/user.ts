@@ -1,10 +1,10 @@
 import { boot } from 'quasar/wrappers';
 import { getUserById } from 'src/shared/api';
-import { useUserInfoStore } from 'stores/user-info';
+import { useUserStore } from 'stores/user';
 import { account } from 'src/plugins/appwrite';
 
 export default boot(async ({ router }) => {
-  const userStore = useUserInfoStore();
+  const userStore = useUserStore();
 
   try {
     const { $id: accountId } = await account.get();

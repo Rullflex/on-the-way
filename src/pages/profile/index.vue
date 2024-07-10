@@ -3,7 +3,7 @@ import { MyAvatar, MyItem } from 'src/shared/ui';
 import { createCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
-import { useUserInfoStore } from 'src/stores/user-info';
+import { useUserStore } from 'src/stores/user';
 import { account } from 'src/plugins/appwrite';
 
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
@@ -11,7 +11,7 @@ const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/Upda
 const $q = useQuasar();
 const router = useRouter();
 const isDialogVisible = ref(false);
-const userInfoStore = useUserInfoStore();
+const userStore = useUserStore();
 
 const handleAddedCar = async (payload: ICar) => {
   $q.loading.show();
@@ -22,7 +22,7 @@ const handleAddedCar = async (payload: ICar) => {
 
 const logout = async () => {
   account.deleteSession('current');
-  userInfoStore.$reset();
+  userStore.$reset();
   router.push('/login');
 };
 </script>
@@ -35,7 +35,7 @@ const logout = async () => {
         to="/profile/preview/1"
       >
         <q-item-section>
-          <q-item-label class="text-h5 text-blue-grey-9">{{ userInfoStore.name }}</q-item-label>
+          <q-item-label class="text-h5 text-blue-grey-9">{{ userStore.name }}</q-item-label>
           <q-item-label caption>Личные данные</q-item-label>
         </q-item-section>
 
@@ -62,9 +62,9 @@ const logout = async () => {
 
       <q-item-label header>Машины</q-item-label>
 
-      <template v-if="userInfoStore.cars.length">
+      <template v-if="userStore.cars.length">
         <q-item
-          v-for="car in userInfoStore.cars"
+          v-for="car in userStore.cars"
           :key="car.licensePlate"
           clickable
           :to="`/cars/preview/${car.$id}`"
