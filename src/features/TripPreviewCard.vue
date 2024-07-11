@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { date as QDate } from 'quasar';
 import { getAvatarURL } from 'src/shared/api';
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { ITrip } from 'src/shared/types';
@@ -28,7 +27,7 @@ const conveniences = computed(() =>
       style="width: 72px"
     >
       <span class="text-subtitle2">{{ trip.departureCity }}</span>
-      <span class="text-caption">{{ QDate.formatDate(trip.departureTime, 'HH:mm') }}</span>
+      <span class="text-caption">{{ trip.departureTime }}</span>
 
       <q-icon
         name="eva-more-vertical-outline"
@@ -53,7 +52,7 @@ const conveniences = computed(() =>
             trip.alreadyReserved === trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
           }}</span>
           <div class="row items-center gap-xs text-caption">
-            <span>{{ trip.alreadyReserved }}/{{ trip.totalPassengers }}</span>
+            <span>{{ trip.alreadyReserved ?? 0 }}/{{ trip.totalPassengers }}</span>
             <q-icon name="eva-people-outline" />
           </div>
         </div>
