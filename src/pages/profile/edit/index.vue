@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from 'src/stores/user';
-import { MyAvatar, MyBackBtn, MyItem, MyPhoneInput } from 'src/shared/ui';
+import { MyAvatar, MyItem, MyPhoneInput } from 'src/shared/ui';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { AppwriteException, updateUser, uploadAvatar } from 'src/shared/api';
 import { captureApiException } from 'src/shared/utils';
@@ -88,14 +88,10 @@ const handleSave = async () => {
 </script>
 
 <template>
-  <q-page>
-    <div class="sticky-top bg-white q-pa-md z-top">
-      <my-back-btn fallback-route="/profile" />
-    </div>
-
+  <q-page padding>
     <h5 class="q-mb-lg q-mx-lg">Редактирование профиля</h5>
 
-    <q-list class="q-pa-sm">
+    <q-list>
       <!-- ANCHOR - Add Profile Photo -->
       <my-item
         tag="label"
@@ -202,3 +198,9 @@ const handleSave = async () => {
     </q-card>
   </q-dialog>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: subPage
+  fallbackRoute: '/profile'
+</route>
