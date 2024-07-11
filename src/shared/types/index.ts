@@ -1,5 +1,6 @@
 export { type ITripConvenience } from './tripConvenience';
 import { Response } from '../api';
+import { TripConveniencesNames } from '../enums';
 
 export interface IUser {
   name: string;
@@ -18,7 +19,7 @@ export interface ITrip {
   departureTime: string;
   totalPassengers: number;
   alreadyReserved: number;
-  conveniences: string[];
+  conveniences: TripConveniencesNames[];
   departureCity: string;
   arrivalCity: string;
   departureAddress: string;

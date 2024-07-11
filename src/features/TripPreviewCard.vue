@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { date as QDate } from 'quasar';
 import { getAvatarURL } from 'src/shared/api';
+import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { ITrip } from 'src/shared/types';
 import { MyAvatar } from 'src/shared/ui';
 
@@ -10,6 +11,10 @@ interface IProps {
 }
 
 const props = defineProps<IProps>();
+
+const conveniences = computed(() =>
+  TRIP_CONVENIENCES.filter((convenience) => props.trip.conveniences.includes(convenience.name))
+);
 </script>
 
 <template>
@@ -63,16 +68,9 @@ const props = defineProps<IProps>();
 
       <div class="row q-mt-auto gap-sm justify-end">
         <q-icon
-          v-for="icon in [
-            { name: 'cube', type: 'eva' },
-            { name: 'briefcase', type: 'eva' },
-            { name: 'air', type: 'material' },
-            { name: 'child_care', type: 'material' },
-            { name: 'pets', type: 'material' },
-            { name: 'social_distance', type: 'material' },
-          ]"
-          :key="icon.name"
-          :name="icon.type === 'eva' ? `eva-${icon.name}-outline` : icon.name"
+          v-for="convenience in conveniences"
+          :key="convenience.name"
+          :name="convenience.icon"
           size="1.2rem"
         />
       </div>
