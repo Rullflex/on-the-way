@@ -104,4 +104,5 @@ getUserById(props.id)
 <route lang="yaml">
 meta:
   layout: subPage
+  fallbackRoute: '/profile'
 </route>
