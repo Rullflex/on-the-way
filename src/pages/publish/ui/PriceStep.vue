@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
+import UiStepContainer from 'src/shared/ui/UiStepContainer.vue';
 
 const price = defineModel({ default: '' });
 </script>
 
 <template>
-  <StepContainer>
+  <UiStepContainer>
     <h4 class="q-ma-lg">Сколько будет стоить поездка для одного пассажира?</h4>
 
     <q-input
@@ -19,5 +19,5 @@ const price = defineModel({ default: '' });
         <q-icon name="currency_ruble" />
       </template>
     </q-input>
-  </StepContainer>
+  </UiStepContainer>
 </template>

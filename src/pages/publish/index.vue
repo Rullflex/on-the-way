@@ -4,13 +4,11 @@ import { MyBackBtn } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import CityStep from './ui/CityStep.vue';
 import LocationStep from './ui/LocationStep.vue';
-import NextButton from './ui/NextButton.vue';
 import IntermediateCitiesStep from './ui/IntermediateCitiesStep.vue';
 import DateStep from './ui/DateStep.vue';
 import TimeStep from 'pages/publish/ui/TimeStep.vue';
 import TripConveniencesStep from 'pages/publish/ui/TripConveniencesStep.vue';
 import { TripConveniencesNames } from 'src/shared/enums';
-import PublishButton from 'pages/publish/ui/PublishButton.vue';
 import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
@@ -19,9 +17,11 @@ import { createTrip } from 'src/shared/api';
 import { useUserStore } from 'stores/user';
 import { captureApiException } from 'src/shared/utils';
 import { AppwriteException } from 'appwrite';
+import UiPageButton from 'src/shared/ui/UiPageButton.vue';
+import UiNextStepButton from 'src/shared/ui/UiNextStepButton.vue';
 
 defineOptions({
-  name: 'PublishPage',
+  name: 'PublishPage'
 });
 
 enum StepNames {
@@ -48,7 +48,7 @@ export interface ICityInfo {
 const initialCityState: ICityInfo = {
   city: '',
   location: '',
-  canDriveToPassengerLocation: false,
+  canDriveToPassengerLocation: false
 };
 
 const userStore = useUserStore();
@@ -130,14 +130,14 @@ const handlePublishBtnClick = async () => {
     canDriveToPlace: destinationCity.value.canDriveToPassengerLocation,
     driver: userStore.accountId,
     comment: comment.value,
-    car: carId.value,
+    car: carId.value
   };
   try {
     await createTrip(tripData);
     $q.notify({
       message: 'Поездка успешно опубликована',
       position: 'top',
-      color: 'positive',
+      color: 'positive'
     });
     await router.push({ path: '/rides' });
   } catch (error) {
@@ -150,7 +150,7 @@ const handlePublishBtnClick = async () => {
 
 <template>
   <q-page>
-    <my-back-btn
+    <MyBackBtn
       v-if="currentStep !== StepNames.departureCity"
       class="q-ml-md q-mt-md"
       @click="currentStep--"
@@ -235,13 +235,16 @@ const handlePublishBtnClick = async () => {
       />
     </transition>
 
-    <NextButton
+    <UiNextStepButton
       v-if="isNextButtonVisible"
-      @btn-click="currentStep++"
+      nav-menu-margin
+      v-model="currentStep"
     />
 
-    <PublishButton
+    <UiPageButton
       v-else-if="currentStep === Object.values(StepNames).pop()"
+      label="Опубликовать"
+      nav-menu-margin
       @click="handlePublishBtnClick"
     />
   </q-page>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { MyAvatar, MyItem } from 'src/shared/ui';
-import { createCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
-import { captureApiException } from 'src/shared/utils';
 import { useUserStore } from 'src/stores/user';
 import { account } from 'src/plugins/appwrite';
+import { addCar } from 'src/features/UpdateCar/utils/addCar';
 
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
@@ -13,11 +12,14 @@ const router = useRouter();
 const isDialogVisible = ref(false);
 const userStore = useUserStore();
 
-const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
+const handleAddedCar = async (payload: ICar) => {
   $q.loading.show();
-  await createCar({ ...payload, user: userStore.accountId }).catch(captureApiException);
-  $q.loading.hide();
-  isDialogVisible.value = false;
+  await addCar(payload)
+    .finally(() => {
+        $q.loading.hide();
+        isDialogVisible.value = false;
+      }
+    );
 };
 
 const logout = async () => {
@@ -25,26 +27,6 @@ const logout = async () => {
   userStore.$reset();
   router.push('/login');
 };
-
-const otherLinks = [
-  {
-    label: 'Ваши отзывы',
-  },
-  {
-    label: 'О проекте',
-    to: '/about',
-  },
-  {
-    label: 'Помощь',
-    to: '/help',
-  },
-  {
-    label: 'Оцените сервис',
-  },
-  {
-    label: 'Пользовательское соглашение',
-  },
-];
 </script>
 
 <template>
@@ -120,10 +102,9 @@ const otherLinks = [
       />
 
       <my-item
-        v-for="link in otherLinks"
-        :key="link.label"
-        :label="link.label"
-        :to="link.to"
+        v-for="link in ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение']"
+        :key="link"
+        :label="link"
         clickable
         chevron
       />

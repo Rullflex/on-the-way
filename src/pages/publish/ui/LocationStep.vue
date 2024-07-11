@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
 import { ICityInfo } from 'pages/publish/index.vue';
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
+import UiStepContainer from 'src/shared/ui/UiStepContainer.vue';
 
 const props = defineProps<{
   title: string,
@@ -13,7 +13,7 @@ const locationInputValue = ref(props.city.location);
 </script>
 
 <template>
-  <StepContainer>
+  <UiStepContainer>
     <h4 class="q-ma-lg">{{ title }}</h4>
 
     <q-input
@@ -36,5 +36,5 @@ const locationInputValue = ref(props.city.location);
       clickable
       @click="$emit('optionClick')"
     />
-  </StepContainer>
+  </UiStepContainer>
 </template>

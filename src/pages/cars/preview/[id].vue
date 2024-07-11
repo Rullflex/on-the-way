@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { deleteCar, getCarById, updateCar, Response } from 'src/shared/api';
+import { getCarById, Response } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
-import { MyItem } from 'src/shared/ui';
 import { captureApiException } from 'src/shared/utils';
+import { MyBackBtn } from 'src/shared/ui';
+import { updateCarById } from 'src/features/UpdateCar/utils/updateCarById';
+import { deleteCarById } from 'src/features/UpdateCar/utils/deleteCarById';
+
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
@@ -13,15 +16,15 @@ const router = useRouter();
 const isDialogVisible = ref(false);
 const carResponse = ref<Response<ICar>>();
 
-const carItems = computed(() => {
+const listItems = computed(() => {
   const { licensePlate, name, year, bodyType, color } = carResponse.value || {};
 
   return [
-    { label: 'Регистрационный номер', value: licensePlate },
-    { label: 'Марка', value: name },
-    { label: 'Год выпуска', value: typeof year === 'number' && String(year) },
-    { label: 'Тип кузова', value: bodyType },
-    { label: 'Цвет', value: color },
+    { label: 'Регистрационный номер', value: licensePlate || '-' },
+    { label: 'Марка', value: name || '-' },
+    { label: 'Год выпуска', value: year || '-' },
+    { label: 'Тип кузова', value: bodyType || '-' },
+    { label: 'Цвет', value: color || '-' }
   ];
 });
 
@@ -30,21 +33,26 @@ const handleDeleteCard = () => {
     title: 'Подтвердите действие',
     message: 'Вы уверены, что хотите удалить данные о машине?',
     persistent: true,
-    cancel: true,
+    cancel: true
   }).onOk(async () => {
     $q.loading.show();
-    await deleteCar(props.id).catch(captureApiException);
-    $q.loading.hide();
-    router.back();
+    await deleteCarById(props.id)
+      .finally(() => {
+        $q.loading.hide();
+        router.back();
+      });
   });
 };
 
-const handleUpdateCar = async (payload: Omit<ICar, 'user'>) => {
+const handleUpdateCar = async (payload: ICar) => {
   $q.loading.show();
-  await updateCar(props.id, payload).catch(captureApiException);
-  $q.loading.hide();
 
-  isDialogVisible.value = false;
+  await updateCarById(props.id, payload)
+    // .then(response => carResponse.value = response as Response<ICar>)
+    .finally(() => {
+      $q.loading.hide();
+      isDialogVisible.value = false;
+    });
 };
 
 onMounted(async () => {
@@ -57,38 +65,54 @@ onMounted(async () => {
 </script>
 
 <template>
-  <q-page padding>
-    <h5 class="q-mb-lg q-px-md">Информация о машине</h5>
+  <q-layout>
+    <q-page-container>
+      <q-page class="q-pa-lg">
+        <my-back-btn fallback-route="/profile" />
 
-    <q-list>
-      <my-item
-        v-for="item in carItems"
-        :key="item.label"
-        :label="item.label"
-        :caption="item.value || '-'"
-      />
+        <h5 class="q-mb-lg q-mt-md">Информация о машине</h5>
 
-      <q-separator
-        inset
-        spaced="1rem"
-      />
+        <q-list>
+          <!-- ANCHOR - Car Info -->
+          <q-item
+            v-for="item in listItems"
+            :key="item.label"
+          >
+            <q-item-section>
+              <q-item-label>{{ item.label }}</q-item-label>
+              <q-item-label caption>{{ item.value }}</q-item-label>
+            </q-item-section>
+          </q-item>
 
-      <my-item
-        clickable
-        color="primary"
-        label="Изменить данные"
-        @click="isDialogVisible = true"
-      />
+          <q-separator class="q-my-md" />
 
-      <my-item
-        clickable
-        color="primary"
-        label="Удалить авто"
-        @click="handleDeleteCard"
-      />
-    </q-list>
-  </q-page>
+          <!-- ANCHOR - Edit Car -->
+          <q-item
+            clickable
+            class="rounded-borders text-primary"
+            @click="isDialogVisible = true"
+          >
+            <q-item-section>
+              <q-item-label>Изменить данные</q-item-label>
+            </q-item-section>
+          </q-item>
 
+          <!-- ANCHOR - Delete Car -->
+          <q-item
+            clickable
+            class="rounded-borders text-primary"
+            @click="handleDeleteCard"
+          >
+            <q-item-section>
+              <q-item-label>Удалить авто</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-page>
+    </q-page-container>
+  </q-layout>
+
+  <!-- ANCHOR - Update Car Dialog -->
   <q-dialog
     v-model="isDialogVisible"
     maximized
@@ -102,5 +126,5 @@ onMounted(async () => {
 
 <route lang="yaml">
 meta:
-  layout: subPage
+layout: blank
 </route>

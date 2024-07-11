@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
+import UiStepContainer from 'src/shared/ui/UiStepContainer.vue';
 
 const passengersAmount = defineModel({ default: 4 });
 </script>
 
 <template>
-  <StepContainer>
+  <UiStepContainer>
     <h4 class="q-ma-lg">Сколько пассажиров вы планируете взять в поездку?</h4>
 
     <div class="column items-center gap-lg">
@@ -33,5 +33,5 @@ const passengersAmount = defineModel({ default: 4 });
         />
       </div>
     </div>
-  </StepContainer>
+  </UiStepContainer>
 </template>

@@ -2,6 +2,7 @@
 import { useTripSettingsStore } from 'stores/trip-settings';
 import { CITY_NAMES, MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
+import UiPageButton from 'src/shared/ui/UiPageButton.vue';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
@@ -264,12 +265,9 @@ const availableDestinations = computed(() => {
           </div>
         </div>
 
-        <q-btn
-          unelevated
-          color="primary"
+        <UiPageButton
           label="Подтвердить"
           @click="isDialogVisible = false"
-          class="full-width q-fixed-bottom q-mb-sm"
         />
       </q-card-section>
     </q-card>

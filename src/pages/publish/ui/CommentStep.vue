@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
+import UiStepContainer from 'src/shared/ui/UiStepContainer.vue';
 
 const comment = defineModel({ default: '' });
 </script>
 
 <template>
-  <StepContainer>
+  <UiStepContainer>
     <h4 class="q-ma-lg">Добавьте комментарий к поездке</h4>
     <q-input
       type="textarea"
@@ -13,7 +13,7 @@ const comment = defineModel({ default: '' });
       class="q-mx-lg q-pt-sm"
       v-model="comment"
     />
-  </StepContainer>
+  </UiStepContainer>
 </template>
 
 
