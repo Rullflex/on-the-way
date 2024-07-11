@@ -55,6 +55,10 @@ const onSearchClicked = () => {
     router.push('/trips/list');
   }
 };
+
+const availableDestinations = computed(() => {
+  return CITY_NAMES.filter(city => city !== origin.value);
+});
 </script>
 
 <template>
@@ -190,7 +194,7 @@ const onSearchClicked = () => {
 
         <q-list>
           <my-item
-            v-for="name in CITY_NAMES"
+            v-for="name in dialogType === 'origin' ? CITY_NAMES : availableDestinations"
             :key="name"
             :label="name"
             clickable
