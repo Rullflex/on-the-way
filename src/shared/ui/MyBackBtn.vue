@@ -7,8 +7,11 @@ interface IProps {
 
 const router = useRouter();
 const props = defineProps<IProps>();
-const goBack = () => {
-  if (!history.state.back && props.fallbackRoute) {
+
+const handleButtonClick = () => {
+  if (!props.fallbackRoute) {
+    return;
+  } else if (!history.state.back) {
     router.push(props.fallbackRoute);
   } else {
     router.go(-1);
@@ -21,6 +24,6 @@ const goBack = () => {
     flat
     dense
     icon="eva-arrow-back-outline"
-    @click="fallbackRoute ? goBack() : $emit('click', $event)"
+    @click="handleButtonClick"
   />
 </template>
