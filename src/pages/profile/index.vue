@@ -25,6 +25,25 @@ const logout = async () => {
   userStore.$reset();
   router.push('/login');
 };
+
+const otherLinks = [
+  {
+    label: 'Ваши отзывы',
+  },
+  {
+    label: 'О проекте',
+    to: '/about',
+  },
+  {
+    label: 'Помощь',
+  },
+  {
+    label: 'Оцените сервис',
+  },
+  {
+    label: 'Пользовательское соглашение',
+  },
+];
 </script>
 
 <template>
@@ -100,9 +119,10 @@ const logout = async () => {
       />
 
       <my-item
-        v-for="link in ['Ваши отзывы', 'О проекте', 'Помощь', 'Оцените сервис', 'Пользовательское соглашение']"
-        :key="link"
-        :label="link"
+        v-for="link in otherLinks"
+        :key="link.label"
+        :label="link.label"
+        :to="link.to"
         clickable
         chevron
       />
