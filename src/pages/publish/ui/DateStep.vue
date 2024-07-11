@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
-
 const date = defineModel({ default: '' });
 </script>
 
 <template>
-  <StepContainer>
+  <div>
     <h4 class="q-ma-lg">Когда поездка?</h4>
 
     <q-date
@@ -21,5 +19,5 @@ const date = defineModel({ default: '' });
             }
           "
     ></q-date>
-  </StepContainer>
+  </div>
 </template>

@@ -163,6 +163,8 @@ const handlePublishBtnClick = async () => {
         :city-name="departureCity.city"
         :city-list="CITY_NAMES"
         @list-item-click="handleCityChoose(departureCity, $event)"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <LocationStep
@@ -172,6 +174,8 @@ const handlePublishBtnClick = async () => {
         :options="['Я заберу пассажиров с места']"
         @location-input="handleCityLocationChange(departureCity, $event)"
         @option-click="handleCityOptionChoose(departureCity)"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <CityStep
@@ -180,6 +184,8 @@ const handlePublishBtnClick = async () => {
         :city-name="destinationCity.city"
         :city-list="CITY_NAMES"
         @list-item-click="handleCityChoose(destinationCity, $event)"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <LocationStep
@@ -189,49 +195,63 @@ const handlePublishBtnClick = async () => {
         :options="['Я довезу пассажиров до места']"
         @location-input="handleCityLocationChange(destinationCity, $event)"
         @option-click="handleCityOptionChoose(destinationCity)"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <IntermediateCitiesStep
         v-else-if="currentStep === StepNames.intermediateCities"
         :city-list="CITY_NAMES"
         v-model="intermediateCities"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <DateStep
         v-else-if="currentStep === StepNames.date"
         v-model="date"
         @update:model-value="currentStep++"
+        class="absolute full-width"
       />
 
       <TimeStep
         v-else-if="currentStep === StepNames.time"
         v-model="time"
+        class="absolute full-width"
       />
 
       <CarSelectionStep
         v-else-if="currentStep === StepNames.car"
         v-model="carId"
         @update:model-value="currentStep++"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <PassengersAmountStep
         v-else-if="currentStep === StepNames.passengersAmount"
         v-model="passengersAmount"
+        class="absolute full-width"
       />
 
       <TripConveniencesStep
         v-else-if="currentStep === StepNames.tripConveniences"
         v-model="tripConveniences"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
 
       <PriceStep
         v-else-if="currentStep === StepNames.price"
         v-model="price"
+        class="absolute full-width"
       />
 
       <CommentStep
         v-else-if="currentStep === StepNames.comment"
         v-model="comment"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
       />
     </transition>
 

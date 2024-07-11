@@ -3,7 +3,6 @@ import { createCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
 import { MyItem } from 'src/shared/ui';
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
 import { useUserStore } from 'stores/user';
 
 const carId = defineModel({ default: '' });
@@ -26,7 +25,7 @@ const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
 </script>
 
 <template>
-  <StepContainer>
+  <div>
     <h4 class="q-ma-lg">Выберите автомобиль для поездки</h4>
     <div
       v-if="cars.length"
@@ -71,5 +70,5 @@ const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
     >
       <UpdateCar @updated="handleAddedCar" />
     </q-dialog>
-  </StepContainer>
+  </div>
 </template>

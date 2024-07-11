@@ -2,7 +2,6 @@
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { TripConveniencesNames } from 'src/shared/enums';
 import { MyItem } from 'src/shared/ui';
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 const tripConveniences = defineModel<TripConveniencesNames[]>({ default: [] });
 
@@ -16,7 +15,7 @@ const toggleConvenience = (name: TripConveniencesNames) => {
 </script>
 
 <template>
-  <StepContainer>
+  <div>
     <h4 class="q-ma-lg">Выберите удобства, доступные пассажирам</h4>
 
     <q-list class="q-px-sm">
@@ -35,5 +34,5 @@ const toggleConvenience = (name: TripConveniencesNames) => {
         </template>
       </my-item>
     </q-list>
-  </StepContainer>
+  </div>
 </template>

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import StepContainer from 'pages/publish/ui/StepContainer.vue';
-
 const time = defineModel({ default: '' });
 </script>
 
 <template>
-  <StepContainer>
+  <div>
     <h4 class="q-ma-lg">Во сколько заберете пассажиров?</h4>
 
     <q-input
@@ -14,7 +12,7 @@ const time = defineModel({ default: '' });
       class="q-mx-lg q-pt-sm"
       v-model="time"
     />
-  </StepContainer>
+  </div>
 </template>
 
 
