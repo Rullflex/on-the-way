@@ -25,6 +25,8 @@ export default boot(async ({ router }) => {
   router.beforeEach((to, _from, next) => {
     if (to.path !== '/login' && !userStore.accountId) {
       next({ path: '/login' });
+    } else if ((userStore.accountId && to.path === '/login') || to.path === '/register') {
+      next({ path: '/', replace: true });
     } else {
       next();
     }
