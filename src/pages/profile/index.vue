@@ -36,6 +36,7 @@ const otherLinks = [
   },
   {
     label: 'Помощь',
+    to: '/help',
   },
   {
     label: 'Оцените сервис',
