@@ -110,14 +110,6 @@ const handleCityOptionChoose = (city: ICityInfo) => {
   currentStep.value++;
 };
 
-const filteredCityList = computed(() => {
-  return CITY_NAMES.filter(city => {
-    return city !== departureCity.value.city &&
-      city !== destinationCity.value.city &&
-      !intermediateCities.value.includes(city);
-  });
-});
-
 const router = useRouter();
 const handlePublishBtnClick = async () => {
   $q.loading.show();
@@ -154,6 +146,20 @@ const handlePublishBtnClick = async () => {
     $q.loading.hide();
   }
 };
+
+const filteredCityList = computed(() => {
+  const currentCity = currentStep.value === StepNames.departureCity
+    ? departureCity.value.city
+    : destinationCity.value.city;
+
+  return CITY_NAMES.filter(city => {
+    return city === currentCity || (
+      city !== departureCity.value.city &&
+      city !== destinationCity.value.city &&
+      !intermediateCities.value.includes(city)
+    );
+  });
+});
 </script>
 
 <template>
