@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { deleteCar, getCarById, updateCar, Response } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
+import { MyItem } from 'src/shared/ui';
 import { captureApiException } from 'src/shared/utils';
-import { MyBackBtn } from 'src/shared/ui';
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
@@ -13,15 +13,15 @@ const router = useRouter();
 const isDialogVisible = ref(false);
 const carResponse = ref<Response<ICar>>();
 
-const listItems = computed(() => {
+const carItems = computed(() => {
   const { licensePlate, name, year, bodyType, color } = carResponse.value || {};
 
   return [
-    { label: 'Регистрационный номер', value: licensePlate || '-' },
-    { label: 'Марка', value: name || '-' },
-    { label: 'Год выпуска', value: year || '-' },
-    { label: 'Тип кузова', value: bodyType || '-' },
-    { label: 'Цвет', value: color || '-' },
+    { label: 'Регистрационный номер', value: licensePlate },
+    { label: 'Марка', value: name },
+    { label: 'Год выпуска', value: typeof year === 'number' && String(year) },
+    { label: 'Тип кузова', value: bodyType },
+    { label: 'Цвет', value: color },
   ];
 });
 
@@ -57,54 +57,38 @@ onMounted(async () => {
 </script>
 
 <template>
-  <q-layout>
-    <q-page-container>
-      <q-page class="q-pa-lg">
-        <my-back-btn fallback-route="/profile" />
+  <q-page padding>
+    <h5 class="q-mb-lg q-px-md">Информация о машине</h5>
 
-        <h5 class="q-mb-lg q-mt-md">Информация о машине</h5>
+    <q-list>
+      <my-item
+        v-for="item in carItems"
+        :key="item.label"
+        :label="item.label"
+        :caption="item.value || '-'"
+      />
 
-        <q-list>
-          <!-- ANCHOR - Car Info -->
-          <q-item
-            v-for="item in listItems"
-            :key="item.label"
-          >
-            <q-item-section>
-              <q-item-label>{{ item.label }}</q-item-label>
-              <q-item-label caption>{{ item.value }}</q-item-label>
-            </q-item-section>
-          </q-item>
+      <q-separator
+        inset
+        spaced="1rem"
+      />
 
-          <q-separator class="q-my-md" />
+      <my-item
+        clickable
+        color="primary"
+        label="Изменить данные"
+        @click="isDialogVisible = true"
+      />
 
-          <!-- ANCHOR - Edit Car -->
-          <q-item
-            clickable
-            class="rounded-borders text-primary"
-            @click="isDialogVisible = true"
-          >
-            <q-item-section>
-              <q-item-label>Изменить данные</q-item-label>
-            </q-item-section>
-          </q-item>
+      <my-item
+        clickable
+        color="primary"
+        label="Удалить авто"
+        @click="handleDeleteCard"
+      />
+    </q-list>
+  </q-page>
 
-          <!-- ANCHOR - Delete Car -->
-          <q-item
-            clickable
-            class="rounded-borders text-primary"
-            @click="handleDeleteCard"
-          >
-            <q-item-section>
-              <q-item-label>Удалить авто</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-page>
-    </q-page-container>
-  </q-layout>
-
-  <!-- ANCHOR - Update Car Dialog -->
   <q-dialog
     v-model="isDialogVisible"
     maximized
@@ -118,5 +102,5 @@ onMounted(async () => {
 
 <route lang="yaml">
 meta:
-  layout: blank
+  layout: subPage
 </route>

@@ -15,7 +15,7 @@ const fallbackRoute = computed(() => router.currentRoute.value.meta.fallbackRout
       reveal
       class="bg-white text-blue-grey-8 q-pa-md"
     >
-      <my-back-btn :fallback-route="fallbackRoute ?? '/search'" />
+      <my-back-btn :fallback-route="fallbackRoute ?? '/'" />
     </q-header>
 
     <q-page-container>
