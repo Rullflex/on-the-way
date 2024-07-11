@@ -11,8 +11,12 @@ const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
 
 const tripDate = computed(() => {
-  const monthIndex = Number(QDate.formatDate(trip.value?.departureTime, 'M')) - 1;
-  return `${QDate.formatDate(trip.value?.departureTime, 'ddd, D')} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
+  if (!trip.value?.departureDate) {
+    return '';
+  }
+
+  const monthIndex = Number(QDate.formatDate(trip.value.departureDate, 'M')) - 1;
+  return `${QDate.formatDate(trip.value.departureDate, 'ddd, D')} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
 });
 
 Loading.show();
@@ -39,7 +43,7 @@ getTripById(props.id)
           <div class="column">
             <span class="text-bold">{{ trip.canPickUpFromPlace ? 'Заберу с места' : trip.departureAddress }}</span>
             <span class="text-subtitle2">{{ trip.departureCity }}</span>
-            <span class="text-subtitle2">{{ QDate.formatDate(trip.departureTime, 'HH:mm') }}</span>
+            <span class="text-subtitle2">{{ trip.departureTime }}</span>
 
             <q-icon
               name="eva-more-vertical-outline"
