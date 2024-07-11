@@ -14,9 +14,12 @@ const cars = computed(() => userStore.cars);
 const isDialogVisible = ref(false);
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
-const handleAddedCar = async (payload: ICar) => {
+const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
-  await createCar(payload).then(({ $id }) => (carId.value = $id), captureApiException);
+  await createCar({ ...payload, user: userStore.accountId }).then(
+    ({ $id }) => (carId.value = $id),
+    captureApiException
+  );
   $q.loading.hide();
   isDialogVisible.value = false;
 };

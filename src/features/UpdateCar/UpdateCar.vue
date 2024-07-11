@@ -18,7 +18,7 @@ interface IProps {
 }
 
 interface IEmits {
-  (e: 'updated', payload: ICar): void;
+  (e: 'updated', payload: Omit<ICar, 'user'>): void;
 }
 
 const props = defineProps<IProps>();

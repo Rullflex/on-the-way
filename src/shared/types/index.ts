@@ -37,4 +37,5 @@ export interface ICar {
   bodyType: string;
   color: string;
   year: number;
+  user: Response<IUser>;
 }

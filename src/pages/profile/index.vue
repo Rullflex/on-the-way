@@ -13,9 +13,9 @@ const router = useRouter();
 const isDialogVisible = ref(false);
 const userStore = useUserStore();
 
-const handleAddedCar = async (payload: ICar) => {
+const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
-  await createCar(payload).catch(captureApiException);
+  await createCar({ ...payload, user: userStore.accountId }).catch(captureApiException);
   $q.loading.hide();
   isDialogVisible.value = false;
 };

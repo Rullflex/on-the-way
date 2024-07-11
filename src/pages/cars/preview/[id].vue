@@ -39,7 +39,7 @@ const handleDeleteCard = () => {
   });
 };
 
-const handleUpdateCar = async (payload: ICar) => {
+const handleUpdateCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
   await updateCar(props.id, payload).catch(captureApiException);
   $q.loading.hide();
@@ -60,7 +60,7 @@ onMounted(async () => {
   <q-layout>
     <q-page-container>
       <q-page class="q-pa-lg">
-        <my-back-btn fallback-route="/profile"/>
+        <my-back-btn fallback-route="/profile" />
 
         <h5 class="q-mb-lg q-mt-md">Информация о машине</h5>
 
