@@ -25,8 +25,8 @@ export class AppWriteApi {
     return databases.listDocuments<Response<T>>(this.databaseId, this.collectionId, queries);
   }
 
-  create<T>(payload: Payload<T>, permissions?: string[]) {
-    return databases.createDocument<Response<T>>(this.databaseId, this.collectionId, ID.unique(), payload, permissions);
+  create<T>(payload: Payload<T>, customId = ID.unique(), permissions?: string[]) {
+    return databases.createDocument<Response<T>>(this.databaseId, this.collectionId, customId, payload, permissions);
   }
 
   update<T>(id: string, payload?: Payload<T>, permissions?: string[]) {

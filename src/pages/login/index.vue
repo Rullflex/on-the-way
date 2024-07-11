@@ -4,6 +4,10 @@ import { AppwriteException, getUserById } from 'src/shared/api';
 import { captureApiException } from 'src/shared/utils';
 import { useUserStore } from 'stores/user';
 
+defineOptions({
+  name: 'LoginPage',
+});
+
 const email = ref('');
 const password = ref('');
 const isPasswordVisible = ref(false);
@@ -27,7 +31,7 @@ const handleUserLogin = async () => {
       cars: user.cars,
     });
 
-    router.push('/search');
+    router.push({ path: '/', replace: true });
   } catch (error) {
     captureApiException(error as AppwriteException);
   } finally {
@@ -50,6 +54,7 @@ const handleUserLogin = async () => {
           <q-input
             v-model="email"
             outlined
+            hide-bottom-space
             type="email"
             label="Email"
             :rules="['email']"
@@ -82,10 +87,12 @@ const handleUserLogin = async () => {
           <p>
             Нет аккаунта?
             <router-link
+              replace
               to="/register"
               class="text-primary"
-              >Зарегистрироваться</router-link
             >
+              Зарегистрироваться
+            </router-link>
           </p>
         </q-form>
       </q-page>
