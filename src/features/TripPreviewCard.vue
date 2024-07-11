@@ -61,7 +61,7 @@ const conveniences = computed(() =>
       <div class="row">
         <div class="column">
           <span class="text-subtitle2">{{ trip.driver.name }}</span>
-          <span class="text-caption">{{ trip.driver.cars[0]?.name }}</span>
+          <span class="text-caption">{{ trip.car?.name }}</span>
         </div>
       </div>
 

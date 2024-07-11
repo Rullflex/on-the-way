@@ -119,15 +119,19 @@ getTripById(props.id)
             inset
           />
 
-          <q-item>
+          <q-item v-if="trip.car">
             <q-item-section side>
               <q-icon name="eva-car-outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ trip.driver.cars[0]?.name }}</q-item-label>
+              <q-item-label>{{ trip.car.name }}</q-item-label>
               <q-item-label caption>
-                {{ trip.driver.cars[0]?.year }}, {{ trip.driver.cars[0]?.color }}
-                <q-chip dense>{{ trip.driver.cars[0]?.licensePlate }}</q-chip>
+                {{ trip.car.year }}, {{ trip.car.color }}
+                <q-chip
+                  v-if="trip.car.licensePlate"
+                  dense
+                  :label="trip.car.licensePlate"
+                />
               </q-item-label>
             </q-item-section>
           </q-item>
