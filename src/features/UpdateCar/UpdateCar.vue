@@ -43,6 +43,10 @@ const isBtnNextVisible = computed<boolean>(() => {
   return false;
 });
 
+watch(licensePlate, () => {
+  licensePlate.value = licensePlate.value?.toUpperCase();
+});
+
 onMounted(async () => {
   if (props.id) {
     $q.loading.show();
@@ -93,7 +97,7 @@ onMounted(async () => {
           outlined
           clearable
           maxlength="20"
-          placeholder="А 123 БВ 45"
+          placeholder="А123БВ159"
           class="q-mx-md"
         />
 
