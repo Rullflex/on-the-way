@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { MyBackBtn, MyItem } from 'src/shared/ui';
+import { MyBackBtn } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import { getCarById } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { captureApiException } from 'src/shared/utils';
+import CarLicensePlateStep from 'src/features/UpdateCar/ui/CarLicensePlateStep.vue';
+import CarModelNameStep from 'src/features/UpdateCar/ui/CarModelNameStep.vue';
+import CarBodyTypeStep from 'src/features/UpdateCar/ui/CarBodyTypeStep.vue';
+import CarColorStep from 'src/features/UpdateCar/ui/CarColorStep.vue';
+import CarYearStep from 'src/features/UpdateCar/ui/CarYearStep.vue';
 
 enum Steps {
   LicensePlate,
@@ -28,35 +33,50 @@ const $q = useQuasar();
 const { currentStep, stepAnimationName } = useStep(Steps.LicensePlate);
 
 const licensePlate = ref<string | null>();
-const name = ref<string | null>();
-const bodyType = ref<string | null>();
-const color = ref<string | null>();
-const year = ref<number | null>();
+const name = ref<string>('');
+const bodyType = ref<string>('');
+const color = ref<string>('');
+const year = ref<string>('');
 
-const isBtnNextVisible = computed<boolean>(() => {
+const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === Steps.LicensePlate) {
-    return Boolean(licensePlate.value);
+    return Boolean(licensePlate.value) || licensePlate.value === null;
   } else if (currentStep.value === Steps.Name) {
     return Boolean(name.value);
+  } else if (currentStep.value === Steps.BodyType) {
+    return Boolean(bodyType.value);
+  } else if (currentStep.value === Steps.Color) {
+    return Boolean(color.value);
   }
 
   return false;
 });
 
 watch(licensePlate, () => {
-  licensePlate.value = licensePlate.value?.toUpperCase();
+  if (licensePlate.value)
+    licensePlate.value = licensePlate.value?.toUpperCase();
 });
+
+const handleFromSubmitButton = () => {
+  emit('updated', {
+    licensePlate: licensePlate.value ?? '',
+    name: name.value ?? '',
+    bodyType: bodyType.value ?? '',
+    color: color.value ?? '',
+    year: Number(year.value) ?? 1000
+  });
+};
 
 onMounted(async () => {
   if (props.id) {
     $q.loading.show();
     await getCarById(props.id)
       .then((response) => {
-        licensePlate.value = response.licensePlate;
-        name.value = response.name;
-        bodyType.value = response.bodyType;
-        color.value = response.color;
-        year.value = response.year;
+        licensePlate.value = response.licensePlate ?? '';
+        name.value = response.name ?? '';
+        bodyType.value = response.bodyType ?? '';
+        color.value = response.color ?? '';
+        year.value = String(response.year) ?? '0000';
       })
       .catch(captureApiException);
     $q.loading.hide();
@@ -66,197 +86,74 @@ onMounted(async () => {
 
 <template>
   <q-card>
-    <!-- ANCHOR - Close/Back Button -->
-    <q-card-section class="sticky-top bg-white z-top">
-      <q-btn
-        v-if="currentStep === Steps.LicensePlate"
-        v-close-popup
-        flat
-        dense
-        icon="eva-close"
-      />
+    <q-btn
+      v-if="currentStep === Steps.LicensePlate"
+      v-close-popup
+      flat
+      dense
+      icon="eva-close"
+      class="q-ml-md q-mt-md"
+    />
 
-      <my-back-btn
-        v-else
-        @click="currentStep--"
-      />
-    </q-card-section>
+    <my-back-btn
+      v-else
+      @click="currentStep--"
+      class="q-ml-md q-mt-md"
+    />
 
     <transition :name="stepAnimationName">
-      <!-- SECTION - Step License Plate -->
-      <q-card-section
+      <CarLicensePlateStep
         v-if="currentStep === Steps.LicensePlate"
-        tag="form"
-        class="absolute q-px-sm q-pt-none"
-        @submit.prevent="licensePlate && currentStep++"
-      >
-        <h4 class="q-mx-md q-mb-lg">Какой у машины регистрационный номер?</h4>
+        v-model="licensePlate"
+        @option-click="currentStep++"
+        class="absolute full-width"
+      />
 
-        <q-input
-          v-model="licensePlate"
-          outlined
-          clearable
-          maxlength="20"
-          placeholder="А123БВ159"
-          class="q-mx-md"
-        />
-
-        <my-item
-          v-show="!licensePlate?.length"
-          chevron
-          clickable
-          class="q-mt-md"
-          label="Я не знаю номер"
-          @click="currentStep++"
-        />
-      </q-card-section>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Car Name -->
-      <q-card-section
+      <CarModelNameStep
         v-else-if="currentStep === Steps.Name"
-        tag="form"
-        class="absolute q-px-lg q-pt-none"
-        @submit.prevent="name && currentStep++"
-      >
-        <h4 class="q-mb-lg">Какая у вас марка и модель машины?</h4>
+        v-model="name"
+        class="absolute full-width"
+      />
 
-        <q-input
-          v-model="name"
-          outlined
-          clearable
-          maxlength="20"
-          placeholder="HYNDAI SOLARIS"
-        />
-      </q-card-section>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Body Type -->
-      <q-card-section
+      <CarBodyTypeStep
         v-else-if="currentStep === Steps.BodyType"
-        class="absolute q-px-sm q-pt-none"
-      >
-        <h4 class="q-mx-md q-mb-lg">Какой тип кузова у вашего авто?</h4>
+        v-model="bodyType"
+        @update:model-value="currentStep++"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
+      />
 
-        <q-list>
-          <!-- TODO: Icons of body types for items -->
-          <my-item
-            v-for="type in ['Седан', 'Хэтчбэк', 'Легковой фургон', 'Универсал', 'Кроссовер', 'Минивэн']"
-            :key="type"
-            clickable
-            chevron
-            :label="type"
-            @click="
-              bodyType = type;
-              currentStep++;
-            "
-          />
-        </q-list>
-      </q-card-section>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Car Color -->
-      <q-card-section
+      <CarColorStep
         v-else-if="currentStep === Steps.Color"
-        class="absolute q-px-sm q-pt-none"
-      >
-        <h4 class="q-mx-md q-mb-lg">Какого цвета ваша машина?</h4>
+        v-model="color"
+        @update:model-value="currentStep++"
+        class="absolute full-width"
+        style="padding-bottom: 66px"
+      />
 
-        <q-list>
-          <q-item
-            v-for="item in [
-              { name: 'Белый', value: 'grey-1' },
-              { name: 'Черный', value: 'black' },
-              { name: 'Темно-серый', value: 'grey-7' },
-              { name: 'Серый', value: 'grey-4' },
-              { name: 'Вишневый', value: 'red-10' },
-              { name: 'Красный', value: 'red' },
-              { name: 'Темно-синий', value: 'blue' },
-              { name: 'Синий', value: 'light-blue' },
-              { name: 'Темно-зеленый', value: 'teal' },
-              { name: 'Зеленый', value: 'green' },
-              { name: 'Коричневый', value: 'brown' },
-              { name: 'Бежевый', value: 'biege' },
-              { name: 'Оранжевый', value: 'orange' },
-              { name: 'Желтый', value: 'yellow' },
-              { name: 'Фиолетовый', value: 'purple' },
-              { name: 'Розовый', value: 'pink' },
-            ]"
-            :key="item.name"
-            clickable
-            class="rounded-borders"
-            @click="
-              color = item.name;
-              currentStep++;
-            "
-          >
-            <q-item-section side>
-              <q-icon
-                name="circle"
-                :color="item.value"
-              />
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label>{{ item.name }}</q-item-label>
-            </q-item-section>
-
-            <q-item-section side>
-              <q-icon name="eva-chevron-right-outline"></q-icon>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-      <!-- !SECTION -->
-
-      <!-- SECTION - Step Car Year -->
-      <q-card-section
+      <CarYearStep
         v-else-if="currentStep === Steps.Year"
-        class="absolute q-px-lg q-pt-none"
-      >
-        <h4 class="q-mb-lg">Какого года выпуска ваша машина?</h4>
-
-        <q-input
-          v-model="year"
-          outlined
-          clearable
-          inputmode="numeric"
-          :rules="[
-            (val) =>
-              (val?.length === 4 && Number(val) <= new Date().getFullYear()) || 'Введите год в правильном формате',
-          ]"
-          placeholder="2000"
-        />
-
-        <!-- ANCHOR - Submit Button -->
-        <q-btn
-          v-if="String(year)?.length === 4 && Number(year) <= new Date().getFullYear()"
-          unelevated
-          color="primary"
-          label="Сохранить"
-          class="fixed-bottom q-ma-lg"
-          @click="
-            emit('updated', {
-              licensePlate: licensePlate ?? '',
-              name: name ?? '',
-              bodyType: bodyType ?? '',
-              color: color ?? '',
-              year: Number(year) ?? 1000,
-            })
-          "
-        />
-      </q-card-section>
-      <!-- !SECTION -->
+        v-model="year"
+        class="absolute full-width"
+      />
     </transition>
 
-    <!-- ANCHOR - Next Button -->
     <q-btn
-      v-show="isBtnNextVisible"
+      v-if="isNextButtonVisible"
       fab
       icon="eva-arrow-forward-outline"
       color="primary"
       class="fixed-bottom-right q-ma-lg"
       @click="currentStep++"
+    />
+
+    <q-btn
+      v-else-if="String(year)?.length === 4 && Number(year) <= new Date().getFullYear()"
+      unelevated
+      color="primary"
+      label="Сохранить"
+      class="fixed-bottom q-ma-lg"
+      @click="handleFromSubmitButton"
     />
   </q-card>
 </template>
