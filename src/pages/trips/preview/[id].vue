@@ -6,6 +6,7 @@ import { MyAvatar, MyBackBtn } from 'src/shared/ui';
 import { getAvatarURL, getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import { Loading, date as QDate } from 'quasar';
+import { TRIP_CONVENIENCES } from 'src/shared/constants';
 
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
@@ -17,6 +18,10 @@ const tripDate = computed(() => {
 
   const monthIndex = Number(QDate.formatDate(trip.value.departureDate, 'M')) - 1;
   return `${QDate.formatDate(trip.value.departureDate, 'ddd, D')} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
+});
+
+const tripConveniences = computed(() => {
+  return trip.value?.conveniences.map((name) => TRIP_CONVENIENCES.find((item) => item.name === name)!) ?? [];
 });
 
 Loading.show();
@@ -142,13 +147,10 @@ getTripById(props.id)
           />
 
           <my-item
-            icon="eva-cube-outline"
-            label="Заберу посылки"
-          />
-
-          <my-item
-            icon="eva-briefcase-outline"
-            label="Можно с багажом"
+            v-for="convenience in tripConveniences"
+            :key="convenience?.name"
+            :icon="convenience?.icon"
+            :label="convenience?.title"
           />
         </q-list>
 
