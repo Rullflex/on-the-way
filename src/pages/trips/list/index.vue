@@ -4,9 +4,34 @@ import { getAllTrips, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
+import { useTripSettingsStore } from 'src/stores/trip-settings';
 
 const isLoading = ref<boolean>(true);
 const trips = ref<Response<ITrip>[]>([]);
+
+const route = useRoute();
+const router = useRouter();
+const store = useTripSettingsStore();
+
+if (store.origin && store.destination && store.date) {
+  router.replace({
+    query: {
+      origin: store.origin,
+      destination: store.destination,
+      date: store.date,
+      passengers: String(store.passengers),
+    },
+  });
+} else if (route.query.origin && route.query.destination && route.query.date) {
+  store.$patch({
+    origin: route.query.origin as string,
+    destination: route.query.destination as string,
+    date: route.query.date as string,
+    passengers: Number(route.query.passengers as string),
+  });
+} else {
+  router.push({ path: '/search', replace: true });
+}
 
 getAllTrips()
   .then((response) => (trips.value = response.documents))
