@@ -12,6 +12,7 @@ const comment = defineModel({ default: '' });
       outlined
       class="q-mx-lg q-pt-sm"
       v-model="comment"
+      v-focus
     />
   </StepContainer>
 </template>

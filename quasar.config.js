@@ -23,6 +23,7 @@ module.exports = configure(function (/* ctx */) {
     boot: [
       'user',
       'axios',
+      'directives',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

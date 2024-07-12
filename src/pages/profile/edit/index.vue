@@ -145,6 +145,7 @@ const handleSave = async () => {
       <q-input
         v-if="dialogType === 'name'"
         v-model="dialogModel"
+        v-focus
         outlined
         clearable
         maxlength="20"
@@ -155,6 +156,7 @@ const handleSave = async () => {
       <q-input
         v-else-if="dialogType === 'surname'"
         v-model="dialogModel"
+        v-focus
         outlined
         clearable
         maxlength="20"
@@ -165,6 +167,7 @@ const handleSave = async () => {
       <q-date
         v-else-if="dialogType === 'dateOfBirth'"
         v-model="dialogModel"
+        v-focus
         flat
         minimal
         class="full-width"
@@ -173,6 +176,7 @@ const handleSave = async () => {
       <q-input
         v-else-if="dialogType === 'email'"
         v-model="dialogModel"
+        v-focus
         outlined
         clearable
         maxlength="40"
@@ -184,6 +188,7 @@ const handleSave = async () => {
       <my-phone-input
         v-else-if="dialogType === 'phone'"
         v-model="dialogModel"
+        v-focus
         class="q-mx-lg"
       />
 

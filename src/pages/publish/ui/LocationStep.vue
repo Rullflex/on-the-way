@@ -19,6 +19,7 @@ const locationInputValue = ref(props.city.location);
     <q-input
       class="q-mx-lg q-py-sm"
       v-model="locationInputValue"
+      v-focus
       @update:model-value="$emit('locationInput', locationInputValue)"
       outlined
       maxlength="20"

@@ -14,6 +14,7 @@ const price = defineModel({ default: '' });
       outlined
       class="q-mx-lg q-pt-sm"
       v-model="price"
+      v-focus
     >
       <template v-slot:append>
         <q-icon name="currency_ruble" />
