@@ -22,6 +22,7 @@ const locationInputValue = ref(props.city.location);
       @update:model-value="$emit('locationInput', locationInputValue)"
       outlined
       maxlength="20"
+      :autofocus="!locationInputValue"
       :prefix="`${city.city},`"
       placeholder="Ленина 24"
     />

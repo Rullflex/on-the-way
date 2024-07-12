@@ -13,6 +13,7 @@ const time = defineModel({ default: '' });
       outlined
       class="q-mx-lg q-pt-sm"
       v-model="time"
+      :autofocus="!time"
     />
   </StepContainer>
 </template>
