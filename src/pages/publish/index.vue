@@ -110,6 +110,18 @@ const handleCityOptionChoose = (city: ICityInfo) => {
   currentStep.value++;
 };
 
+const departureCityList = computed(() => {
+  return CITY_NAMES.filter(city => city !== destinationCity.value.city && !intermediateCities.value.includes(city));
+});
+
+const destinationCityList = computed(() => {
+  return CITY_NAMES.filter(city => city !== departureCity.value.city && !intermediateCities.value.includes(city));
+});
+
+const intermediateCityList = computed(() => {
+  return CITY_NAMES.filter(city => city !== departureCity.value.city && city !== destinationCity.value.city);
+});
+
 const router = useRouter();
 const handlePublishBtnClick = async () => {
   $q.loading.show();
@@ -161,7 +173,7 @@ const handlePublishBtnClick = async () => {
         v-if="currentStep === StepNames.departureCity"
         title="Откуда вы выезжаете?"
         :city-name="departureCity.city"
-        :city-list="CITY_NAMES"
+        :city-list="departureCityList"
         @list-item-click="handleCityChoose(departureCity, $event)"
       />
 
@@ -178,7 +190,7 @@ const handlePublishBtnClick = async () => {
         v-else-if="currentStep === StepNames.destinationCity"
         title="Куда вы едете?"
         :city-name="destinationCity.city"
-        :city-list="CITY_NAMES"
+        :city-list="destinationCityList"
         @list-item-click="handleCityChoose(destinationCity, $event)"
       />
 
@@ -193,7 +205,7 @@ const handlePublishBtnClick = async () => {
 
       <IntermediateCitiesStep
         v-else-if="currentStep === StepNames.intermediateCities"
-        :city-list="CITY_NAMES"
+        :city-list="intermediateCityList"
         v-model="intermediateCities"
       />
 
