@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { captureApiException } from 'src/shared/utils';
-import { getAllTrips, Response } from 'src/shared/api';
+import { getTripsByDate, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
@@ -33,7 +33,7 @@ if (store.origin && store.destination && store.date) {
   router.push({ path: '/search', replace: true });
 }
 
-getAllTrips()
+getTripsByDate(store.date)
   .then((response) => (trips.value = response.documents))
   .catch(captureApiException)
   .finally(() => (isLoading.value = false));
@@ -45,28 +45,42 @@ getAllTrips()
 
     <q-page-container>
       <q-page class="q-pa-lg">
-        <h5 class="q-mb-sm">Сегодня</h5>
+        <div
+          v-if="isLoading"
+          class="column gap-sm"
+        >
+          <q-skeleton
+            v-for="i in 4"
+            :key="i"
+            type="rect"
+            height="150px"
+          />
+        </div>
 
-        <q-list class="column gap-sm">
-          <template v-if="isLoading">
-            <q-skeleton
-              v-for="i in 4"
-              :key="i"
-              type="rect"
-              height="130px"
-            />
-          </template>
-
-          <template v-else>
-            <TripPreviewCard
-              v-for="trip in trips"
-              :key="trip.$id"
-              :trip="trip"
-              :to="`/trips/preview/${trip.$id}`"
-              :disabled="trip.alreadyReserved === trip.totalPassengers"
-            />
-          </template>
+        <q-list
+          v-else-if="trips.length"
+          class="column gap-sm"
+        >
+          <TripPreviewCard
+            v-for="trip in trips"
+            :key="trip.$id"
+            :trip="trip"
+            :to="`/trips/preview/${trip.$id}`"
+            :disabled="trip.alreadyReserved === trip.totalPassengers"
+          />
         </q-list>
+
+        <template v-else>
+          <div class="column flex-center text-center gap-lg">
+            <q-img
+              noSpinner
+              width="80%"
+              src="~/assets/travel-mode.svg"
+              style="max-width: 300px"
+            />
+            <h4>На текущую дату нет доступных поездок</h4>
+          </div>
+        </template>
       </q-page>
     </q-page-container>
   </q-layout>
