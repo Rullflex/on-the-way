@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
+import { date as QDateUtil } from 'quasar';
 import { CITY_NAMES, MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { MyItem } from 'src/shared/ui';
 
@@ -9,19 +10,20 @@ const router = useRouter();
 const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 
-const datePickerModel = ref<string>('');
+const formattedDate = computed(() => {
+  if (!date.value) {
+    return '';
+  }
 
-watch(datePickerModel, (newValue) => {
-  const [dayOfWeek, dayOfMonth, month] = newValue.split(' ');
+  const [dayOfWeek, dayOfMonth, month] = QDateUtil.formatDate(date.value, 'ddd D M').split(' ');
 
   if (Number(dayOfMonth) === new Date().getDate()) {
-    date.value = 'Сегодня';
+    return 'Сегодня';
   } else if (Number(dayOfMonth) === new Date().getDate() + 1) {
-    date.value = 'Завтра';
-  } else {
-    const monthIndex = Number(month) - 1;
-    date.value = `${dayOfWeek} ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
+    return 'Завтра';
   }
+
+  return `${dayOfWeek}, ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]}`;
 });
 
 const isDialogVisible = ref<boolean>(false);
@@ -57,11 +59,11 @@ const onSearchClicked = () => {
 };
 
 const availableOrigins = computed(() => {
-  return CITY_NAMES.filter(city => city !== destination.value);
+  return CITY_NAMES.filter((city) => city !== destination.value);
 });
 
 const availableDestinations = computed(() => {
-  return CITY_NAMES.filter(city => city !== origin.value);
+  return CITY_NAMES.filter((city) => city !== origin.value);
 });
 </script>
 
@@ -121,7 +123,7 @@ const availableDestinations = computed(() => {
         >
           <q-field
             label="Дата"
-            :stack-label="Boolean(date)"
+            :stack-label="Boolean(formattedDate)"
           >
             <template v-slot:prepend>
               <q-icon
@@ -131,7 +133,7 @@ const availableDestinations = computed(() => {
             </template>
 
             <template v-slot:control>
-              {{ date }}
+              {{ formattedDate }}
             </template>
           </q-field>
         </div>
@@ -166,7 +168,7 @@ const availableDestinations = computed(() => {
           color="primary"
           class="full-width"
           @click="onSearchClicked"
-        >Поиск
+          >Поиск
         </q-btn>
       </div>
     </q-card>
@@ -216,10 +218,9 @@ const availableDestinations = computed(() => {
         <h4 class="q-mx-lg q-mb-lg">Когда вы едете?</h4>
 
         <q-date
-          v-model="datePickerModel"
+          v-model="date"
           flat
           minimal
-          mask="ddd D M"
           class="full-width"
           :options="
             (date) => {
@@ -239,7 +240,10 @@ const availableDestinations = computed(() => {
       >
         <h4>Количество бронируемых мест</h4>
 
-        <div class="column items-center gap-lg" style="flex: 1; justify-content: center;">
+        <div
+          class="column items-center gap-lg"
+          style="flex: 1; justify-content: center"
+        >
           <div class="row items-center">
             <q-btn
               flat
