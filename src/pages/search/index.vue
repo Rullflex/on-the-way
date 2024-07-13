@@ -1,30 +1,20 @@
 <script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
-import { date as QDateUtil } from 'quasar';
-import { CITY_NAMES, MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
-import { MyItem } from 'src/shared/ui';
+import OriginField from './ui/OriginField.vue';
+import DestinationField from './ui/DestinationField.vue';
+import DateField from './ui/DateField.vue';
+import PassengersField from './ui/PassengersField.vue';
+import SearchButton from './ui/SearchButton.vue';
+import CloseButton from './ui/CloseButton.vue';
+import LocationPicker from './ui/LocationPicker.vue';
+import DatePicker from './ui/DatePicker.vue';
+import PassengersPicker from './ui/PassengersPicker.vue';
 
 type DialogType = 'origin' | 'destination' | 'date' | 'passengers';
 
 const router = useRouter();
 const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
-
-const formattedDate = computed(() => {
-  if (!date.value) {
-    return '';
-  }
-
-  const [dayOfWeek, dayOfMonth, month] = QDateUtil.formatDate(date.value, 'ddd D M').split(' ');
-
-  if (Number(dayOfMonth) === new Date().getDate()) {
-    return 'Сегодня';
-  } else if (Number(dayOfMonth) === new Date().getDate() + 1) {
-    return 'Завтра';
-  }
-
-  return `${dayOfWeek}, ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]}`;
-});
 
 const isDialogVisible = ref<boolean>(false);
 const dialogType = ref<DialogType>();
@@ -44,6 +34,14 @@ const onDestinationPicked = (name: string) => {
   isDialogVisible.value = false;
 };
 
+const onDatePicked = () => {
+  isDialogVisible.value = false;
+};
+
+const onPassengersPicked = () => {
+  isDialogVisible.value = false;
+};
+
 const onSearchClicked = () => {
   if (!origin.value) {
     showDialog('origin');
@@ -57,226 +55,53 @@ const onSearchClicked = () => {
     router.push('/trips/list');
   }
 };
-
-const availableOrigins = computed(() => {
-  return CITY_NAMES.filter((city) => city !== destination.value);
-});
-
-const availableDestinations = computed(() => {
-  return CITY_NAMES.filter((city) => city !== origin.value);
-});
 </script>
 
 <template>
   <q-page class="column justify-end bg-secondary">
-    <!-- SECTION - Search Card -->
     <q-card style="border-bottom-right-radius: 0; border-bottom-left-radius: 0">
-      <!-- ANCHOR - Origin Field -->
-      <div
-        class="q-px-lg q-pt-sm"
-        @click="showDialog('origin')"
-      >
-        <q-field
-          label="Откуда"
-          :stack-label="Boolean(origin)"
-        >
-          <template v-slot:prepend>
-            <q-icon
-              name="eva-pin-outline"
-              size="1.3rem"
-            />
-          </template>
+      <OriginField
+        @choose-origin-btn-click="showDialog('origin')"
+      />
 
-          <template v-slot:control>
-            {{ origin }}
-          </template>
-        </q-field>
-      </div>
+      <DestinationField
+        @choose-destination-btn-click="showDialog('destination')"
+      />
 
-      <!-- ANCHOR - Destination Field -->
-      <div
-        class="q-px-lg"
-        @click="showDialog('destination')"
-      >
-        <q-field
-          label="Куда"
-          :stack-label="Boolean(destination)"
-        >
-          <template v-slot:prepend>
-            <q-icon
-              name="eva-pin-outline"
-              size="1.3rem"
-            />
-          </template>
-
-          <template v-slot:control>
-            {{ destination }}
-          </template>
-        </q-field>
-      </div>
-
-      <!-- ANCHOR - Date Field -->
       <div class="q-px-lg row gap-lg">
-        <div
-          class="col"
-          @click="showDialog('date')"
-        >
-          <q-field
-            label="Дата"
-            :stack-label="Boolean(formattedDate)"
-          >
-            <template v-slot:prepend>
-              <q-icon
-                name="eva-calendar-outline"
-                size="1.3rem"
-              />
-            </template>
+        <DateField
+          @choose-date-btn-click="showDialog('date')"
+        />
 
-            <template v-slot:control>
-              {{ formattedDate }}
-            </template>
-          </q-field>
-        </div>
-
-        <!-- ANCHOR - Passengers Field -->
-        <div
-          class="col"
-          @click="showDialog('passengers')"
-        >
-          <q-field
-            label="Пассажиры"
-            :stack-label="Boolean(passengers)"
-          >
-            <template v-slot:prepend>
-              <q-icon
-                name="eva-people-outline"
-                size="1.3rem"
-              />
-            </template>
-
-            <template v-slot:control>
-              {{ passengers }}
-            </template>
-          </q-field>
-        </div>
+        <PassengersField
+          @choose-passengers-btn-click="showDialog('passengers')"
+        />
       </div>
 
-      <div class="q-pa-lg">
-        <!-- ANCHOR - Search Button -->
-        <q-btn
-          unelevated
-          color="primary"
-          class="full-width"
-          @click="onSearchClicked"
-          >Поиск
-        </q-btn>
-      </div>
+      <SearchButton @click="onSearchClicked" />
     </q-card>
-    <!-- !SECTION -->
   </q-page>
 
-  <!-- SECTION - Full Sized Dialog -->
   <q-dialog
     maximized
     v-model="isDialogVisible"
   >
     <q-card class="column">
-      <!-- ANCHOR - Row with close button -->
-      <q-card-section class="sticky-top bg-white z-top">
-        <q-btn
-          v-close-popup
-          icon="eva-close"
-          flat
-          dense
-        />
-      </q-card-section>
+      <CloseButton />
 
-      <!-- ANCHOR - Location Picker -->
-      <q-card-section
+      <LocationPicker
         v-if="dialogType === 'origin' || dialogType === 'destination'"
-        class="q-px-sm q-pt-none"
-      >
-        <h4 class="q-mx-md q-mb-lg">{{ dialogType === 'origin' ? 'Откуда едете?' : 'Куда едете?' }}</h4>
+        :type="dialogType === 'origin' ? 'origin' : 'destination'"
+        @pick="dialogType === 'origin' ? onOriginPicked($event) : onDestinationPicked($event)"
+      />
 
-        <q-list>
-          <my-item
-            v-for="name in dialogType === 'origin' ? availableOrigins : availableDestinations"
-            :key="name"
-            :label="name"
-            clickable
-            chevron
-            @click="dialogType === 'origin' ? onOriginPicked(name) : onDestinationPicked(name)"
-          />
-        </q-list>
-      </q-card-section>
+      <DatePicker
+        v-else-if="dialogType === 'date'" @pick="onDatePicked"
+      />
 
-      <!-- ANCHOR - Date Picker -->
-      <q-card-section
-        v-else-if="dialogType === 'date'"
-        class="q-px-none q-pt-none"
-      >
-        <h4 class="q-mx-lg q-mb-lg">Когда вы едете?</h4>
-
-        <q-date
-          v-model="date"
-          flat
-          minimal
-          class="full-width"
-          :options="
-            (date) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              return new Date(date) >= today;
-            }
-          "
-          @update:model-value="isDialogVisible = false"
-        ></q-date>
-      </q-card-section>
-
-      <!-- ANCHOR - Passengers Picker -->
-      <q-card-section
-        v-else-if="dialogType === 'passengers'"
-        class="q-px-lg q-pt-none col column justify-between"
-      >
-        <h4>Количество бронируемых мест</h4>
-
-        <div
-          class="column items-center gap-lg"
-          style="flex: 1; justify-content: center"
-        >
-          <div class="row items-center">
-            <q-btn
-              flat
-              dense
-              icon="eva-minus-circle-outline"
-              @click="passengers > 1 && passengers--"
-            />
-
-            <div
-              class="text-h1 text-bold q-px-md row flex-center"
-              style="width: 100px"
-            >
-              {{ passengers }}
-            </div>
-
-            <q-btn
-              flat
-              dense
-              icon="eva-plus-circle-outline"
-              @click="passengers++"
-            />
-          </div>
-        </div>
-
-        <q-btn
-          unelevated
-          color="primary"
-          label="Подтвердить"
-          @click="isDialogVisible = false"
-          class="full-width q-fixed-bottom q-mb-sm"
-        />
-      </q-card-section>
+      <PassengersPicker
+        v-else-if="dialogType === 'passengers'" @pick="onPassengersPicked"
+      />
     </q-card>
   </q-dialog>
-  <!-- !SECTION -->
 </template>
