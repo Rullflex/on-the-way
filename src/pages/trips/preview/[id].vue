@@ -3,16 +3,18 @@ import MyItem from 'src/shared/ui/MyItem.vue';
 import { captureApiException, getPluralNoun } from 'src/shared/utils';
 import { MyAvatar } from 'src/shared/ui';
 import { AppwriteException, getAvatarURL, getTripById, Response } from 'src/shared/api';
-import { ITrip } from 'src/shared/types';
+import { ITrip, IUser } from 'src/shared/types';
 import { Loading } from 'quasar';
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { useUserStore } from 'src/stores/user';
 import ReserveTripButton from './ui/ReserveTripButton.vue';
 import { reserveTrip, cancelReservation } from './api';
 import { useFormattedDate } from 'src/shared/hooks/useFormattedDate';
+import { getPassengers } from './api';
 
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
+const passengers = ref<Response<IUser>[]>([]);
 const userStore = useUserStore();
 
 const { shortFormatDate } = useFormattedDate(ref(trip.value?.departureDate ?? ''));
@@ -44,6 +46,14 @@ const handleSubmitReserve = async () => {
     Loading.hide();
   }
 };
+
+watch(trip, async () => {
+  if (trip.value) {
+    getPassengers(trip.value.passengerIds)
+      .then((response) => (passengers.value = response.documents))
+      .catch(captureApiException);
+  }
+});
 
 Loading.show();
 getTripById(props.id)
@@ -165,8 +175,7 @@ getTripById(props.id)
         :label="convenience?.title"
       />
 
-      <!-- TODO: Заменить на подгрузку запроса с пользователями с фильтром по id пассажиров -->
-      <template v-if="trip.passengers?.length">
+      <template v-if="passengers.length">
         <q-separator
           spaced
           inset
@@ -175,7 +184,7 @@ getTripById(props.id)
         <q-item-label header>Пассажиры</q-item-label>
 
         <my-item
-          v-for="passenger in trip.passengers"
+          v-for="passenger in passengers"
           :key="passenger.$id"
           chevron
           :label="passenger.name"

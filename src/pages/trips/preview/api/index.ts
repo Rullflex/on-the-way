@@ -1,5 +1,6 @@
 import { Notify } from 'quasar';
-import { getTripById, updateTrip } from 'src/shared/api';
+import { getTripById, Query, updateTrip, usersApi } from 'src/shared/api';
+import { IUser } from 'src/shared/types';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
 import { useUserStore } from 'src/stores/user';
 
@@ -44,3 +45,5 @@ export const cancelReservation = async (tripId: string) => {
 
   return updatedTrip;
 };
+
+export const getPassengers = (passengerIds: string[]) => usersApi.getAll<IUser>([Query.equal('$id', passengerIds)]);
