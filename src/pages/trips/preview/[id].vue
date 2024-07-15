@@ -48,7 +48,7 @@ const handleSubmitReserve = async () => {
 };
 
 watch(trip, async () => {
-  if (trip.value) {
+  if (trip.value && trip.value.passengerIds?.length) {
     getPassengers(trip.value.passengerIds)
       .then((response) => (passengers.value = response.documents))
       .catch(captureApiException);
