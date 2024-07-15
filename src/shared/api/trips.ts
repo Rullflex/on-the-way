@@ -13,7 +13,7 @@ export const tripsApi = new AppWriteApi({
 
 export const getTripById = (id: string) => tripsApi.getById<ITrip>(id);
 
-export const getAllTrips = () => tripsApi.getAll<ITrip>();
+export const getAllTrips = (queries?: string[]) => tripsApi.getAll<ITrip>(queries);
 
 export const getTripsByDate = (date: string) => tripsApi.getAll<ITrip>([Query.equal('departureDate', date)]);
 
