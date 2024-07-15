@@ -1,25 +1,27 @@
 <script setup lang="ts">
-import { deleteCar, getCarById, updateCar, Response } from 'src/shared/api';
+import { deleteCar, updateCar } from 'src/shared/api';
 import { ICar } from 'src/shared/types';
 import { MyItem } from 'src/shared/ui';
 import { captureApiException } from 'src/shared/utils';
+import { useUserStore } from 'stores/user';
+import { AppwriteException } from 'appwrite';
+
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
 const props = defineProps<{ id: string }>();
 
 const $q = useQuasar();
 const router = useRouter();
+const userStore = useUserStore();
 
 const isDialogVisible = ref(false);
-const carResponse = ref<Response<ICar>>();
-
 const carItems = computed(() => {
-  const { licensePlate, name, year, bodyType, color } = carResponse.value || {};
+  const { licensePlate, name, year, bodyType, color } = { ...userStore.cars.find((car) => car.$id === props.id) };
 
   return [
     { label: 'Регистрационный номер', value: licensePlate },
     { label: 'Марка', value: name },
-    { label: 'Год выпуска', value: typeof year === 'number' && String(year) },
+    { label: 'Год выпуска', value: year?.toString() },
     { label: 'Тип кузова', value: bodyType },
     { label: 'Цвет', value: color },
   ];
@@ -33,27 +35,30 @@ const handleDeleteCard = () => {
     cancel: true,
   }).onOk(async () => {
     $q.loading.show();
-    await deleteCar(props.id).catch(captureApiException);
-    $q.loading.hide();
-    router.back();
+    try {
+      await deleteCar(props.id);
+      userStore.deleteCar(props.id);
+    } catch (err) {
+      captureApiException(err as AppwriteException);
+    } finally {
+      $q.loading.hide();
+      router.back();
+    }
   });
 };
 
 const handleUpdateCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
-  await updateCar(props.id, payload).catch(captureApiException);
-  $q.loading.hide();
-
-  isDialogVisible.value = false;
+  try {
+    await updateCar(props.id, payload);
+    userStore.updateCar(props.id, payload);
+  } catch (err) {
+    captureApiException(err as AppwriteException);
+  } finally {
+    $q.loading.hide();
+    isDialogVisible.value = false;
+  }
 };
-
-onMounted(async () => {
-  $q.loading.show();
-  await getCarById(props.id)
-    .then((response) => (carResponse.value = response))
-    .catch(captureApiException);
-  $q.loading.hide();
-});
 </script>
 
 <template>

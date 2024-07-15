@@ -9,7 +9,7 @@ export const getCarById = (id: string) => carsApi.getById<ICar>(id);
 
 export const getAllCars = () => carsApi.getAll<ICar>();
 
-export const createCar = (payload: Omit<ICar, 'user'> & { user: string }) => carsApi.create(payload);
+export const createCar = (payload: Omit<ICar, 'user'> & { user: string }) => carsApi.create<ICar>(payload);
 
 export const deleteCar = (id: string) => carsApi.delete(id);
 
