@@ -1,63 +1,47 @@
 <script setup lang="ts">
-import TripPreviewCard from 'src/features/TripPreviewCard.vue';
+import { Loading } from 'quasar';
+import { captureApiException } from 'src/shared/utils';
+import { getArchivedUserTrips } from './api';
+import { useUserStore } from 'src/stores/user';
 import { ITrip } from 'src/shared/types';
-import { MyBackBtn } from 'src/shared/ui';
+import { Response } from 'src/shared/api';
+import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 
-const testTripData = {
-  price: 1000,
-  canPickUpFromPlace: true,
-  canDriveToPlace: true,
-  departureAddress: 'ул. Пушкина, д. 4',
-  arrivalAddress: 'ул. Ленина, д. 10',
-  departureCity: 'Москва',
-  arrivalCity: 'Санкт-Петербург',
-  departureTime: Date(),
-  totalPassengers: 4,
-  comment: 'Комментарий',
-  conveniences: ['wifi', 'parking'],
-  driver: {
-    name: 'Иван',
-    surname: 'Иванов',
-    phone: '+7(999)999-99-99',
-    email: 'n0qg6@example.com',
-    dateOfBirth: Date(),
-    avatarFileId: '',
-    cars: [
-      {
-        name: 'BMW X5',
-        year: 2021,
-        color: 'black',
-        licensePlate: 'А000АА',
-        bodyType: 'Седан',
-      },
-    ],
-    trips: [],
-  },
-} as unknown as ITrip;
+const userStore = useUserStore();
+const archivedTrips = ref<Response<ITrip>[]>();
+
+const pageTitle = computed(() => (archivedTrips.value?.length ? 'Архив поездок' : 'В архиве поездок пока пусто'));
+
+Loading.show();
+getArchivedUserTrips(userStore.accountId)
+  .then((response) => (archivedTrips.value = response.documents))
+  .catch(captureApiException)
+  .finally(Loading.hide);
 </script>
 
 <template>
-  <q-layout>
-    <q-header
-      reveal
-      class="bg-white text-blue-grey-8 q-pa-md"
+  <q-page
+    v-if="archivedTrips"
+    padding
+  >
+    <h5 class="q-px-md q-mb-md">{{ pageTitle }}</h5>
+
+    <q-list
+      v-if="archivedTrips.length"
+      class="column gap-sm q-pa-md"
     >
-      <MyBackBtn fallback-route="/rides" />
-    </q-header>
-
-    <q-page-container>
-      <q-page padding>
-        <h5 class="q-px-md q-mb-md">Архив поездок</h5>
-
-        <q-list class="q-pa-md">
-          <TripPreviewCard :trip="testTripData" />
-        </q-list>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+      <TripPreviewCard
+        v-for="trip in archivedTrips"
+        :key="trip.$id"
+        :trip="trip"
+        :to="`/trips/preview/${trip.$id}`"
+      />
+    </q-list>
+  </q-page>
 </template>
 
 <route lang="yaml">
 meta:
-  layout: blank
+  layout: subPage
+  fallbackRoute: '/rides'
 </route>
