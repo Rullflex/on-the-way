@@ -81,7 +81,10 @@ module.exports = configure(function (/* ctx */) {
           }
         }, { server: false }],
         ['vite-plugin-pages', {
-          exclude: ['**/ui/*.vue'],
+          exclude: [
+            '**/ui/*.vue',
+            '**/api/*.vue',
+          ],
         }],
         ['vite-plugin-vue-layouts'],
         ['unplugin-auto-import/vite', {

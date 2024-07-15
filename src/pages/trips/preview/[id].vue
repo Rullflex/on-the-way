@@ -2,14 +2,18 @@
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { captureApiException, getPluralNoun } from 'src/shared/utils';
 import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
-import { MyAvatar, MyBackBtn } from 'src/shared/ui';
-import { getAvatarURL, getTripById, Response } from 'src/shared/api';
+import { MyAvatar } from 'src/shared/ui';
+import { AppwriteException, getAvatarURL, getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import { Loading, date as QDate } from 'quasar';
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
+import { useUserStore } from 'src/stores/user';
+import ReserveTripButton from './ui/ReserveTripButton.vue';
+import { reserveTrip, cancelReservation } from './api';
 
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
+const userStore = useUserStore();
 
 const tripDate = computed(() => {
   if (!trip.value?.departureDate) {
@@ -23,6 +27,30 @@ const tripDate = computed(() => {
 const tripConveniences = computed(() => {
   return trip.value?.conveniences.map((name) => TRIP_CONVENIENCES.find((item) => item.name === name)!) ?? [];
 });
+
+const isCurrentUserDriver = computed(() => {
+  return trip.value?.driver.$id === userStore.accountId;
+});
+
+const isAlreadyReserved = computed(() => {
+  return Boolean(trip.value?.passengers.find((p) => p.$id === userStore.accountId));
+});
+
+const handleSubmitReserve = async () => {
+  Loading.show();
+  try {
+    if (!isAlreadyReserved.value) {
+      const response = await reserveTrip(props.id);
+      response && (trip.value = response);
+    } else {
+      trip.value = await cancelReservation(props.id);
+    }
+  } catch (error) {
+    captureApiException(error as AppwriteException);
+  } finally {
+    Loading.hide();
+  }
+};
 
 Loading.show();
 getTripById(props.id)
@@ -161,6 +189,17 @@ getTripById(props.id)
         label="Пожаловаться на поездку"
       />
     </q-list>
+
+    <div
+      v-if="!isCurrentUserDriver"
+      class="sticky-bottom q-pa-md bg-white"
+    >
+      <ReserveTripButton
+        class="full-width"
+        :is-already-reserved="isAlreadyReserved"
+        @submit="handleSubmitReserve"
+      />
+    </div>
   </q-page>
 </template>
 

@@ -28,6 +28,7 @@ export interface ITrip {
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
   driver: Response<IUser>;
+  passengers: Response<IUser>[];
   car: Response<ICar>;
   comment: string;
 }
