@@ -34,7 +34,12 @@ if (store.origin && store.destination && store.date) {
 }
 
 getTripsByDate(store.date)
-  .then((response) => (trips.value = response.documents))
+  .then((response) => {
+    trips.value = response.documents.filter((trip) =>
+      (trip.departureCity === store.origin || trip.intermediateCities.includes(store.origin)) &&
+      (trip.arrivalCity === store.destination || trip.intermediateCities.includes(store.destination))
+    );
+  })
   .catch(captureApiException)
   .finally(() => (isLoading.value = false));
 </script>
