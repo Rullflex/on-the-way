@@ -1,28 +1,12 @@
 <script setup lang='ts'>
 import { useTripSettingsStore } from 'stores/trip-settings';
-import { date as QDateUtil } from 'quasar';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
-import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
+import { useFormattedDate } from 'src/shared/hooks/useFormattedDate';
 
 const store = useTripSettingsStore();
 const { date } = storeToRefs(store);
 
-const formattedDate = computed(() => {
-  if (!date.value) {
-    return '';
-  }
-
-  const [dayOfWeek, dayOfMonth, month] = QDateUtil.formatDate(date.value, 'ddd D M').split(' ');
-
-  if (Number(dayOfMonth) === new Date().getDate()) {
-    return 'Сегодня';
-  } else if (Number(dayOfMonth) === new Date().getDate() + 1) {
-    return 'Завтра';
-  }
-
-  return `${dayOfWeek}, ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]}`;
-});
+const { shortFormatDate } = useFormattedDate(date);
 
 const emit = defineEmits(['chooseDateBtnClick']);
 </script>
@@ -34,7 +18,7 @@ const emit = defineEmits(['chooseDateBtnClick']);
   >
     <q-field
       label="Дата"
-      :stack-label="Boolean(formattedDate)"
+      :stack-label="Boolean(shortFormatDate)"
     >
       <template v-slot:prepend>
         <q-icon
@@ -44,7 +28,7 @@ const emit = defineEmits(['chooseDateBtnClick']);
       </template>
 
       <template v-slot:control>
-        {{ formattedDate }}
+        {{ shortFormatDate }}
       </template>
     </q-field>
   </div>

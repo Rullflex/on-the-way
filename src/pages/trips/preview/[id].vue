@@ -1,28 +1,21 @@
 <script setup lang="ts">
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { captureApiException, getPluralNoun } from 'src/shared/utils';
-import { MONTHS_NAMES_IN_GENITIVE } from 'src/shared/constants';
 import { MyAvatar } from 'src/shared/ui';
 import { AppwriteException, getAvatarURL, getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
-import { Loading, date as QDate } from 'quasar';
+import { Loading } from 'quasar';
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { useUserStore } from 'src/stores/user';
 import ReserveTripButton from './ui/ReserveTripButton.vue';
 import { reserveTrip, cancelReservation } from './api';
+import { useFormattedDate } from 'src/shared/hooks/useFormattedDate';
 
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
 const userStore = useUserStore();
 
-const tripDate = computed(() => {
-  if (!trip.value?.departureDate) {
-    return '';
-  }
-
-  const monthIndex = Number(QDate.formatDate(trip.value.departureDate, 'M')) - 1;
-  return `${QDate.formatDate(trip.value.departureDate, 'ddd, D')} ${MONTHS_NAMES_IN_GENITIVE[monthIndex]}`;
-});
+const { shortFormatDate } = useFormattedDate(ref(trip.value?.departureDate ?? ''));
 
 const tripConveniences = computed(() => {
   return trip.value?.conveniences.map((name) => TRIP_CONVENIENCES.find((item) => item.name === name)!) ?? [];
@@ -62,7 +55,7 @@ getTripById(props.id)
 <template>
   <q-page v-if="trip">
     <div class="q-px-lg">
-      <h5 class="q-mb-lg">{{ tripDate }}</h5>
+      <h5 class="q-mb-lg">{{ shortFormatDate }}</h5>
 
       <div class="column">
         <span class="text-bold">{{ trip.canPickUpFromPlace ? 'Заберу с места' : trip.departureAddress }}</span>
