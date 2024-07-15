@@ -10,7 +10,6 @@ export interface IUser {
   dateOfBirth: string | null;
   avatarFileId: string | null;
   cars: Response<ICar>[];
-  trips: Response<ICar>[];
 }
 
 export interface ITrip {
@@ -27,7 +26,8 @@ export interface ITrip {
   canPickUpFromPlace: boolean;
   canDriveToPlace: boolean;
   driver: Response<IUser>;
-  passengers: Response<IUser>[];
+  driverId: string;
+  passengerIds: string[];
   car: Response<ICar>;
   comment: string;
 }

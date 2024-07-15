@@ -48,14 +48,14 @@ const conveniences = computed(() =>
         <my-avatar :src="trip.driver?.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />
 
         <div
-          v-if="trip.passengers"
+          v-if="trip.passengerIds"
           class="col-auto column items-end"
         >
           <span class="text-bold">{{
-            trip.passengers.length >= trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
+            trip.passengerIds.length >= trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
           }}</span>
           <div class="row items-center gap-xs text-caption">
-            <span>{{ trip.passengers.length }}/{{ trip.totalPassengers }}</span>
+            <span>{{ trip.passengerIds.length }}/{{ trip.totalPassengers }}</span>
             <q-icon name="eva-people-outline" />
           </div>
         </div>

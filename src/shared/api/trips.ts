@@ -2,10 +2,9 @@ import { Query } from 'appwrite';
 import { AppWriteApi } from 'src/plugins/appwrite';
 import { ITrip } from 'src/shared/types';
 
-type ITripRequestPayload = Omit<ITrip, 'driver' | 'car' | 'passengers'> & {
+type ITripRequestPayload = Omit<ITrip, 'driver' | 'car'> & {
   driver: string;
   car: string;
-  passengers?: string[];
 };
 
 export const tripsApi = new AppWriteApi({

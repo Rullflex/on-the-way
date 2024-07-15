@@ -140,6 +140,9 @@ const handlePublishBtnClick = async () => {
     canPickUpFromPlace: departureCity.value.canDriveToPassengerLocation,
     canDriveToPlace: destinationCity.value.canDriveToPassengerLocation,
     driver: userStore.accountId,
+    // Передаем отдельно id так как appwrite еще не умеет работать с параметрами вложенных сущностей
+    driverId: userStore.accountId,
+    passengerIds: [],
     comment: comment.value,
     car: carId.value,
   };

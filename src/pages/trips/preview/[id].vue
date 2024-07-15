@@ -26,7 +26,7 @@ const isCurrentUserDriver = computed(() => {
 });
 
 const isAlreadyReserved = computed(() => {
-  return Boolean(trip.value?.passengers.find((p) => p.$id === userStore.accountId));
+  return Boolean(trip.value?.passengerIds.find((id) => id === userStore.accountId));
 });
 
 const handleSubmitReserve = async () => {
@@ -79,8 +79,8 @@ getTripById(props.id)
 
     <div class="q-px-lg">
       <span class="text-h6">{{ trip.price }} ₽</span> за 1 пассажира, осталось
-      {{ trip.totalPassengers - trip.passengers.length }}
-      {{ getPluralNoun(trip.totalPassengers - trip.passengers.length, 'место', 'места', 'мест') }}
+      {{ trip.totalPassengers - trip.passengerIds.length }}
+      {{ getPluralNoun(trip.totalPassengers - trip.passengerIds.length, 'место', 'места', 'мест') }}
     </div>
 
     <q-separator
@@ -165,7 +165,8 @@ getTripById(props.id)
         :label="convenience?.title"
       />
 
-      <template v-if="trip.passengers.length">
+      <!-- TODO: Заменить на подгрузку запроса с пользователями с фильтром по id пассажиров -->
+      <template v-if="trip.passengers?.length">
         <q-separator
           spaced
           inset

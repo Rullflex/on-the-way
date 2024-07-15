@@ -7,9 +7,9 @@ const userStore = useUserStore();
 const tripSettingsStore = useTripSettingsStore();
 
 export const reserveTrip = async (tripId: string) => {
-  const { passengers, totalPassengers } = await getTripById(tripId);
+  const { passengerIds, totalPassengers } = await getTripById(tripId);
 
-  if (totalPassengers - passengers.length < tripSettingsStore.passengers) {
+  if (totalPassengers - passengerIds.length < tripSettingsStore.passengers) {
     Notify.create({
       type: 'negative',
       message: 'Недостаточно свободных мест',
@@ -19,7 +19,7 @@ export const reserveTrip = async (tripId: string) => {
   }
 
   const updatedTrip = await updateTrip(tripId, {
-    passengers: [...passengers.map((p) => p.$id), userStore.accountId],
+    passengerIds: [...passengerIds, userStore.accountId],
   });
 
   Notify.create({
@@ -34,7 +34,7 @@ export const reserveTrip = async (tripId: string) => {
 export const cancelReservation = async (tripId: string) => {
   const trip = await getTripById(tripId);
   const updatedTrip = await updateTrip(tripId, {
-    passengers: trip.passengers.map((p) => p.$id).filter((id) => id !== userStore.accountId) ?? [],
+    passengerIds: trip.passengerIds.filter((id) => id !== userStore.accountId) ?? [],
   });
 
   Notify.create({

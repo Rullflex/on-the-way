@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const props = defineProps<IProps>();
-const user = ref<Omit<IUser, 'cars' | 'trips' | 'surname'>>();
+const user = ref<Omit<IUser, 'cars' | 'surname'>>();
 
 const userAge = computed(() => {
   if (!user.value?.dateOfBirth) {

@@ -1,7 +1,7 @@
 import { getAvatarURL } from 'src/shared/api';
 import { IUser } from 'src/shared/types';
 
-type State = Omit<IUser, 'trips'> & { accountId: string };
+type State = IUser & { accountId: string };
 
 export const useUserStore = defineStore('user', {
   state: () =>
