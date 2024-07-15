@@ -17,7 +17,10 @@ const trip = ref<Response<ITrip>>();
 const passengers = ref<Response<IUser>[]>([]);
 const userStore = useUserStore();
 
-const { shortFormatDate } = useFormattedDate(ref(trip.value?.departureDate ?? ''));
+const tripData = computed(() => {
+  const { shortFormatDate } = useFormattedDate(ref(trip.value?.departureDate ?? ''));
+  return shortFormatDate.value;
+});
 
 const tripConveniences = computed(() => {
   return trip.value?.conveniences.map((name) => TRIP_CONVENIENCES.find((item) => item.name === name)!) ?? [];
@@ -65,7 +68,7 @@ getTripById(props.id)
 <template>
   <q-page v-if="trip">
     <div class="q-px-lg">
-      <h5 class="q-mb-lg">{{ shortFormatDate }}</h5>
+      <h5 class="q-mb-lg">{{ tripData }}</h5>
 
       <div class="column">
         <span class="text-bold">{{ trip.canPickUpFromPlace ? 'Заберу с места' : trip.departureAddress }}</span>
