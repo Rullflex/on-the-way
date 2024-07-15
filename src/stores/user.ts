@@ -1,5 +1,5 @@
-import { getAvatarURL } from 'src/shared/api';
-import { IUser } from 'src/shared/types';
+import { getAvatarURL, Response } from 'src/shared/api';
+import { ICar, IUser } from 'src/shared/types';
 
 type State = IUser & { accountId: string };
 
@@ -17,6 +17,17 @@ export const useUserStore = defineStore('user', {
     } as State),
   getters: {
     avatarURL: (state) => (state.avatarFileId ? getAvatarURL(state.avatarFileId) : ''),
+  },
+  actions: {
+    addCar(car: Response<ICar>) {
+      this.cars = [...this.cars, car];
+    },
+    updateCar(carId: string, payload: Partial<ICar>) {
+      this.cars = this.cars.map((car) => (car.$id === carId ? { ...car, ...payload } : car));
+    },
+    deleteCar(carId: string) {
+      this.cars = this.cars.filter((car) => car.$id !== carId);
+    },
   },
 });
 

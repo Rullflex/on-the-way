@@ -5,6 +5,7 @@ import { captureApiException } from 'src/shared/utils';
 import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 import { useUserStore } from 'stores/user';
+import { AppwriteException } from 'appwrite';
 
 const carId = defineModel({ default: '' });
 
@@ -16,12 +17,16 @@ const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/Upda
 
 const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
-  await createCar({ ...payload, user: userStore.accountId }).then(
-    ({ $id }) => (carId.value = $id),
-    captureApiException
-  );
-  $q.loading.hide();
-  isDialogVisible.value = false;
+  try {
+    const response = await createCar({ ...payload, user: userStore.accountId });
+    userStore.addCar(response);
+    carId.value = response.$id;
+  } catch (err) {
+    captureApiException(err as AppwriteException);
+  } finally {
+    $q.loading.hide();
+    isDialogVisible.value = false;
+  }
 };
 </script>
 

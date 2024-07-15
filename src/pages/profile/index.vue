@@ -8,6 +8,7 @@ import LinksSection from 'pages/profile/ui/LinksSection.vue';
 import CarsSection from 'pages/profile/ui/CarsSection.vue';
 import ProfileSection from 'pages/profile/ui/ProfileSection.vue';
 import SectionSeparator from 'pages/profile/ui/SectionSeparator.vue';
+import { AppwriteException } from 'appwrite';
 
 const UpdateCar = defineAsyncComponent(() => import('src/features/UpdateCar/UpdateCar.vue'));
 
@@ -17,9 +18,15 @@ const userStore = useUserStore();
 
 const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
   $q.loading.show();
-  await createCar({ ...payload, user: userStore.accountId }).catch(captureApiException);
-  $q.loading.hide();
-  isDialogVisible.value = false;
+  try {
+    const response = await createCar({ ...payload, user: userStore.accountId });
+    userStore.addCar(response);
+  } catch (err) {
+    captureApiException(err as AppwriteException);
+  } finally {
+    $q.loading.hide();
+    isDialogVisible.value = false;
+  }
 };
 </script>
 
@@ -30,9 +37,7 @@ const handleAddedCar = async (payload: Omit<ICar, 'user'>) => {
 
       <SectionSeparator />
 
-      <CarsSection
-        @add-car-btn-click="isDialogVisible = true"
-      />
+      <CarsSection @add-car-btn-click="isDialogVisible = true" />
 
       <SectionSeparator />
 
