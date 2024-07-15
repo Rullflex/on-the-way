@@ -66,7 +66,7 @@ getTripsByDate(store.date)
             :key="trip.$id"
             :trip="trip"
             :to="`/trips/preview/${trip.$id}`"
-            :disabled="trip.alreadyReserved === trip.totalPassengers"
+            :disabled="trip.passengers.length >= trip.totalPassengers"
           />
         </q-list>
 

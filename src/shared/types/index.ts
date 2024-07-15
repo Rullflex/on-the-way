@@ -18,7 +18,6 @@ export interface ITrip {
   departureDate: string;
   departureTime: string;
   totalPassengers: number;
-  alreadyReserved: number;
   conveniences: TripConveniencesNames[];
   departureCity: string;
   arrivalCity: string;

@@ -111,15 +111,15 @@ const handleCityOptionChoose = (city: ICityInfo) => {
 };
 
 const departureCityList = computed(() => {
-  return CITY_NAMES.filter(city => city !== destinationCity.value.city && !intermediateCities.value.includes(city));
+  return CITY_NAMES.filter((city) => city !== destinationCity.value.city && !intermediateCities.value.includes(city));
 });
 
 const destinationCityList = computed(() => {
-  return CITY_NAMES.filter(city => city !== departureCity.value.city && !intermediateCities.value.includes(city));
+  return CITY_NAMES.filter((city) => city !== departureCity.value.city && !intermediateCities.value.includes(city));
 });
 
 const intermediateCityList = computed(() => {
-  return CITY_NAMES.filter(city => city !== departureCity.value.city && city !== destinationCity.value.city);
+  return CITY_NAMES.filter((city) => city !== departureCity.value.city && city !== destinationCity.value.city);
 });
 
 const router = useRouter();
@@ -131,7 +131,6 @@ const handlePublishBtnClick = async () => {
     departureDate: date.value,
     departureTime: time.value,
     totalPassengers: passengersAmount.value,
-    alreadyReserved: 0,
     conveniences: tripConveniences.value,
     departureCity: departureCity.value.city,
     arrivalCity: destinationCity.value.city,

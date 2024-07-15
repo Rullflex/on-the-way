@@ -86,8 +86,8 @@ getTripById(props.id)
 
     <div class="q-px-lg">
       <span class="text-h6">{{ trip.price }} ₽</span> за 1 пассажира, осталось
-      {{ trip.totalPassengers - trip.alreadyReserved }}
-      {{ getPluralNoun(trip.totalPassengers - trip.alreadyReserved, 'место', 'места', 'мест') }}
+      {{ trip.totalPassengers - trip.passengers.length }}
+      {{ getPluralNoun(trip.totalPassengers - trip.passengers.length, 'место', 'места', 'мест') }}
     </div>
 
     <q-separator

@@ -45,14 +45,17 @@ const conveniences = computed(() =>
 
     <div class="col column gap-sm">
       <div class="row justify-between">
-        <my-avatar :src="trip.driver.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />
+        <my-avatar :src="trip.driver?.avatarFileId ? getAvatarURL(trip.driver.avatarFileId) : ''" />
 
-        <div class="col-auto column items-end">
+        <div
+          v-if="trip.passengers"
+          class="col-auto column items-end"
+        >
           <span class="text-bold">{{
-            trip.alreadyReserved === trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
+            trip.passengers.length >= trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
           }}</span>
           <div class="row items-center gap-xs text-caption">
-            <span>{{ trip.alreadyReserved ?? 0 }}/{{ trip.totalPassengers }}</span>
+            <span>{{ trip.passengers.length }}/{{ trip.totalPassengers }}</span>
             <q-icon name="eva-people-outline" />
           </div>
         </div>
@@ -60,7 +63,7 @@ const conveniences = computed(() =>
 
       <div class="row">
         <div class="column">
-          <span class="text-subtitle2">{{ trip.driver.name }}</span>
+          <span class="text-subtitle2">{{ trip.driver?.name }}</span>
           <span class="text-caption">{{ trip.car?.name }}</span>
         </div>
       </div>
