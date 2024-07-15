@@ -171,6 +171,27 @@ getTripById(props.id)
         :icon="convenience?.icon"
         :label="convenience?.title"
       />
+
+      <template v-if="trip.passengers.length">
+        <q-separator
+          spaced
+          inset
+        />
+
+        <q-item-label header>Пассажиры</q-item-label>
+
+        <my-item
+          v-for="passenger in trip.passengers"
+          :key="passenger.$id"
+          chevron
+          :label="passenger.name"
+          :to="`/profile/preview/${passenger.$id}`"
+        >
+          <template #append>
+            <my-avatar :src="passenger.avatarFileId ? getAvatarURL(passenger.avatarFileId) : ''" />
+          </template>
+        </my-item>
+      </template>
     </q-list>
 
     <q-separator
