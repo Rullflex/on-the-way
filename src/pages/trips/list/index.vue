@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { captureApiException } from 'src/shared/utils';
-import { getTripsByDate, Response } from 'src/shared/api';
+import { Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
+import { getFilteredTrips } from './api';
 
 const isLoading = ref<boolean>(true);
 const trips = ref<Response<ITrip>[]>([]);
@@ -33,8 +34,16 @@ if (store.origin && store.destination && store.date) {
   router.push({ path: '/search', replace: true });
 }
 
-getTripsByDate(store.date)
-  .then((response) => (trips.value = response.documents))
+getFilteredTrips({
+  date: store.date,
+  origin: store.origin,
+  destination: store.destination,
+})
+  .then((response) => {
+    trips.value = response.documents.filter(
+      (trip) => trip.totalPassengers - trip.passengerIds.length >= store.passengers
+    );
+  })
   .catch(captureApiException)
   .finally(() => (isLoading.value = false));
 </script>
