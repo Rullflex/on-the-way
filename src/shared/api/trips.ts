@@ -1,4 +1,3 @@
-import { Query } from 'appwrite';
 import { AppWriteApi } from 'src/plugins/appwrite';
 import { ITrip } from 'src/shared/types';
 
@@ -14,8 +13,6 @@ export const tripsApi = new AppWriteApi({
 export const getTripById = (id: string) => tripsApi.getById<ITrip>(id);
 
 export const getAllTrips = (queries?: string[]) => tripsApi.getAll<ITrip>(queries);
-
-export const getTripsByDate = (date: string) => tripsApi.getAll<ITrip>([Query.equal('departureDate', date)]);
 
 export const createTrip = (payload: ITripRequestPayload) => tripsApi.create(payload);
 
