@@ -17,7 +17,9 @@ const trip = ref<Response<ITrip>>();
 const passengers = ref<Response<IUser>[]>([]);
 const userStore = useUserStore();
 
-const { shortFormatDate } = useFormattedDate(ref(trip.value?.departureDate ?? ''));
+const { shortFormatDate } = useFormattedDate(
+  computed(() => trip.value?.departureDate ?? ''), { shortcuts: false }
+);
 
 const tripConveniences = computed(() => {
   return trip.value?.conveniences.map((name) => TRIP_CONVENIENCES.find((item) => item.name === name)!) ?? [];
