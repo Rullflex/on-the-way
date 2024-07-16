@@ -77,6 +77,18 @@ getTripById(props.id)
           class="q-my-sm"
         />
 
+        <div
+          v-for="city in trip.intermediateCities"
+          :key="city"
+        >
+          <div class="text-subtitle2">{{ city }}</div>
+
+          <q-icon
+            name="eva-more-vertical-outline"
+            class="q-my-sm"
+          />
+        </div>
+
         <span class="text-bold">{{ trip.canDriveToPlace ? 'Довезу до места' : trip.arrivalAddress }}</span>
         <span class="text-subtitle2">{{ trip.arrivalCity }}</span>
       </div>
