@@ -17,6 +17,7 @@ const isPasswordVisible = ref(false);
 const isPending = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 const handleUserRegister = async () => {
   isPending.value = true;
@@ -32,7 +33,7 @@ const handleUserRegister = async () => {
       email: email.value,
     });
 
-    router.push({ path: '/', replace: true });
+    router.push({ path: route.redirectedFrom?.path ?? '/', replace: true });
   } catch (error) {
     captureApiException(error as AppwriteException);
   } finally {
