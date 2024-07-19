@@ -14,6 +14,7 @@ const isPasswordVisible = ref(false);
 const isPending = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 const handleUserLogin = async () => {
   isPending.value = true;
@@ -31,7 +32,7 @@ const handleUserLogin = async () => {
       cars: user.cars,
     });
 
-    router.push({ path: '/', replace: true });
+    router.push({ path: route.redirectedFrom?.path ?? '/', replace: true });
   } catch (error) {
     captureApiException(error as AppwriteException);
   } finally {
