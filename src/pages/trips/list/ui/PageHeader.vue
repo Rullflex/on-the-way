@@ -6,12 +6,12 @@ import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { TripConveniencesNames } from 'src/shared/enums';
 
 const store = useTripSettingsStore();
-const { origin, destination, date, passengers } = storeToRefs(store);
+const { origin, destination, date, passengers, conveniences } = storeToRefs(store);
 
 const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
 const selectedSortOption = ref(null);
 
-const tripConveniences = ref<Set<TripConveniencesNames>>(new Set());
+const tripConveniences = ref<Set<TripConveniencesNames>>(new Set(conveniences.value));
 
 const toggleConvenience = (name: TripConveniencesNames) => {
   if (tripConveniences.value.has(name)) {
@@ -19,12 +19,18 @@ const toggleConvenience = (name: TripConveniencesNames) => {
   } else {
     tripConveniences.value.add(name);
   }
+  conveniences.value = Array.from(tripConveniences.value);
 };
+
 const isDialogVisible = ref<boolean>(false);
 
 const showDialog = () => {
   isDialogVisible.value = true;
 };
+
+watch(tripConveniences, () => {
+  store.conveniences = Array.from(tripConveniences.value);
+}, { deep: true });
 </script>
 
 <template>

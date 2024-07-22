@@ -7,12 +7,14 @@ import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
 import { getFilteredTrips } from './api';
 
+const store = useTripSettingsStore();
+const { origin, destination, date, passengers, conveniences } = storeToRefs(store);
+
 const isLoading = ref<boolean>(true);
 const trips = ref<Response<ITrip>[]>([]);
 
 const route = useRoute();
 const router = useRouter();
-const store = useTripSettingsStore();
 
 if (store.origin && store.destination && store.date) {
   router.replace({
@@ -34,18 +36,26 @@ if (store.origin && store.destination && store.date) {
   router.push({ path: '/search', replace: true });
 }
 
-getFilteredTrips({
-  date: store.date,
-  origin: store.origin,
-  destination: store.destination,
-})
-  .then((response) => {
-    trips.value = response.documents.filter(
-      (trip) => trip.totalPassengers - trip.passengerIds.length >= store.passengers
-    );
+const updateTrips = () => {
+  isLoading.value = true;
+  getFilteredTrips({
+    date: store.date,
+    origin: store.origin,
+    destination: store.destination,
+    conveniences: conveniences.value,
   })
-  .catch(captureApiException)
-  .finally(() => (isLoading.value = false));
+    .then((response) => {
+      trips.value = response.documents.filter(
+        (trip) => trip.totalPassengers - trip.passengerIds.length >= store.passengers
+      );
+    })
+    .catch(captureApiException)
+    .finally(() => (isLoading.value = false));
+};
+
+watch([origin, destination, date, passengers, conveniences], updateTrips, { deep: true });
+
+updateTrips();
 </script>
 
 <template>
@@ -94,8 +104,3 @@ getFilteredTrips({
     </q-page-container>
   </q-layout>
 </template>
-
-<route lang="yaml">
-meta:
-  layout: blank
-</route>
