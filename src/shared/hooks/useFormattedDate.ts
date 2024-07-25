@@ -7,8 +7,7 @@ interface IOptions {
 }
 
 const getDateData = (date: string) => {
-  const [dayOfWeek, dayOfMonth, month, year] =
-    QDateUtil.formatDate(date, 'ddd D M YYYY').split(' ');
+  const [dayOfWeek, dayOfMonth, month, year] = QDateUtil.formatDate(date, 'ddd D M YYYY').split(' ');
 
   return { dayOfWeek, dayOfMonth, month, year };
 };
@@ -39,7 +38,7 @@ export function useFormattedDate(dateRef: Ref<string> | Ref<null>, options: IOpt
 
     const { dayOfMonth, month, year } = getDateData(dateRef.value);
 
-    return `${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month)]} ${year}`;
+    return `${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]} ${year}`;
   });
 
   return { shortFormatDate, fullFormatDate };
