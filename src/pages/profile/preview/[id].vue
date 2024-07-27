@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const props = defineProps<IProps>();
-const user = ref<Omit<IUser, 'cars' | 'surname'>>();
+const user = ref<Omit<IUser, 'cars'>>();
 
 const userAge = computed(() => {
   if (!user.value?.dateOfBirth) {
@@ -31,6 +31,7 @@ getUserById(props.id)
   .then((response) => {
     user.value = {
       name: response.name,
+      surname: response.surname,
       email: response.email,
       phone: response.phone,
       dateOfBirth: response.dateOfBirth,
@@ -46,7 +47,7 @@ getUserById(props.id)
     <q-list class="q-px-sm">
       <q-item>
         <q-item-section>
-          <q-item-label class="text-h5">{{ user.name }}</q-item-label>
+          <q-item-label class="text-h5">{{ user.name }} {{ user.surname }}</q-item-label>
           <q-item-label
             v-if="userAge"
             caption
@@ -63,39 +64,25 @@ getUserById(props.id)
         </q-item-section>
       </q-item>
 
-      <my-item
-        color="positive"
-        icon="eva-done-all-outline"
-        label="Профиль подтвержден"
-      />
-
       <q-separator
-        spaced
+        spaced="1rem"
         inset
       />
 
-      <q-item-label header>Личные данные</q-item-label>
+      <q-item-label header>Контактные данные</q-item-label>
 
       <my-item
+        :color="user.phone ? 'primary' : undefined"
+        :href="user.phone ? `tel:${user.phone}` : undefined"
         :label="user.phone ?? 'Не указан'"
         caption="Номер телефона"
       />
 
       <my-item
+        :color="user.email ? 'primary' : undefined"
+        :href="user.email ? `mailto:${user.email}` : undefined"
         :label="user.email ?? 'Не указан'"
         caption="Адрес эл. почты"
-      />
-    </q-list>
-
-    <q-separator
-      spaced="1rem"
-      size="0.5rem"
-    />
-
-    <q-list class="q-px-sm">
-      <my-item
-        color="negative"
-        label="Пожаловаться на пользователя"
       />
     </q-list>
   </q-page>
