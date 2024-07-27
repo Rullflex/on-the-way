@@ -8,9 +8,6 @@ defineProps<{
 
 <template>
   <q-item>
-    <q-item-section side>
-      <q-icon name="eva-car-outline" />
-    </q-item-section>
     <q-item-section>
       <q-item-label>{{ car.name }}</q-item-label>
       <q-item-label caption>

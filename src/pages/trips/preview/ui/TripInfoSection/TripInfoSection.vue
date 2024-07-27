@@ -27,9 +27,6 @@ const props = defineProps<{ trip: ITrip }>();
 
     <TripConveniencesParagraph :conveniences="props.trip.conveniences" />
 
-    <TripPassengersParagraph
-      v-if="props.trip.passengerIds?.length"
-      :passenger-ids="props.trip.passengerIds"
-    />
+    <TripPassengersParagraph :passenger-ids="props.trip.passengerIds ?? []" />
   </q-list>
 </template>

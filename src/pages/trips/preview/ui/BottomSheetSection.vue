@@ -8,10 +8,5 @@ import MyItem from 'src/shared/ui/MyItem.vue';
       color="primary"
       label="Поделиться поездкой"
     />
-
-    <my-item
-      color="primary"
-      label="Пожаловаться на поездку"
-    />
   </q-list>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getAvatarURL, Response } from 'src/shared/api';
-import ParagraphSeparator from 'pages/trips/preview/ui/ParagraphSeparator.vue';
 import { MyAvatar } from 'src/shared/ui';
 import MyItem from 'src/shared/ui/MyItem.vue';
 import { IUser } from 'src/shared/types';
@@ -14,6 +13,10 @@ const props = defineProps<{
 const passengers = ref<Response<IUser>[]>([]);
 
 const fetchPassengers = () => {
+  if (!props.passengerIds.length) {
+    return;
+  }
+
   getPassengers(props.passengerIds)
     .then((response) => (passengers.value = response.documents))
     .catch(captureApiException);
@@ -23,9 +26,12 @@ watch(props.passengerIds, fetchPassengers, { immediate: true });
 </script>
 
 <template>
-  <ParagraphSeparator />
-
   <q-item-label header>Пассажиры</q-item-label>
+
+  <my-item
+    v-if="!passengerIds.length"
+    label="Пока еще нет пассажиров"
+  />
 
   <my-item
     v-for="passenger in passengers"
