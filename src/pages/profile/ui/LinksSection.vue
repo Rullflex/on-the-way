@@ -1,28 +1,23 @@
 <script setup lang="ts">
 import { MyItem } from 'src/shared/ui';
 
-// TODO: СТРАНИЦЫ И ССЫЛКИ НА НИХ
 const otherLinks = [
   {
-    label: 'Ваши отзывы',
-    to: ''
-  },
-  {
     label: 'О проекте',
-    to: '/about'
+    to: '/about',
   },
   {
     label: 'Помощь',
-    to: '/help'
+    to: '/help',
   },
   {
     label: 'Оцените сервис',
-    to: ''
+    to: '',
   },
   {
     label: 'Пользовательское соглашение',
-    to: ''
-  }
+    to: '',
+  },
 ];
 </script>
 
@@ -36,4 +31,3 @@ const otherLinks = [
     chevron
   />
 </template>
-
