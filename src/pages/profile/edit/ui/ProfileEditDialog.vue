@@ -67,7 +67,7 @@ const handleSave = async () => {
 
       <q-input
         v-if="dialogType === ItemType.name"
-        v-model="dialogModel"
+        v-model.trim="dialogModel"
         autofocus
         outlined
         clearable
@@ -78,7 +78,7 @@ const handleSave = async () => {
 
       <q-input
         v-else-if="dialogType === ItemType.surname"
-        v-model="dialogModel"
+        v-model.trim="dialogModel"
         autofocus
         outlined
         clearable
@@ -97,7 +97,7 @@ const handleSave = async () => {
 
       <q-input
         v-else-if="dialogType === ItemType.email"
-        v-model="dialogModel"
+        v-model.trim="dialogModel"
         autofocus
         outlined
         clearable
