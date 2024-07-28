@@ -20,31 +20,6 @@ defineProps<{
     </template>
   </my-item>
 
-  <q-item class="q-my-sm">
-    <q-item-section>
-      <q-btn
-        dense
-        outline
-        size="0.8rem"
-        padding="6px"
-        label="Позвонить"
-        icon="eva-phone-outline"
-        :href="`tel:${driver.phone}`"
-      />
-    </q-item-section>
-
-    <q-item-section>
-      <q-btn
-        dense
-        outline
-        size="0.8rem"
-        padding="6px"
-        label="Написать"
-        icon="eva-message-circle-outline"
-      />
-    </q-item-section>
-  </q-item>
-
   <q-item v-if="comment">
     <q-item-section>
       <q-item-label caption>Комментарий</q-item-label>
