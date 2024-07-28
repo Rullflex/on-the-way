@@ -26,8 +26,9 @@ const conveniences = computed(() =>
       class="column overflow-hidden"
       style="width: 72px"
     >
+      <span class="text-bold">{{ trip.departureTime }}</span>
+
       <span class="text-subtitle2">{{ trip.departureCity }}</span>
-      <span class="text-caption">{{ trip.departureTime }}</span>
 
       <q-icon
         name="eva-more-vertical-outline"
