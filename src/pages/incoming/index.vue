@@ -1,21 +1,14 @@
-<script setup lang="ts">
-import { MyItem, MyAvatar } from 'src/shared/ui';
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <q-page>
-    <h4 class="q-ma-lg">Входящие</h4>
+  <q-page class="column flex-center gap-lg">
+    <h4 class="q-ma-lg text-center">Страница на этапе разработки</h4>
 
-    <q-list class="q-px-sm">
-      <my-item
-        chevron
-        label="Входящая заявка"
-        caption="Сообщение о новой заявке"
-      >
-        <template #append>
-          <my-avatar />
-        </template>
-      </my-item>
-    </q-list>
+    <q-img
+      noSpinner
+      width="80%"
+      src="~/assets/processing.svg"
+      style="max-width: 300px"
+    />
   </q-page>
 </template>

@@ -20,11 +20,6 @@ const navigation = [
     to: '/rides',
   },
   {
-    title: 'Входящие',
-    icon: 'eva-message-circle-outline',
-    to: '/incoming',
-  },
-  {
     title: 'Профиль',
     icon: 'eva-person-outline',
     to: '/profile',
