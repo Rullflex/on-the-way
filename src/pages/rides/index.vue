@@ -9,7 +9,7 @@ import { getFutureUserTrips } from './api';
 
 const $q = useQuasar();
 const userStore = useUserStore();
-const userTrips = ref<Response<ITrip>[]>([]);
+const userTrips = ref<Response<ITrip>[]>();
 
 $q.loading.show();
 getFutureUserTrips(userStore.accountId)
@@ -20,7 +20,7 @@ getFutureUserTrips(userStore.accountId)
 
 <template>
   <q-page
-    v-if="userTrips.length"
+    v-if="userTrips"
     padding
   >
     <template v-if="userTrips.length">
