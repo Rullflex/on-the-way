@@ -40,7 +40,8 @@ const onDatePicked = () => {
   isDialogVisible.value = false;
 };
 
-const onPassengersPicked = () => {
+const onPassengersPicked = (payload: number) => {
+  passengers.value = payload;
   isDialogVisible.value = false;
 };
 

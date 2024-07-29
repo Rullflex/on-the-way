@@ -1,17 +1,22 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
-import { storeToRefs } from 'pinia';
 
 const store = useTripSettingsStore();
-const { passengers } = storeToRefs(store);
 
-const emit = defineEmits(['pick']);
+const passengers = ref(store.passengers);
+
+const emit = defineEmits<{
+  (event: 'pick', passengers: number): void;
+}>();
 </script>
 
 <template>
   <q-card-section class="q-px-lg q-pt-none col column justify-between">
     <h4>Количество бронируемых мест</h4>
-    <div class="column items-center gap-lg" style="flex: 1; justify-content: center">
+    <div
+      class="column items-center gap-lg"
+      style="flex: 1; justify-content: center"
+    >
       <div class="row items-center">
         <q-btn
           flat
@@ -19,7 +24,10 @@ const emit = defineEmits(['pick']);
           icon="eva-minus-circle-outline"
           @click="passengers > 1 && passengers--"
         />
-        <div class="text-h1 text-bold q-px-md row flex-center" style="width: 100px">
+        <div
+          class="text-h1 text-bold q-px-md row flex-center"
+          style="width: 100px"
+        >
           {{ passengers }}
         </div>
         <q-btn
@@ -34,7 +42,7 @@ const emit = defineEmits(['pick']);
       unelevated
       color="primary"
       label="Подтвердить"
-      @click="emit('pick')"
+      @click="emit('pick', passengers)"
       class="full-width q-fixed-bottom q-mb-sm"
     />
   </q-card-section>
