@@ -2,7 +2,7 @@
   "name": "on-the-way",
   "version": "0.0.1",
   "description": "Сервис поиска попутчиков",
-  "productName": "On The Way App",
+  "productName": "По Пути",
   "author": "Dmitry Gorshkov <libafer99@gmail.com>",
   "private": true,
   "scripts": {
