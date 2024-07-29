@@ -4,9 +4,11 @@ import { useTripSettingsStore } from 'stores/trip-settings';
 import { TRIP_CONVENIENCES } from 'src/shared/constants';
 import { MyBackBtn, MyItem } from 'src/shared/ui';
 import { TripConveniencesNames } from 'src/shared/enums';
+import { useFormattedDate } from 'src/shared/hooks/useFormattedDate';
 
 const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
+const { shortFormatDate } = useFormattedDate(date);
 
 const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
 const selectedSortOption = ref(null);
@@ -43,7 +45,7 @@ const showDialog = () => {
       </div>
 
       <div class="text-grey-8 text-center">
-        {{ date }}, {{ passengers }} {{ getPluralNoun(passengers, 'пассажир', 'пассажира', 'пассажиров') }}
+        {{ shortFormatDate }}, {{ passengers }} {{ getPluralNoun(passengers, 'пассажир', 'пассажира', 'пассажиров') }}
       </div>
     </div>
 
