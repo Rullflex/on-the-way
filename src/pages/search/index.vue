@@ -62,6 +62,13 @@ const onSearchClicked = () => {
 
 <template>
   <q-page class="column justify-end bg-secondary">
+    <q-img
+      no-spinner
+      width="90%"
+      class="self-center"
+      src="~/assets/through-the-park.svg"
+    />
+
     <q-card style="border-bottom-right-radius: 0; border-bottom-left-radius: 0">
       <OriginField @choose-origin-btn-click="showDialog('origin')" />
 
