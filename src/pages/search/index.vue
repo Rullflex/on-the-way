@@ -88,7 +88,7 @@ const onSearchClicked = () => {
     maximized
     v-model="isDialogVisible"
   >
-    <q-card class="column">
+    <q-card class="column no-wrap">
       <CloseButton />
 
       <LocationPicker

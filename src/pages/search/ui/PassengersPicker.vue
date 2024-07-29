@@ -11,7 +11,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <q-card-section class="q-px-lg q-pt-none col column justify-between">
+  <q-card-section class="q-px-lg q-pt-none col column justify-between no-wrap">
     <h4>Количество бронируемых мест</h4>
     <div
       class="column items-center gap-lg"
