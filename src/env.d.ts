@@ -7,5 +7,6 @@ declare namespace NodeJS {
     VUE_ROUTER_BASE: string | undefined;
     APP_WRITE_API_URL: string;
     APP_WRITE_PROJECT_ID: string;
+    APP_HELP_MAIL_URL: string;
   }
 }
