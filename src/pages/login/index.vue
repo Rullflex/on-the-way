@@ -1,101 +1,33 @@
 <script lang="ts" setup>
-import { account } from 'src/plugins/appwrite';
-import { AppwriteException, getUserById } from 'src/shared/api';
-import { captureApiException } from 'src/shared/utils';
-import { useUserStore } from 'stores/user';
+import { VkOneTapButton } from './ui';
 
 defineOptions({
   name: 'LoginPage',
 });
-
-const email = ref('');
-const password = ref('');
-const isPasswordVisible = ref(false);
-const isPending = ref(false);
-const userStore = useUserStore();
-const router = useRouter();
-const route = useRoute();
-
-const handleUserLogin = async () => {
-  isPending.value = true;
-  try {
-    const { userId } = await account.createEmailPasswordSession(email.value, password.value);
-    const user = await getUserById(userId);
-    userStore.$patch({
-      accountId: userId,
-      avatarFileId: user.avatarFileId,
-      name: user.name,
-      surname: user.surname,
-      dateOfBirth: user.dateOfBirth,
-      email: user.email,
-      phone: user.phone,
-      cars: user.cars,
-    });
-
-    router.push({ path: route.redirectedFrom?.path ?? '/', replace: true });
-  } catch (error) {
-    captureApiException(error as AppwriteException);
-  } finally {
-    isPending.value = false;
-  }
-};
 </script>
 
 <template>
   <q-layout>
     <q-page-container>
-      <q-page padding>
-        <h4 class="q-pa-md">Войдите используя эл.&nbsp;почту и пароль</h4>
+      <q-page class="q-pa-lg column justify-between">
+        <h4 class="q-mb-xl text-center">Вход</h4>
 
-        <q-form
-          autofocus
-          class="q-pa-md column gap-md"
-          @submit="handleUserLogin"
-        >
-          <q-input
-            v-model="email"
-            outlined
-            hide-bottom-space
-            type="email"
-            label="Email"
-            :rules="['email']"
-          />
-
-          <q-input
-            v-model="password"
-            outlined
-            label="Пароль"
-            :rules="[(val) => val && val.length >= 8]"
-            :type="isPasswordVisible ? 'text' : 'password'"
-          >
-            <template v-slot:append>
-              <q-icon
-                class="cursor-pointer"
-                :name="isPasswordVisible ? 'eva-eye-outline' : 'eva-eye-off-outline'"
-                @click="isPasswordVisible = !isPasswordVisible"
-              />
-            </template>
-          </q-input>
+        <div class="column gap-md">
+          <VkOneTapButton />
 
           <q-btn
             unelevated
-            type="submit"
-            label="Войти"
+            no-caps
+            dense
+            outline
+            padding="sm"
             color="primary"
-            :loading="isPending"
+            label="Войти по почте"
+            class="text-weight-medium"
+            icon="eva-at"
+            to="/login/email"
           />
-
-          <p>
-            Нет аккаунта?
-            <router-link
-              replace
-              to="/register"
-              class="text-primary"
-            >
-              Зарегистрироваться
-            </router-link>
-          </p>
-        </q-form>
+        </div>
       </q-page>
     </q-page-container>
   </q-layout>

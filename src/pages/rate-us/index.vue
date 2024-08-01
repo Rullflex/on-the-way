@@ -32,7 +32,6 @@ const onSubmit = () => {
       @submit="onSubmit"
     >
       <q-input
-        ref="form"
         placeholder="Напишите Ваш развернутый отзыв"
         type="textarea"
         outlined

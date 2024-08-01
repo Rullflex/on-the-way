@@ -9,7 +9,6 @@ defineOptions({
   name: 'RegisterPage',
 });
 
-const name = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
@@ -22,14 +21,13 @@ const route = useRoute();
 const handleUserRegister = async () => {
   isPending.value = true;
   try {
-    const accountResponse = await account.create(ID.unique(), email.value, password.value, name.value);
+    const accountResponse = await account.create(ID.unique(), email.value, password.value);
     const createSession = () => account.createEmailPasswordSession(email.value, password.value);
-    const addUser = () => createUser({ name: name.value, email: email.value }, accountResponse.$id);
+    const addUser = () => createUser({ email: email.value }, accountResponse.$id);
     await Promise.all([createSession(), addUser()]);
 
     userStore.$patch({
       accountId: accountResponse.$id,
-      name: name.value,
       email: email.value,
     });
 
@@ -53,14 +51,6 @@ const handleUserRegister = async () => {
           class="q-pa-md column gap-md"
           @submit="handleUserRegister"
         >
-          <q-input
-            v-model.trim="name"
-            outlined
-            hide-bottom-space
-            label="Введите Ваше имя"
-            :rules="[(val) => val && !val.includes(' ')]"
-          />
-
           <q-input
             v-model.trim="email"
             outlined
