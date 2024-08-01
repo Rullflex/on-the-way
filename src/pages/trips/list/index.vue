@@ -12,7 +12,8 @@ const { origin, destination, date, passengers, conveniences } = storeToRefs(stor
 
 const isLoading = ref<boolean>(true);
 const trips = ref<Response<ITrip>[]>([]);
-
+const sortOption = ref<string>('departureTime');
+console.log(sortOption);
 const route = useRoute();
 const router = useRouter();
 
@@ -38,12 +39,7 @@ if (store.origin && store.destination && store.date) {
 
 const updateTrips = () => {
   isLoading.value = true;
-  getFilteredTrips({
-    date: store.date,
-    origin: store.origin,
-    destination: store.destination,
-    conveniences: conveniences.value,
-  })
+  getFilteredTrips(sortOption.value)
     .then((response) => {
       trips.value = response.documents.filter(
         (trip) => trip.totalPassengers - trip.passengerIds.length >= store.passengers
@@ -53,14 +49,18 @@ const updateTrips = () => {
     .finally(() => (isLoading.value = false));
 };
 
-watch([origin, destination, date, passengers, conveniences], updateTrips, { deep: true });
+const handleSortChange = (newSortOption: string) => {
+  sortOption.value = newSortOption; //newSortOption.value - работает
+  updateTrips();
+};
 
-updateTrips();
+watch([origin, destination, date, passengers, conveniences], updateTrips, { deep: true, immediate: true });
+
 </script>
 
 <template>
   <q-layout>
-    <PageHeader />
+    <PageHeader @sort-change="handleSortChange"/>
 
     <q-page-container>
       <q-page class="q-pa-lg">

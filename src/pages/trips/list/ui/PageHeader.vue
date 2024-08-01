@@ -8,18 +8,19 @@ import { TripConveniencesNames } from 'src/shared/enums';
 const store = useTripSettingsStore();
 const { origin, destination, date, passengers, conveniences } = storeToRefs(store);
 
-const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
-const selectedSortOption = ref(null);
-
-const tripConveniences = ref<Set<TripConveniencesNames>>(new Set(conveniences.value));
+const sortOptions = [
+  { label: 'По времени выезда', value: 'departureTime' },
+  { label: 'По цене', value: 'price' },
+  { label: 'По кол-ву свободных мест', value: 'totalPassengers' }
+];
+const selectedSortOption = ref(sortOptions[0].label);
 
 const toggleConvenience = (name: TripConveniencesNames) => {
-  if (tripConveniences.value.has(name)) {
-    tripConveniences.value.delete(name);
+  if (conveniences.value.includes(name)) {
+    conveniences.value = conveniences.value.filter(item => item !== name);
   } else {
-    tripConveniences.value.add(name);
+    conveniences.value.push(name);
   }
-  conveniences.value = Array.from(tripConveniences.value);
 };
 
 const isDialogVisible = ref<boolean>(false);
@@ -28,9 +29,11 @@ const showDialog = () => {
   isDialogVisible.value = true;
 };
 
-watch(tripConveniences, () => {
-  store.conveniences = Array.from(tripConveniences.value);
-}, { deep: true });
+const emit = defineEmits(['sort-change']);
+
+watch(selectedSortOption, (newVal) => {
+  emit('sort-change', newVal.value);
+});
 </script>
 
 <template>
@@ -98,7 +101,7 @@ watch(tripConveniences, () => {
           v-for="convenience in TRIP_CONVENIENCES"
           :key="convenience.name"
           :label="convenience.title"
-          :icon="tripConveniences.has(convenience.name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
+          :icon="conveniences.includes(convenience.name) ? 'eva-checkmark-square-2-outline' : 'eva-square-outline'"
           clickable
           @click="toggleConvenience(convenience.name)"
         >
@@ -109,6 +112,22 @@ watch(tripConveniences, () => {
           </template>
         </my-item>
       </q-list>
+
+      <q-card-section class="q-px-lg">
+        <q-btn
+          v-close-popup
+          unelevated
+          color="primary"
+          label="Применить"
+          class="full-width q-mb-sm"
+        />
+      </q-card-section>
+
     </q-card>
   </q-dialog>
 </template>
+
+<route lang="yaml">
+meta:
+layout: blank
+</route>

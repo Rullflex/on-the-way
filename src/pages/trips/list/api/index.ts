@@ -1,26 +1,17 @@
 import { Query } from 'appwrite';
 import { tripsApi } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
-import { TripConveniencesNames } from 'src/shared/enums';
+import { useTripSettingsStore } from 'src/stores/trip-settings';
 
-interface ITripFilters {
-  date: string;
-  origin: string;
-  destination: string;
-  conveniences: TripConveniencesNames[];
-}
-
-export const getFilteredTrips = async ({ date, origin, destination, conveniences }: ITripFilters) => {
+export const getFilteredTrips = async (sortOption: string) => {
+  const store = useTripSettingsStore();
   const queries: string[] = [
-    Query.equal('departureDate', date),
-    Query.or([Query.equal('departureCity', origin), Query.contains('intermediateCities', origin)]),
-    Query.or([Query.equal('arrivalCity', destination), Query.contains('intermediateCities', destination)]),
-    Query.orderAsc('departureTime'),
+    Query.equal('departureDate', store.date),
+    Query.or([Query.equal('departureCity', store.origin), Query.contains('intermediateCities', store.origin)]),
+    Query.or([Query.equal('arrivalCity', store.destination), Query.contains('intermediateCities', store.destination)]),
+    ...(store.conveniences.length > 0 ? store.conveniences.map(convenience => Query.contains('conveniences', convenience)) : []),
+    Query.orderAsc(sortOption),
   ];
-
-  conveniences.forEach(convenience => {
-    queries.push(Query.equal('conveniences', convenience));
-  });
 
   return tripsApi.getAll<ITrip>(queries);
 };
