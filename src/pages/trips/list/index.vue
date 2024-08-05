@@ -13,7 +13,6 @@ const { origin, destination, date, passengers, conveniences } = storeToRefs(stor
 const isLoading = ref<boolean>(true);
 const trips = ref<Response<ITrip>[]>([]);
 const sortOption = ref<string>('departureTime');
-console.log(sortOption);
 const route = useRoute();
 const router = useRouter();
 

@@ -1,5 +1,6 @@
 import { getAvatarURL, Response } from 'src/shared/api';
 import { ICar, IUser } from 'src/shared/types';
+import { calculateAge } from 'src/shared/utils';
 
 type State = IUser & { accountId: string };
 
@@ -17,6 +18,7 @@ export const useUserStore = defineStore('user', {
     } as State),
   getters: {
     avatarURL: (state) => (state.avatarFileId ? getAvatarURL(state.avatarFileId) : ''),
+    age: (state) => calculateAge(state.dateOfBirth),
   },
   actions: {
     addCar(car: Response<ICar>) {
