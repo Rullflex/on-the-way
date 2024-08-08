@@ -60,15 +60,10 @@ const toggleConvenience = (name: TripConveniencesNames) => {
         </my-item>
       </q-list>
 
-      <q-card-section
-        v-show="tripConveniences.size"
-        class="q-px-lg sticky-bottom bg-white q-mt-auto"
-      >
+      <q-card-section class="q-px-lg sticky-bottom bg-white q-mt-auto">
         <q-btn
           v-close-popup
           unelevated
-          size="md"
-          padding="12px"
           color="primary"
           label="Применить"
           class="full-width"
