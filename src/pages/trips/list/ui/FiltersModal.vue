@@ -5,6 +5,10 @@ import { TripConveniencesNames } from 'src/shared/enums';
 
 const open = defineModel<boolean>({ default: false });
 
+const emit = defineEmits<{
+  (e: 'apply-filters', tripConveniences: TripConveniencesNames[]): void;
+}>();
+
 const tripConveniences = ref<Set<TripConveniencesNames>>(new Set());
 
 const toggleConvenience = (name: TripConveniencesNames) => {
@@ -21,7 +25,7 @@ const toggleConvenience = (name: TripConveniencesNames) => {
     maximized
     v-model="open"
   >
-    <q-card>
+    <q-card class="column no-wrap">
       <q-card-section class="sticky-top bg-white z-top">
         <q-btn
           v-close-popup
@@ -55,6 +59,22 @@ const toggleConvenience = (name: TripConveniencesNames) => {
           </template>
         </my-item>
       </q-list>
+
+      <q-card-section
+        v-show="tripConveniences.size"
+        class="q-px-lg sticky-bottom bg-white q-mt-auto"
+      >
+        <q-btn
+          v-close-popup
+          unelevated
+          size="md"
+          padding="12px"
+          color="primary"
+          label="Применить"
+          class="full-width"
+          @click="emit('apply-filters', Array.from(tripConveniences))"
+        />
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
