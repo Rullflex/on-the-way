@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { captureApiException } from 'src/shared/utils';
-import { Response } from 'src/shared/api';
+import { AppwriteException, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
 import { getFilteredTrips } from './api';
 import FiltersModal from './ui/FiltersModal.vue';
+import { TripConveniencesNames } from 'src/shared/enums';
 
-const isLoading = ref<boolean>(true);
+const isLoading = ref<boolean>(false);
 const isFilterModalOpen = ref<boolean>(false);
 const trips = ref<Response<ITrip>[]>([]);
+const conveniences = ref<TripConveniencesNames[]>([]);
 
 const route = useRoute();
 const router = useRouter();
@@ -36,25 +38,37 @@ if (store.origin && store.destination && store.date) {
   router.push({ path: '/search', replace: true });
 }
 
-getFilteredTrips({
-  date: store.date,
-  origin: store.origin,
-  destination: store.destination,
-})
-  .then((response) => {
+const updateTrips = async () => {
+  isLoading.value = true;
+  try {
+    const response = await getFilteredTrips({
+      date: store.date,
+      origin: store.origin,
+      destination: store.destination,
+      conveniences: conveniences.value,
+    });
+
     trips.value = response.documents.filter(
       (trip) => trip.totalPassengers - trip.passengerIds.length >= store.passengers
     );
-  })
-  .catch(captureApiException)
-  .finally(() => (isLoading.value = false));
+  } catch (error) {
+    captureApiException(error as AppwriteException);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+updateTrips();
 </script>
 
 <template>
   <q-layout>
     <PageHeader @open-filters="isFilterModalOpen = true" />
 
-    <FiltersModal v-model="isFilterModalOpen" />
+    <FiltersModal
+      v-model="isFilterModalOpen"
+      @apply-filters="(conveniences = $event), updateTrips()"
+    />
 
     <q-page-container>
       <q-page class="q-pa-lg">
