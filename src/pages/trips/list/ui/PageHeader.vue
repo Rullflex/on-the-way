@@ -11,13 +11,13 @@ const { origin, destination, date, passengers, conveniences } = storeToRefs(stor
 const sortOptions = [
   { label: 'По времени выезда', value: 'departureTime' },
   { label: 'По цене', value: 'price' },
-  { label: 'По кол-ву свободных мест', value: 'totalPassengers' }
+  { label: 'По кол-ву свободных мест', value: 'totalPassengers' },
 ];
 const selectedSortOption = ref(sortOptions[0].label);
 
 const toggleConvenience = (name: TripConveniencesNames) => {
   if (conveniences.value.includes(name)) {
-    conveniences.value = conveniences.value.filter(item => item !== name);
+    conveniences.value = conveniences.value.filter((item) => item !== name);
   } else {
     conveniences.value.push(name);
   }
@@ -32,7 +32,7 @@ const showDialog = () => {
 const emit = defineEmits(['sort-change']);
 
 watch(selectedSortOption, (newVal) => {
-  emit('sort-change', newVal.value);
+  emit('sort-change', newVal);
 });
 </script>
 
@@ -122,7 +122,6 @@ watch(selectedSortOption, (newVal) => {
           class="full-width q-mb-sm"
         />
       </q-card-section>
-
     </q-card>
   </q-dialog>
 </template>
