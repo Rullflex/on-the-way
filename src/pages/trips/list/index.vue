@@ -6,8 +6,10 @@ import PageHeader from './ui/PageHeader.vue';
 import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
 import { getFilteredTrips } from './api';
+import FiltersModal from './ui/FiltersModal.vue';
 
 const isLoading = ref<boolean>(true);
+const isFilterModalOpen = ref<boolean>(false);
 const trips = ref<Response<ITrip>[]>([]);
 
 const route = useRoute();
@@ -50,7 +52,9 @@ getFilteredTrips({
 
 <template>
   <q-layout>
-    <PageHeader />
+    <PageHeader @open-filters="isFilterModalOpen = true" />
+
+    <FiltersModal v-model="isFilterModalOpen" />
 
     <q-page-container>
       <q-page class="q-pa-lg">
