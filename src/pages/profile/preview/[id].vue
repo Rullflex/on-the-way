@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { MyAvatar, MyItem } from 'src/shared/ui';
-import { captureApiException, getPluralNoun } from 'src/shared/utils';
+import { captureApiException, parseAge } from 'src/shared/utils';
 import { getAvatarURL, getUserById } from 'src/shared/api';
-import { date as qDate } from 'quasar';
 import { Loading } from 'quasar';
 import { IUser } from 'src/shared/types';
 
@@ -13,14 +12,7 @@ interface IProps {
 const props = defineProps<IProps>();
 const user = ref<Omit<IUser, 'cars'>>();
 
-const userAge = computed(() => {
-  if (!user.value?.dateOfBirth) {
-    return '';
-  }
-
-  const years = qDate.getDateDiff(new Date(), user.value.dateOfBirth, 'years');
-  return `${years} ${getPluralNoun(years, 'год', 'года', 'лет')}`;
-});
+const userAge = computed(() => (user.value?.dateOfBirth ? parseAge(user.value.dateOfBirth).age : ''));
 
 const userAvatar = computed(() => {
   return user.value?.avatarFileId ? getAvatarURL(user.value.avatarFileId) : '';

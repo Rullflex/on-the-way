@@ -12,7 +12,7 @@ const userStore = useUserStore();
   >
     <q-item-section>
       <q-item-label class="text-h5 text-blue-grey-9">{{ userStore.name }}</q-item-label>
-      <q-item-label caption>Личные данные</q-item-label>
+      <q-item-label caption>{{ userStore.age }}</q-item-label>
     </q-item-section>
 
     <q-item-section avatar>
