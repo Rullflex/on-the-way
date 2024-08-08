@@ -10,9 +10,6 @@ const store = useTripSettingsStore();
 const { origin, destination, date, passengers } = storeToRefs(store);
 const { shortFormatDate } = useFormattedDate(date);
 
-const sortOptions = [{ label: 'По времени выезда' }, { label: 'По цене' }, { label: 'По кол-ву свободных мест' }];
-const selectedSortOption = ref(null);
-
 const tripConveniences = ref<Set<TripConveniencesNames>>(new Set());
 
 const toggleConvenience = (name: TripConveniencesNames) => {
@@ -73,16 +70,6 @@ const showDialog = () => {
 
       <q-card-section class="q-px-lg q-pt-none">
         <h4>Фильтровать</h4>
-      </q-card-section>
-
-      <q-card-section class="q-px-lg">
-        <h6 class="q-pb-md">Сортировать</h6>
-
-        <q-select
-          outlined
-          :options="sortOptions"
-          v-model="selectedSortOption"
-        />
       </q-card-section>
 
       <q-card-section class="q-px-lg">
