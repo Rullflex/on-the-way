@@ -39,11 +39,13 @@ getFutureUserTrips(userStore.accountId)
       v-if="userTrips.length"
       class="column gap-md q-pa-md"
     >
+      <h4 class="q-mb-md">Ближайшие поездки</h4>
+
       <div
         v-for="(trips, date) in groupedTrips"
         :key="date"
       >
-        <h5 class="q-mb-md">{{ formatDate(date, 'medium') }}</h5>
+        <h5 class="q-mb-md">{{ formatDate(date) }}</h5>
         <q-list class="column gap-sm">
           <TripPreviewCard
             v-for="trip in trips"
