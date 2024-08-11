@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ITrip } from 'src/shared/types';
-import { useFormattedDate } from 'src/shared/hooks/useFormattedDate';
+import { formatDate } from 'src/shared/utils';
 const props = defineProps<{
   trip: ITrip;
 }>();
-
-const { shortFormatDate } = useFormattedDate(
-  computed(() => props.trip?.departureDate ?? ''),
-  { shortcuts: false }
-);
 </script>
 
 <template>
   <div class="q-px-lg">
-    <h5 class="q-mb-lg">{{ shortFormatDate }}</h5>
+    <h5 class="q-mb-lg">{{ formatDate(props.trip?.departureDate ?? '') }}</h5>
 
     <div class="column">
       <span class="text-bold">{{ trip.canPickUpFromPlace ? 'Заберу с места' : trip.departureAddress }}</span>

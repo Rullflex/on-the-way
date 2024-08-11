@@ -1,6 +1,6 @@
 import { getAvatarURL, Response } from 'src/shared/api';
 import { ICar, IUser } from 'src/shared/types';
-import { parseAge } from 'src/shared/utils';
+import { formatDate, parseAge } from 'src/shared/utils';
 
 type State = IUser & { accountId: string };
 
@@ -19,6 +19,7 @@ export const useUserStore = defineStore('user', {
   getters: {
     avatarURL: (state) => (state.avatarFileId ? getAvatarURL(state.avatarFileId) : ''),
     age: (state) => (state.dateOfBirth ? parseAge(state.dateOfBirth).age : ''),
+    birthday: (state) => (state.dateOfBirth ? formatDate(state.dateOfBirth, 'short') : ''),
   },
   actions: {
     addCar(car: Response<ICar>) {

@@ -31,15 +31,5 @@ export function useFormattedDate(dateRef: Ref<string> | Ref<null>, options: IOpt
     return `${dayOfWeek}, ${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]}`;
   });
 
-  const fullFormatDate = computed(() => {
-    if (!dateRef.value) {
-      return '';
-    }
-
-    const { dayOfMonth, month, year } = getDateData(dateRef.value);
-
-    return `${dayOfMonth} ${MONTHS_NAMES_IN_GENITIVE[Number(month) - 1]} ${year}`;
-  });
-
-  return { shortFormatDate, fullFormatDate };
+  return { shortFormatDate };
 }
