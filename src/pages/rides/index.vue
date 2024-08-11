@@ -6,6 +6,7 @@ import { MyItem } from 'src/shared/ui';
 import { captureApiException } from 'src/shared/utils';
 import { useUserStore } from 'src/stores/user';
 import { getFutureUserTrips } from './api';
+import { EmptyRides } from './ui';
 
 const $q = useQuasar();
 const userStore = useUserStore();
@@ -36,19 +37,7 @@ getFutureUserTrips(userStore.accountId)
       </q-list>
     </template>
 
-    <div
-      v-else
-      class="column flex-center text-center gap-lg q-pa-md"
-    >
-      <q-img
-        noSpinner
-        width="80%"
-        src="~/assets/traveling.svg"
-        style="max-width: 300px"
-      />
-
-      <h4>Здесь появятся ваши будущие поездки</h4>
-    </div>
+    <EmptyRides v-else />
 
     <MyItem
       chevron
