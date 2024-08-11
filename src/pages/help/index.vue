@@ -18,6 +18,7 @@ defineOptions({
       <my-item
         chevron
         label="Вопросы и ответы"
+        to="/help/faq"
       />
       <my-item
         chevron
