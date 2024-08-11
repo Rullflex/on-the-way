@@ -3,7 +3,7 @@ import TripPreviewCard from 'src/features/TripPreviewCard.vue';
 import { Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import { MyItem } from 'src/shared/ui';
-import { captureApiException } from 'src/shared/utils';
+import { captureApiException, formatDate } from 'src/shared/utils';
 import { useUserStore } from 'src/stores/user';
 import { getFutureUserTrips } from './api';
 import { EmptyRides } from './ui';
@@ -11,6 +11,17 @@ import { EmptyRides } from './ui';
 const $q = useQuasar();
 const userStore = useUserStore();
 const userTrips = ref<Response<ITrip>[]>();
+
+const groupedTrips = computed(() =>
+  userTrips.value?.reduce((acc, trip) => {
+    const date = trip.departureDate;
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(trip);
+    return acc;
+  }, {} as Record<string, Response<ITrip>[]>)
+);
 
 $q.loading.show();
 getFutureUserTrips(userStore.accountId)
@@ -24,18 +35,25 @@ getFutureUserTrips(userStore.accountId)
     v-if="userTrips"
     padding
   >
-    <template v-if="userTrips.length">
-      <h4 class="q-pa-md">Ближайшие поездки</h4>
-
-      <q-list class="column gap-sm q-pa-md">
-        <TripPreviewCard
-          v-for="trip in userTrips"
-          :key="trip.$id"
-          :trip="trip"
-          :to="`/trips/preview/${trip.$id}`"
-        />
-      </q-list>
-    </template>
+    <div
+      v-if="userTrips.length"
+      class="column gap-md q-pa-md"
+    >
+      <div
+        v-for="(trips, date) in groupedTrips"
+        :key="date"
+      >
+        <h5 class="q-mb-md">{{ formatDate(date, 'medium') }}</h5>
+        <q-list class="column gap-sm">
+          <TripPreviewCard
+            v-for="trip in trips"
+            :key="trip.$id"
+            :trip="trip"
+            :to="`/trips/preview/${trip.$id}`"
+          />
+        </q-list>
+      </div>
+    </div>
 
     <EmptyRides v-else />
 
