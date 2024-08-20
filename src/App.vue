@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({
-  name: 'App'
+onMounted(() => {
+  document.body.classList.remove('app-loading');
 });
 </script>
