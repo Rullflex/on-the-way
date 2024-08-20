@@ -27,5 +27,7 @@ const src = computed(() => props.src ?? userStore.avatarURL);
       v-else
       name="eva-person"
     />
+
+    <slot />
   </q-avatar>
 </template>
