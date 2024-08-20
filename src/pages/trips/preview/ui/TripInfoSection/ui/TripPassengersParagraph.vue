@@ -31,7 +31,7 @@ const fetchPassengers = () => {
     .catch(captureApiException);
 };
 
-watch(props.passengerIds, fetchPassengers, { immediate: true });
+watch(() => props.passengerIds, fetchPassengers, { immediate: true });
 </script>
 
 <template>
