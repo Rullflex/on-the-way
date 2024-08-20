@@ -19,8 +19,10 @@ export const reserveTrip = async (tripId: string) => {
     return;
   }
 
+  const seats = Array.from({ length: tripSettingsStore.passengers }, () => userStore.accountId);
+
   const updatedTrip = await updateTrip(tripId, {
-    passengerIds: [...passengerIds, userStore.accountId],
+    passengerIds: [...passengerIds, ...seats],
   });
 
   Notify.create({
