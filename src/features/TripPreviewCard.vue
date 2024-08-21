@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getAvatarURL } from 'src/shared/api';
-import { TRIP_CONVENIENCES } from 'src/shared/constants';
+import { TRIP_CONVENIENCES, TripStatus } from 'src/shared/constants';
 import { ITrip } from 'src/shared/types';
 import { MyAvatar } from 'src/shared/ui';
 
@@ -52,9 +52,12 @@ const conveniences = computed(() =>
           v-if="trip.passengerIds"
           class="col-auto column items-end"
         >
-          <span class="text-bold">{{
-            trip.passengerIds.length >= trip.totalPassengers ? 'Мест нет' : trip.price + ' ₽'
-          }}</span>
+          <span class="text-bold">
+            <template v-if="trip.status === TripStatus.CANCELED">Отменена</template>
+            <template v-else-if="trip.status === TripStatus.COMPLETED">Завершена</template>
+            <template v-else-if="trip.passengerIds.length >= trip.totalPassengers">Мест нет</template>
+            <template v-else>{{ `${trip.price} ₽` }}</template>
+          </span>
           <div class="row items-center gap-xs text-caption">
             <span>{{ trip.passengerIds.length }}/{{ trip.totalPassengers }}</span>
             <q-icon name="eva-people-outline" />
