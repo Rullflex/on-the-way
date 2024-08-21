@@ -25,6 +25,7 @@ const handleButtonClick = (type: 'complete' | 'cancel') => {
     size="md"
     color="negative"
     label="Отменить"
+    padding="12px"
     icon="eva-slash-outline"
     @click="handleButtonClick('cancel')"
   />
@@ -35,6 +36,7 @@ const handleButtonClick = (type: 'complete' | 'cancel') => {
     size="md"
     color="positive"
     label="Завершить"
+    padding="12px"
     icon="eva-checkmark-circle-2-outline"
     @click="handleButtonClick('complete')"
   />
