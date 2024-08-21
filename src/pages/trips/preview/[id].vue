@@ -43,7 +43,7 @@ getTripById(props.id)
     <BottomSheetSection />
 
     <StickyBottomSection
-      v-if="!isCurrentUserDriver"
+      :isCurrentUserDriver
       :trip-id="props.id"
       v-model="trip"
     />

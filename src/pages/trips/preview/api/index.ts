@@ -1,5 +1,6 @@
 import { Notify } from 'quasar';
 import { getTripById, Query, updateTrip, usersApi } from 'src/shared/api';
+import { TripStatus } from 'src/shared/constants';
 import { IUser } from 'src/shared/types';
 import { useTripSettingsStore } from 'src/stores/trip-settings';
 import { useUserStore } from 'src/stores/user';
@@ -42,6 +43,32 @@ export const cancelReservation = async (tripId: string) => {
 
   Notify.create({
     message: 'Бронирование отменено',
+    position: 'top',
+  });
+
+  return updatedTrip;
+};
+
+export const cancelTrip = async (tripId: string) => {
+  const updatedTrip = await updateTrip(tripId, {
+    status: TripStatus.CANCELED,
+  });
+
+  Notify.create({
+    message: 'Поездка отменена',
+    position: 'top',
+  });
+
+  return updatedTrip;
+};
+
+export const completeTrip = async (tripId: string) => {
+  const updatedTrip = await updateTrip(tripId, {
+    status: TripStatus.COMPLETED,
+  });
+
+  Notify.create({
+    message: 'Поездка завершена',
     position: 'top',
   });
 

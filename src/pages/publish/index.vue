@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CITY_NAMES } from 'src/shared/constants';
+import { CITY_NAMES, TripStatus } from 'src/shared/constants';
 import { MyBackBtn } from 'src/shared/ui';
 import { useStep } from 'src/shared/hooks/useStep';
 import CityStep from './ui/CityStep.vue';
@@ -127,6 +127,7 @@ const handlePublishBtnClick = async () => {
   $q.loading.show();
 
   const tripData: Parameters<typeof createTrip>[0] = {
+    status: TripStatus.NEW,
     price: parseInt(price.value),
     departureDate: date.value,
     departureTime: time.value,

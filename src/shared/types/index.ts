@@ -1,5 +1,6 @@
 export { type ITripConvenience } from './tripConvenience';
 import { Response } from '../api';
+import { TripStatus } from '../constants';
 import { TripConveniencesNames } from '../enums';
 
 export interface IUser {
@@ -13,6 +14,7 @@ export interface IUser {
 }
 
 export interface ITrip {
+  status: TripStatus;
   price: number;
   departureDate: string;
   departureTime: string;

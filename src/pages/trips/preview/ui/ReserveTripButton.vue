@@ -31,6 +31,7 @@ const handleButtonClick = () => {
     :outline="props.isAlreadyReserved"
     :color="props.isAlreadyReserved ? 'negative' : 'primary'"
     :label="buttonLabel"
+    :icon="props.isAlreadyReserved ? 'eva-slash-outline' : 'eva-lock-outline'"
     @click="handleButtonClick"
   />
 </template>

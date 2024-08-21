@@ -2,13 +2,15 @@
 import { AppwriteException } from 'appwrite';
 import ReserveTripButton from './ReserveTripButton.vue';
 import { captureApiException } from 'src/shared/utils';
-import { cancelReservation, reserveTrip } from '../api';
+import { cancelReservation, cancelTrip, completeTrip, reserveTrip } from '../api';
 import { Loading } from 'quasar';
 import { ITrip } from 'src/shared/types';
 import { useUserStore } from 'src/stores/user';
+import DriverTripButtons from './DriverTripButtons.vue';
 
 interface IProps {
   tripId: string;
+  isCurrentUserDriver: boolean;
 }
 
 const trip = defineModel<ITrip>({ required: true });
@@ -35,14 +37,44 @@ const handleSubmitReserve = async () => {
     Loading.hide();
   }
 };
+
+const handleSubmit = async (apiFn: () => Promise<ITrip>) => {
+  Loading.show();
+  try {
+    trip.value = await apiFn();
+  } catch (error) {
+    captureApiException(error as AppwriteException);
+  } finally {
+    Loading.hide();
+  }
+};
 </script>
 
 <template>
   <div class="sticky-bottom q-pa-md bg-white">
+    <div
+      v-if="isCurrentUserDriver"
+      :class="$style['driver-row']"
+    >
+      <DriverTripButtons
+        @cancel="handleSubmit(() => cancelTrip(props.tripId))"
+        @complete="handleSubmit(() => completeTrip(props.tripId))"
+      />
+    </div>
+
     <ReserveTripButton
+      v-else
       class="full-width"
       :is-already-reserved="isAlreadyReserved"
       @submit="handleSubmitReserve"
     />
   </div>
 </template>
+
+<style lang="scss" module>
+.driver-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+</style>
