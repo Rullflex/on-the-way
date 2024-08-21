@@ -9,7 +9,7 @@ import TripRouteSection from './ui/TripRouteSection.vue';
 import TripPriceSection from './ui/TripPriceSection.vue';
 import TripInfoSection from './ui/TripInfoSection/TripInfoSection.vue';
 import BottomSheetSection from './ui/BottomSheetSection.vue';
-import ReserveSection from './ui/ReserveSection.vue';
+import StickyBottomSection from './ui/StickyBottomSection.vue';
 
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
@@ -42,7 +42,7 @@ getTripById(props.id)
 
     <BottomSheetSection />
 
-    <ReserveSection
+    <StickyBottomSection
       v-if="!isCurrentUserDriver"
       :trip-id="props.id"
       v-model="trip"
