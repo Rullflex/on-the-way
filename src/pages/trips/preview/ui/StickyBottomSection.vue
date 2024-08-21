@@ -7,6 +7,7 @@ import { Loading } from 'quasar';
 import { ITrip } from 'src/shared/types';
 import { useUserStore } from 'src/stores/user';
 import DriverTripButtons from './DriverTripButtons.vue';
+import { TripStatus } from 'src/shared/constants';
 
 interface IProps {
   tripId: string;
@@ -52,8 +53,19 @@ const handleSubmit = async (apiFn: () => Promise<ITrip>) => {
 
 <template>
   <div class="sticky-bottom q-pa-md bg-white">
+    <template v-if="[TripStatus.CANCELED, TripStatus.COMPLETED].includes(trip.status)">
+      <q-btn
+        size="md"
+        disabled
+        :color="trip.status === TripStatus.COMPLETED ? 'grey' : 'red-3'"
+        unelevated
+        class="full-width"
+        :icon="trip.status === TripStatus.COMPLETED ? 'eva-checkmark-circle-2-outline' : 'eva-slash-outline'"
+        :label="trip.status === TripStatus.COMPLETED ? 'Поездка завершена' : 'Поездка отменена'"
+      />
+    </template>
     <div
-      v-if="isCurrentUserDriver"
+      v-else-if="isCurrentUserDriver"
       :class="$style['driver-row']"
     >
       <DriverTripButtons
