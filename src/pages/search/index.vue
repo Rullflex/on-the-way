@@ -21,6 +21,12 @@ const { origin, destination, date, passengers } = storeToRefs(store);
 const isDialogVisible = ref<boolean>(false);
 const dialogType = ref<DialogType>();
 
+const swap = () => {
+  const temp = origin.value;
+  origin.value = destination.value;
+  destination.value = temp;
+};
+
 const showDialog = (type: DialogType) => {
   isDialogVisible.value = true;
   dialogType.value = type;
@@ -70,9 +76,24 @@ const onSearchClicked = () => {
     />
 
     <q-card style="border-bottom-right-radius: 0; border-bottom-left-radius: 0">
-      <OriginField @choose-origin-btn-click="showDialog('origin')" />
+      <div class="row q-pl-lg q-pt-sm">
+        <div class="col">
+          <OriginField @choose-origin-btn-click="showDialog('origin')" />
 
-      <DestinationField @choose-destination-btn-click="showDialog('destination')" />
+          <DestinationField @choose-destination-btn-click="showDialog('destination')" />
+        </div>
+
+        <div class="col-auto column flex-center q-px-sm">
+          <q-btn
+            flat
+            dense
+            size="md"
+            icon="eva-swap-outline"
+            :style="{ transform: 'rotate(90deg)' }"
+            @click="swap"
+          />
+        </div>
+      </div>
 
       <div class="q-px-lg row gap-lg">
         <DateField @choose-date-btn-click="showDialog('date')" />

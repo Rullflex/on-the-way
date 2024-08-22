@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
 
 const store = useTripSettingsStore();
@@ -8,10 +8,7 @@ const emit = defineEmits(['chooseDestinationBtnClick']);
 </script>
 
 <template>
-  <div
-    class="q-px-lg"
-    @click="emit('chooseDestinationBtnClick')"
-  >
+  <div @click="emit('chooseDestinationBtnClick')">
     <q-field
       label="Куда"
       :stack-label="Boolean(destination)"

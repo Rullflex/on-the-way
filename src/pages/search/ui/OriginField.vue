@@ -1,17 +1,14 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
 
 const store = useTripSettingsStore();
 const { origin } = storeToRefs(store);
 
-const emit = defineEmits(['chooseOriginBtnClick'])
+const emit = defineEmits(['chooseOriginBtnClick']);
 </script>
 
 <template>
-  <div
-    class="q-px-lg q-pt-sm"
-    @click="emit('chooseOriginBtnClick')"
-  >
+  <div @click="emit('chooseOriginBtnClick')">
     <q-field
       label="Откуда"
       :stack-label="Boolean(origin)"
@@ -29,5 +26,3 @@ const emit = defineEmits(['chooseOriginBtnClick'])
     </q-field>
   </div>
 </template>
-
-
