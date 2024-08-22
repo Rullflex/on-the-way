@@ -2,7 +2,7 @@
 import { captureApiException } from 'src/shared/utils';
 import { getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
-import { Loading } from 'quasar';
+import { Loading, Notify } from 'quasar';
 import { useUserStore } from 'src/stores/user';
 import SectionSeparator from './ui/SectionSeparator.vue';
 import TripRouteSection from './ui/TripRouteSection.vue';
@@ -18,6 +18,28 @@ const userStore = useUserStore();
 const isCurrentUserDriver = computed(() => {
   return trip.value?.driver.$id === userStore.accountId;
 });
+
+const canShare = Boolean(navigator.share || navigator.clipboard?.writeText);
+
+const share = async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'По Пути - сервис поиска попутчиков',
+        text: `Поездка ${trip.value?.departureCity} - ${trip.value?.arrivalCity} | По Пути`,
+        url: '',
+      });
+    } catch (error) {}
+  } else if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      Notify.create({
+        message: 'Ссылка скопированна в буфер обмена',
+        position: 'top',
+      });
+    } catch (error) {}
+  }
+};
 
 Loading.show();
 getTripById(props.id)
@@ -38,9 +60,11 @@ getTripById(props.id)
 
     <TripInfoSection :trip="trip" />
 
-    <SectionSeparator />
+    <template v-if="canShare">
+      <SectionSeparator />
 
-    <BottomSheetSection />
+      <BottomSheetSection @share="share" />
+    </template>
 
     <StickyBottomSection
       :isCurrentUserDriver

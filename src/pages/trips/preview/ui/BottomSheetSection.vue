@@ -5,8 +5,10 @@ import MyItem from 'src/shared/ui/MyItem.vue';
 <template>
   <q-list class="q-px-sm">
     <my-item
+      clickable
       color="primary"
       label="Поделиться поездкой"
+      @click="$emit('share')"
     />
   </q-list>
 </template>
