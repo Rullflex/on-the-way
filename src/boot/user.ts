@@ -27,6 +27,8 @@ export default boot(async ({ router }) => {
       next({ path: '/login' });
     } else if (userStore.accountId && (to.path.startsWith('/login') || to.path === '/register')) {
       next({ path: '/', replace: true });
+    } else if (userStore.accountId && !to.path.startsWith('/profile/edit') && (!userStore.name || !userStore.phone)) {
+      next({ path: '/profile/edit' });
     } else {
       next();
     }
