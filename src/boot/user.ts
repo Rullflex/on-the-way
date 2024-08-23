@@ -3,6 +3,7 @@ import { getUserById } from 'src/shared/api';
 import { useUserStore } from 'stores/user';
 import { account } from 'src/plugins/appwrite';
 import { Notify } from 'quasar';
+import { Prefix } from 'src/pages/login/const';
 
 export default boot(async ({ router }) => {
   const userStore = useUserStore();
@@ -17,7 +18,7 @@ export default boot(async ({ router }) => {
       name: user.name,
       surname: user.surname,
       dateOfBirth: user.dateOfBirth,
-      email: user.email,
+      email: user.email?.startsWith(Prefix.NO_EMAIL_VK) ? null : user.email,
       phone: user.phone,
       cars: user.cars,
     });

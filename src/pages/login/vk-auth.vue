@@ -4,6 +4,7 @@ import { account } from 'src/plugins/appwrite';
 import VKID from 'src/plugins/vkid';
 import { createUser, getUserById, uploadAvatar } from 'src/shared/api';
 import { useUserStore } from 'src/stores/user';
+import { Prefix } from './const';
 
 interface UserInfoProperties {
   avatar: string;
@@ -27,6 +28,10 @@ const hashPassword = async (str: string) => {
   return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
 };
 
+const getHashedEmail = (unique: string) => {
+  return `${Prefix.NO_EMAIL_VK}_${unique}@mail.com`;
+};
+
 const getImageFile = async (url: string) => {
   const response = await fetch(url);
   const blob = await response.blob();
@@ -47,8 +52,17 @@ const showError = (message: string) => {
     return;
   }
   const { user } = (await VKID.Auth.userInfo(vkidAccessToken)) as { user: UserInfoProperties };
-  const { avatar: avatarUrl, user_id: userId, email, phone, first_name: name, last_name: surname, birthday } = user;
+  const {
+    avatar: avatarUrl,
+    user_id: userId,
+    email: vkEmail,
+    phone,
+    first_name: name,
+    last_name: surname,
+    birthday,
+  } = user;
 
+  const email = vkEmail || getHashedEmail(userId);
   const password = await hashPassword(userId);
   const dateOfBirth = birthday.split('.').reverse().join('/');
 
