@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers';
 import { getUserById } from 'src/shared/api';
 import { useUserStore } from 'stores/user';
 import { account } from 'src/plugins/appwrite';
+import { Notify } from 'quasar';
 
 export default boot(async ({ router }) => {
   const userStore = useUserStore();
@@ -32,6 +33,11 @@ export default boot(async ({ router }) => {
       !to.path.startsWith('/profile/edit') &&
       (!userStore.name || !userStore.phone || !userStore.dateOfBirth || !userStore.surname)
     ) {
+      Notify.create({
+        position: 'top',
+        color: 'negative',
+        message: 'Пожалуйста, заполните личные данные',
+      });
       next({ path: '/profile/edit' });
     } else {
       next();
