@@ -75,6 +75,16 @@ const showError = (message: string) => {
       account.create(userId, email, password, `${name} ${surname}`),
       createUser({ email, phone, name, surname, dateOfBirth, avatarFileId }, userId),
     ]).catch(() => showError('Ошибка при создании пользователя'));
+
+    userStore.$patch({
+      accountId: userId,
+      name,
+      surname,
+      email,
+      phone,
+      dateOfBirth,
+      avatarFileId,
+    });
   } else {
     userStore.$patch({
       accountId: userId,
