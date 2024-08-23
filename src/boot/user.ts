@@ -35,7 +35,6 @@ export default boot(async ({ router }) => {
     ) {
       Notify.create({
         position: 'top',
-        color: 'default',
         message: 'Пожалуйста, заполните личные данные',
       });
       next({ path: '/profile/edit' });
