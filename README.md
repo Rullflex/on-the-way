@@ -38,14 +38,6 @@ npm run format
 quasar build
 ```
 
-### Deploy the app to dev or production
-
-```bash
-yarn deploy
-# or
-yarn deploy --prod
-```
-
 ### Customize the configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
