@@ -3,3 +3,4 @@ export { getPluralNoun } from './getPluralNoun';
 export { captureApiException } from './captureApiException';
 export { parseAge } from './parseAge';
 export { formatDate } from './formatDate';
+export { getUserEmail } from './getUserEmail';
