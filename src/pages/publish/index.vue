@@ -15,16 +15,20 @@ import PriceStep from 'pages/publish/ui/PriceStep.vue';
 import CarSelectionStep from 'pages/publish/ui/CarSelectionStep.vue';
 import CommentStep from 'pages/publish/ui/CommentStep.vue';
 import PassengersAmountStep from 'pages/publish/ui/PassengersAmountStep.vue';
-import { createTrip } from 'src/shared/api';
+import { createTrip, Response } from 'src/shared/api';
 import { useUserStore } from 'stores/user';
 import { captureApiException } from 'src/shared/utils';
 import { AppwriteException } from 'appwrite';
+import HistoryTemplatesStep from './ui/HistoryTemplatesStep.vue';
+import { getDriverTrips } from './api';
+import { ITrip } from 'src/shared/types';
 
 defineOptions({
   name: 'PublishPage',
 });
 
 enum StepNames {
+  history,
   departureCity,
   departureLocation,
   destinationCity,
@@ -64,8 +68,9 @@ const price = ref('');
 const carId = ref('');
 const passengersAmount = ref(4);
 const tripConveniences = shallowRef<TripConveniencesNames[]>([]);
-const { currentStep, stepAnimationName } = useStep(StepNames.departureCity);
+const { currentStep, stepAnimationName } = useStep(StepNames.history);
 const comment = ref('');
+const driverTrips = ref<Response<ITrip>[]>();
 
 const isNextButtonVisible = computed<boolean>(() => {
   if (currentStep.value === StepNames.departureCity) {
@@ -94,6 +99,28 @@ const isNextButtonVisible = computed<boolean>(() => {
 
   return false;
 });
+
+const handleCreateFromHistory = (trip: Response<ITrip>) => {
+  departureCity.value = {
+    canDriveToPassengerLocation: trip.canPickUpFromPlace,
+    location: trip.departureAddress,
+    city: trip.departureCity,
+  };
+
+  destinationCity.value = {
+    canDriveToPassengerLocation: trip.canDriveToPlace,
+    location: trip.arrivalAddress,
+    city: trip.arrivalCity,
+  };
+
+  price.value = String(trip.price);
+  tripConveniences.value = [...trip.conveniences];
+  intermediateCities.value = [...trip.intermediateCities];
+  passengersAmount.value = trip.totalPassengers;
+  comment.value = trip.comment;
+
+  currentStep.value = StepNames.date;
+};
 
 const handleCityChoose = (city: ICityInfo, cityName: string) => {
   city.city = cityName;
@@ -161,19 +188,37 @@ const handlePublishBtnClick = async () => {
     $q.loading.hide();
   }
 };
+
+$q.loading.show();
+getDriverTrips(userStore.accountId, 4)
+  .then((res) => {
+    if (res.total === 0) {
+      currentStep.value = StepNames.departureCity;
+    }
+    driverTrips.value = res.documents;
+  })
+  .catch(captureApiException)
+  .finally($q.loading.hide);
 </script>
 
 <template>
-  <q-page>
+  <q-page v-if="driverTrips">
     <my-back-btn
-      v-if="currentStep !== StepNames.departureCity"
+      v-if="currentStep > (driverTrips.length ? 0 : 1)"
       class="q-ml-md q-mt-md"
       @click="currentStep--"
     />
 
     <transition :name="stepAnimationName">
+      <HistoryTemplatesStep
+        v-if="currentStep === StepNames.history"
+        :driver-trips="driverTrips"
+        @create-new="currentStep++"
+        @create-history="handleCreateFromHistory"
+      />
+
       <CityStep
-        v-if="currentStep === StepNames.departureCity"
+        v-else-if="currentStep === StepNames.departureCity"
         title="Откуда вы выезжаете?"
         :city-name="departureCity.city"
         :city-list="departureCityList"
