@@ -93,6 +93,19 @@ const handleUserRegister = async () => {
             </template>
           </q-input>
 
+          <p
+            class="text-caption text-center"
+            :style="{ lineHeight: '1.3' }"
+          >
+            Регистрируясь, вы соглашаетесь с
+            <router-link
+              to="/privacy"
+              class="text-primary"
+            >
+              Политикой обработки персональных данных
+            </router-link>
+          </p>
+
           <q-btn
             unelevated
             type="submit"
