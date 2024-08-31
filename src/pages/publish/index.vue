@@ -100,6 +100,13 @@ const isNextButtonVisible = computed<boolean>(() => {
   return false;
 });
 
+watch(currentStep, (nextStep, prevStep) => {
+  // пропуск шага выбора авто если у пользователя только одна машина
+  if (nextStep === StepNames.car && userStore.cars.length === 1) {
+    nextStep > prevStep ? currentStep.value++ : currentStep.value--;
+  }
+});
+
 const handleCreateFromHistory = (trip: Response<ITrip>) => {
   departureCity.value = {
     canDriveToPassengerLocation: trip.canPickUpFromPlace,
