@@ -71,20 +71,24 @@ const showError = (message: string) => {
   if (!existedUser) {
     const { $id: avatarFileId } = await getImageFile(avatarUrl).then(uploadAvatar);
 
-    await Promise.all([
-      account.create(userId, email, password, `${name} ${surname}`),
-      createUser({ email, phone, name, surname, dateOfBirth, avatarFileId }, userId),
-    ]).catch(() => showError('Ошибка при создании пользователя'));
+    try {
+      await Promise.all([
+        account.create(userId, email, password, `${name} ${surname}`),
+        createUser({ email: vkEmail || null, phone, name, surname, dateOfBirth, avatarFileId }, userId),
+      ]);
 
-    userStore.$patch({
-      accountId: userId,
-      name,
-      surname,
-      email,
-      phone,
-      dateOfBirth,
-      avatarFileId,
-    });
+      userStore.$patch({
+        accountId: userId,
+        name,
+        surname,
+        email: vkEmail,
+        phone,
+        dateOfBirth,
+        avatarFileId,
+      });
+    } catch (error) {
+      showError('Ошибка при создании пользователя');
+    }
   } else {
     userStore.$patch({
       accountId: userId,
