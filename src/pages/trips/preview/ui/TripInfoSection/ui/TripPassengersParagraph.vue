@@ -42,24 +42,26 @@ watch(() => props.passengerIds, fetchPassengers, { immediate: true });
     label="Пока еще нет пассажиров"
   />
 
-  <my-item
-    v-for="passenger in uniquePassengers"
-    :key="passenger.$id"
-    chevron
-    :label="passenger.name"
-    :to="`/profile/preview/${passenger.$id}`"
-  >
-    <template #append>
-      <my-avatar :src="passenger.avatarFileId ? getAvatarURL(passenger.avatarFileId) : ''">
-        <q-badge
-          v-if="passenger.seats > 1"
-          rounded
-          floating
-          color="primary"
-        >
-          {{ passenger.seats }}
-        </q-badge>
-      </my-avatar>
-    </template>
-  </my-item>
+  <template v-else>
+    <my-item
+      v-for="passenger in uniquePassengers"
+      :key="passenger.$id"
+      chevron
+      :label="passenger.name"
+      :to="`/profile/preview/${passenger.$id}`"
+    >
+      <template #append>
+        <my-avatar :src="passenger.avatarFileId ? getAvatarURL(passenger.avatarFileId) : ''">
+          <q-badge
+            v-if="passenger.seats > 1"
+            rounded
+            floating
+            color="primary"
+          >
+            {{ passenger.seats }}
+          </q-badge>
+        </my-avatar>
+      </template>
+    </my-item>
+  </template>
 </template>

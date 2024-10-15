@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { captureApiException } from 'src/shared/utils';
+import { captureApiException, getPluralNoun } from 'src/shared/utils';
 import { getTripById, Response } from 'src/shared/api';
 import { ITrip } from 'src/shared/types';
 import { Loading, Notify } from 'quasar';
@@ -14,6 +14,8 @@ import StickyBottomSection from './ui/StickyBottomSection.vue';
 const props = defineProps<{ id: string }>();
 const trip = ref<Response<ITrip>>();
 const userStore = useUserStore();
+
+let timer: ReturnType<typeof setInterval> | null = null;
 
 const isCurrentUserDriver = computed(() => {
   return trip.value?.driver.$id === userStore.accountId;
@@ -40,6 +42,37 @@ const share = async () => {
     } catch (error) {}
   }
 };
+
+onMounted(() => {
+  const fetchTrip = () => {
+    getTripById(props.id).then((response) => {
+      if (isCurrentUserDriver.value && trip.value) {
+        const passengerDiff = Math.abs(response.passengerIds.length - trip.value.passengerIds.length)
+
+        if (passengerDiff > 0) {
+          const passenger = getPluralNoun(passengerDiff, 'пассажир', 'пассажира', 'пассажиров')
+          const message = trip.value.passengerIds.length > response.passengerIds.length
+            ? `${passengerDiff} ${passenger} ${getPluralNoun(passengerDiff, 'отменил', 'отменили', 'отменили')} бронь`
+            : `${passengerDiff} ${getPluralNoun(passengerDiff, 'новый', 'новых', 'новых')} ${passenger}`
+          Notify.create({
+            type: 'warning',
+            message,
+            position: 'top',
+          });
+        }
+      }
+
+      trip.value = response
+    }).catch()
+  }
+  timer = setInterval(fetchTrip, 1000 * 10);
+})
+
+onBeforeUnmount(() => {
+  if (timer !== null) {
+    clearInterval(timer);
+  }
+})
 
 Loading.show();
 getTripById(props.id)
