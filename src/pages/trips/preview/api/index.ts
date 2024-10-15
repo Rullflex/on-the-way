@@ -9,12 +9,21 @@ const userStore = useUserStore();
 const tripSettingsStore = useTripSettingsStore();
 
 export const reserveTrip = async (tripId: string) => {
-  const { passengerIds, totalPassengers } = await getTripById(tripId);
+  const { passengerIds, totalPassengers, status } = await getTripById(tripId);
 
   if (totalPassengers - passengerIds.length < tripSettingsStore.passengers) {
     Notify.create({
       type: 'negative',
       message: 'Недостаточно свободных мест',
+      position: 'top',
+    });
+    return;
+  }
+
+  if (status === TripStatus.PAUSED) {
+    Notify.create({
+      type: 'negative',
+      message: 'Бронирование временно приостановлено',
       position: 'top',
     });
     return;
@@ -69,6 +78,32 @@ export const completeTrip = async (tripId: string) => {
 
   Notify.create({
     message: 'Поездка завершена',
+    position: 'top',
+  });
+
+  return updatedTrip;
+};
+
+export const pauseTrip = async (tripId: string) => {
+  const updatedTrip = await updateTrip(tripId, {
+    status: TripStatus.PAUSED,
+  });
+
+  Notify.create({
+    message: 'Поездка приостановлена',
+    position: 'top',
+  });
+
+  return updatedTrip;
+};
+
+export const unpauseTrip = async (tripId: string) => {
+  const updatedTrip = await updateTrip(tripId, {
+    status: TripStatus.NEW,
+  });
+
+  Notify.create({
+    message: 'Поездка возобновлена',
     position: 'top',
   });
 

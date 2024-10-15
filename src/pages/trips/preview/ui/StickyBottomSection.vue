@@ -2,7 +2,7 @@
 import { AppwriteException } from 'appwrite';
 import ReserveTripButton from './ReserveTripButton.vue';
 import { captureApiException } from 'src/shared/utils';
-import { cancelReservation, cancelTrip, completeTrip, reserveTrip } from '../api';
+import { cancelReservation, cancelTrip, pauseTrip, unpauseTrip, reserveTrip } from '../api';
 import { Loading } from 'quasar';
 import { ITrip } from 'src/shared/types';
 import { useUserStore } from 'src/stores/user';
@@ -53,15 +53,15 @@ const handleSubmit = async (apiFn: () => Promise<ITrip>) => {
 
 <template>
   <div class="sticky-bottom q-pa-md bg-white">
-    <template v-if="[TripStatus.CANCELED, TripStatus.COMPLETED].includes(trip.status)">
+    <template v-if="trip.status === TripStatus.CANCELED">
       <q-btn
         size="md"
         disabled
-        :color="trip.status === TripStatus.COMPLETED ? 'grey' : 'red-3'"
+        color="red-3"
         unelevated
         class="full-width"
-        :icon="trip.status === TripStatus.COMPLETED ? 'eva-checkmark-circle-2-outline' : 'eva-slash-outline'"
-        :label="trip.status === TripStatus.COMPLETED ? 'Поездка завершена' : 'Поездка отменена'"
+        icon="eva-slash-outline"
+        label="Поездка отменена"
       />
     </template>
     <div
@@ -69,8 +69,10 @@ const handleSubmit = async (apiFn: () => Promise<ITrip>) => {
       :class="$style['driver-row']"
     >
       <DriverTripButtons
+        :status="trip.status"
         @cancel="handleSubmit(() => cancelTrip(props.tripId))"
-        @complete="handleSubmit(() => completeTrip(props.tripId))"
+        @pause="handleSubmit(() => pauseTrip(props.tripId))"
+        @unpause="handleSubmit(() => unpauseTrip(props.tripId))"
       />
     </div>
 
