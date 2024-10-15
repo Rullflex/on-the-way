@@ -16,7 +16,7 @@ const otherLinks = [
   },
   {
     label: 'Пользовательское соглашение',
-    to: '',
+    to: '/agreement',
   },
 ];
 </script>

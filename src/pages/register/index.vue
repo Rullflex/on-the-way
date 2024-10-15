@@ -99,6 +99,13 @@ const handleUserRegister = async () => {
           >
             Регистрируясь, вы соглашаетесь с
             <router-link
+              to="/agreement"
+              class="text-primary"
+            >
+              Условиями пользования
+            </router-link>
+            и
+            <router-link
               to="/privacy"
               class="text-primary"
             >
