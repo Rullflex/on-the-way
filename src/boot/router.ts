@@ -24,7 +24,7 @@ export default boot(async ({ router }) => {
   } catch (error) {}
 
   router.beforeEach((to, _from, next) => {
-    if (to.path === '/privacy') {
+    if (to.path === '/privacy' || to.path === '/agreement') {
       next();
     } else if (!userStore.accountId && !to.path.startsWith('/login') && to.path !== '/register') {
       next({ path: '/login' });
