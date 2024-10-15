@@ -105,7 +105,7 @@ updateTrips();
               src="~/assets/travel-mode.svg"
               style="max-width: 300px"
             />
-            <h4>На текущую дату нет доступных поездок</h4>
+            <h4>Для выбранных условий нет доступных поездок</h4>
           </div>
         </template>
       </q-page>
