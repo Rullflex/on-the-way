@@ -13,7 +13,7 @@ const props = withDefaults(
   }>(),
   {
     textareaPlaceholder: 'Напишите Ваш развернутый отзыв',
-    successMessage: 'Ваш отзыв успешно отправлен',
+    successMessage: 'Спасибо за ваш отзыв! Мы получили ваше сообщение и свяжемся с вами в ближайшее время, если это необходимо. Мы ценим ваше мнение и всегда рады помочь.',
   }
 );
 
@@ -30,12 +30,12 @@ const onSubmit = async () => {
       body,
     });
 
-    // TODO: вместо уведомления заменить контент на сообщение и картинку об успешной отправке
     Notify.create({
       type: 'positive',
       message: props.successMessage,
       position: 'top',
     });
+    text.value = ' ';
   } catch (error) {
     Notify.create({
       type: 'negative',

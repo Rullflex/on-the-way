@@ -83,7 +83,7 @@
 
 <route lang="yaml">
 meta:
-  layout: blank
+  layout: subPage
 </route>
   
   
