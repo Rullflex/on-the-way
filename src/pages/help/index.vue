@@ -23,6 +23,7 @@ defineOptions({
       <my-item
         chevron
         label="Связаться с нами"
+        to="/contact-us"
       />
     </q-list>
   </q-page>

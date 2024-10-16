@@ -43,7 +43,7 @@ const helpMailUrl = process.env.APP_HELP_MAIL_URL;
     <p class="q-pa-md">
       <strong>Нам важна ваша обратная связь!</strong> Пишите нам на
       <a
-        :href="`mailto:${{ helpMailUrl }}`"
+        :href="`mailto:${helpMailUrl}`"
         target="_blank"
         class="text-primary"
         >{{ helpMailUrl }}</a

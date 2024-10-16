@@ -115,7 +115,7 @@ const helpMailUrl = process.env.APP_HELP_MAIL_URL;
     <p>
       Если вы не нашли ответа на свой вопрос, напишите нам по адресу
       <a
-        :href="`mailto:${{ helpMailUrl }}`"
+        :href="`mailto:${helpMailUrl}`"
         target="_blank"
         class="text-primary"
         >{{ helpMailUrl }}</a
