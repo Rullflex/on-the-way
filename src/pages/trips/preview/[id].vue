@@ -27,8 +27,7 @@ const share = async () => {
   if (navigator.share) {
     try {
       await navigator.share({
-        title: 'По Пути - сервис поиска попутчиков',
-        text: `Поездка ${trip.value?.departureCity} - ${trip.value?.arrivalCity} | По Пути`,
+        title: `Поездка ${trip.value?.departureCity} - ${trip.value?.arrivalCity} | По Пути`,
         url: '',
       });
     } catch (error) {}
