@@ -14,5 +14,5 @@ export const CAR_COLORS = [
   { color: 'Оранжевый', value: 'orange' },
   { color: 'Желтый', value: 'yellow' },
   { color: 'Фиолетовый', value: 'purple' },
-  { color: 'Розовый', value: 'pink' }
+  { color: 'Розовый', value: 'pink' },
 ];

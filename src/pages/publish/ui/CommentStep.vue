@@ -16,5 +16,3 @@ const comment = defineModel({ default: '' });
     />
   </StepContainer>
 </template>
-
-

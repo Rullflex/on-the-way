@@ -53,8 +53,7 @@ const isNextButtonVisible = computed<boolean>(() => {
 });
 
 watch(licensePlate, () => {
-  if (licensePlate.value)
-    licensePlate.value = licensePlate.value?.toUpperCase();
+  if (licensePlate.value) licensePlate.value = licensePlate.value?.toUpperCase();
 });
 
 const handleFromSubmitButton = () => {
@@ -63,7 +62,7 @@ const handleFromSubmitButton = () => {
     name: name.value ?? '',
     bodyType: bodyType.value ?? '',
     color: color.value ?? '',
-    year: Number(year.value) ?? 1000
+    year: Number(year.value) ?? 1000,
   });
 };
 

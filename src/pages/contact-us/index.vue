@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { MyItem } from 'src/shared/ui';
 
-  const helpMailUrl = process.env.APP_HELP_MAIL_URL;
+const helpMailUrl = process.env.APP_HELP_MAIL_URL;
 </script>
 
 <template>
@@ -15,9 +15,8 @@ import { MyItem } from 'src/shared/ui';
       style="max-width: 300px"
     />
   </div>
-  
 
-  <q-list>
+  <q-list class="q-px-sm">
     <my-item
       chevron
       color="primary"
@@ -39,5 +38,3 @@ import { MyItem } from 'src/shared/ui';
 meta:
   layout: subPage
 </route>
-  
-  

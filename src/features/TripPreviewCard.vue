@@ -53,8 +53,16 @@ const conveniences = computed(() =>
           class="col-auto column items-end"
         >
           <span class="text-bold">
-            <template v-if="trip.status === TripStatus.CANCELED">Отменена</template>
-            <template v-else-if="trip.status === TripStatus.COMPLETED">Завершена</template>
+            <span
+              class="text-red"
+              v-if="trip.status === TripStatus.CANCELED"
+              >Отменена</span
+            >
+            <span
+              class="text-green"
+              v-else-if="trip.status === TripStatus.COMPLETED"
+              >Завершена</span
+            >
             <template v-else-if="trip.passengerIds.length >= trip.totalPassengers">Мест нет</template>
             <template v-else>{{ `${trip.price} ₽` }}</template>
           </span>

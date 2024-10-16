@@ -44,34 +44,42 @@ const share = async () => {
 
 onMounted(() => {
   const fetchTrip = () => {
-    getTripById(props.id).then((response) => {
-      if (isCurrentUserDriver.value && trip.value) {
-        const passengerDiff = Math.abs(response.passengerIds.length - trip.value.passengerIds.length)
+    getTripById(props.id)
+      .then((response) => {
+        if (isCurrentUserDriver.value && trip.value) {
+          const passengerDiff = Math.abs(response.passengerIds.length - trip.value.passengerIds.length);
 
-        if (passengerDiff > 0) {
-          const passenger = getPluralNoun(passengerDiff, 'пассажир', 'пассажира', 'пассажиров')
-          const message = trip.value.passengerIds.length > response.passengerIds.length
-            ? `${passengerDiff} ${passenger} ${getPluralNoun(passengerDiff, 'отменил', 'отменили', 'отменили')} бронь`
-            : `${passengerDiff} ${getPluralNoun(passengerDiff, 'новый', 'новых', 'новых')} ${passenger}`
-          Notify.create({
-            type: 'warning',
-            message,
-            position: 'top',
-          });
+          if (passengerDiff > 0) {
+            const passenger = getPluralNoun(passengerDiff, 'пассажир', 'пассажира', 'пассажиров');
+            const message =
+              trip.value.passengerIds.length > response.passengerIds.length
+                ? `${passengerDiff} ${passenger} ${getPluralNoun(
+                    passengerDiff,
+                    'отменил',
+                    'отменили',
+                    'отменили'
+                  )} бронь`
+                : `${passengerDiff} ${getPluralNoun(passengerDiff, 'новый', 'новых', 'новых')} ${passenger}`;
+            Notify.create({
+              type: 'warning',
+              message,
+              position: 'top',
+            });
+          }
         }
-      }
 
-      trip.value = response
-    }).catch()
-  }
+        trip.value = response;
+      })
+      .catch();
+  };
   timer = setInterval(fetchTrip, 1000 * 10);
-})
+});
 
 onBeforeUnmount(() => {
   if (timer !== null) {
     clearInterval(timer);
   }
-})
+});
 
 Loading.show();
 getTripById(props.id)

@@ -14,12 +14,12 @@ const date = defineModel({ default: '' });
       minimal
       class="full-width"
       :options="
-            (date) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              return new Date(date) >= today;
-            }
-          "
+        (date) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return new Date(date) >= today;
+        }
+      "
     ></q-date>
   </StepContainer>
 </template>

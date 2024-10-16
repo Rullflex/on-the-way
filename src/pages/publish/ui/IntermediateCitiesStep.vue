@@ -3,7 +3,7 @@ import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 defineProps<{
-  cityList: string[],
+  cityList: string[];
 }>();
 
 const intermediateCities = defineModel<string[]>({ default: [] });

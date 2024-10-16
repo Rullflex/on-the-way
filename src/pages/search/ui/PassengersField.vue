@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useTripSettingsStore } from 'stores/trip-settings';
 import { storeToRefs } from 'pinia';
 

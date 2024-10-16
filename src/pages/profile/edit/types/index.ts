@@ -3,7 +3,7 @@ export enum ItemType {
   surname = 'surname',
   dateOfBirth = 'dateOfBirth',
   email = 'email',
-  phone = 'phone'
+  phone = 'phone',
 }
 
 export type IItemsList = { label: string; value: string; type: ItemType };

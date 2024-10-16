@@ -3,11 +3,10 @@ import { MyItem } from 'src/shared/ui';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 defineProps<{
-  title: string,
-  cityName: string,
-  cityList: string[],
+  title: string;
+  cityName: string;
+  cityList: string[];
 }>();
-
 </script>
 
 <template>

@@ -14,9 +14,8 @@ const year = defineModel({ default: '' });
       inputmode="numeric"
       class="q-mx-lg q-pt-sm"
       :rules="[
-            (val) =>
-              (val?.length === 4 && Number(val) <= new Date().getFullYear()) || 'Введите год в правильном формате',
-          ]"
+        (val) => (val?.length === 4 && Number(val) <= new Date().getFullYear()) || 'Введите год в правильном формате',
+      ]"
       placeholder="2000"
     />
   </div>

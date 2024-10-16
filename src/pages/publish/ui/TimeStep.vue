@@ -17,6 +17,3 @@ const time = defineModel({ default: '' });
     />
   </StepContainer>
 </template>
-
-
-

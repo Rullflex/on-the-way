@@ -4,9 +4,9 @@ import { ICityInfo } from 'pages/publish/index.vue';
 import StepContainer from 'pages/publish/ui/StepContainer.vue';
 
 const props = defineProps<{
-  title: string,
-  city: ICityInfo,
-  options: string[]
+  title: string;
+  city: ICityInfo;
+  options: string[];
 }>();
 
 const locationInputValue = ref(props.city.location);
