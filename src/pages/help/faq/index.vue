@@ -9,7 +9,7 @@ const helpMailUrl = process.env.APP_HELP_MAIL_URL;
 </script>
 
 <template>
-  <q-page class="q-px-lg q-pb-lg column gap-md">
+  <q-page class="q-px-lg q-pb-lg column gap-md" :class="$style.root">
     <h4 class="q-mb-lg">Часто задаваемые вопросы (FAQ)</h4>
 
     <h6>1. Общие вопросы</h6>
@@ -126,6 +126,29 @@ const helpMailUrl = process.env.APP_HELP_MAIL_URL;
     <feedback-form />
   </q-page>
 </template>
+
+<style lang="scss" module>
+.root {
+  h1,
+  h2,
+  p,
+  h4,
+  h5,
+  h6,
+  p {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    padding: 0;
+    padding-left: 1em;
+
+    li {
+      list-style-type: '— ';
+    }
+  }
+}
+</style>
 
 <route lang="yaml">
 meta:
