@@ -9,7 +9,7 @@ const helpMailUrl = process.env.APP_HELP_MAIL_URL;
 </script>
 
 <template>
-  <q-page class="q-px-lg q-pb-lg column gap-md" :class="$style.root">
+  <q-page class="q-px-lg q-pb-lg" :class="$style.root">
     <h4 class="q-mb-lg">Часто задаваемые вопросы (FAQ)</h4>
 
     <h6>1. Общие вопросы</h6>
